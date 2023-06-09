@@ -11,7 +11,3 @@ repos:
     -   id: check-json
     -   id: check-xml
     -   id: pretty-format-json
--   repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
-    hooks:
-    -   id: mdformat
