@@ -24,13 +24,13 @@ footer-links:
   email: dario13.loi@gmail.com
   facebook:
   flickr:
-  github: dario-loi/dario-loi.github.io
+  github: dario-loi
   instagram:
-  linkedin:
+  linkedin: https://www.linkedin.com/in/dario-loi-5182531b1/
   pinterest:
   rss: rss
   twitter:
-  stackoverflow:
+  stackoverflow: https://stackoverflow.com/users/18987410/neervana
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
   playconsole:
@@ -41,10 +41,10 @@ footer-links:
 disqus:
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics:
+# google_analytics:
 
 # For newer "GA4" analytics, use the following instead of the "UA" entry above
-#google_analytics_ga4: G-GABC1DEFG
+google_analytics_ga4: G-KPNRZ4BGJY
 
 # Your website URL (e.g. http://amitmerchant1990.github.io or http://www.amitmerchant.com)
 # Used for Sitemap.xml and your RSS feed
