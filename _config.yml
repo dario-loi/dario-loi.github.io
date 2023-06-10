@@ -87,7 +87,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-minifier
-  -
 
 
 include: ['_pages']
