@@ -12,7 +12,7 @@ author: Dario Loi
 description: My portfolio and blog
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: /images/reverie.png
+avatar: /images/reverie.webp
 
 #
 # Flags below are optional
@@ -87,6 +87,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-paginate
   - jekyll-minifier
+  -
+
 
 include: ['_pages']
 
