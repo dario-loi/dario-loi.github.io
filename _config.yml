@@ -7,7 +7,7 @@ lang: en-US
 timezone: Europe/Rome
 repo: https://github.com/DavideBri/Gesko # site repo [optional]
 data-theme: dark # default theme "dark" | "light"
-discus-identifier: darioloi # replace with your disqus shortname
+discus-identifier: neervana # replace with your disqus shortname
 comments-enabled: true # true to enable disqus comments, false to hide them
 
 author:
