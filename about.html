@@ -3,91 +3,98 @@ layout: default
 ---
 
 <section class="post">
-  <div class="flex-row-between">
-      <a href="{{ site.url }}{{ site.baseurl }}/">« Home</a>
-    <button title="Change theme" id="theme-toggle" onclick="modeSwitcher()">
-      <div></div>
-    </button>
-  </div>
+    <div class="flex-row-between">
+        <a href="{{ site.url }}{{ site.baseurl }}/">« Home</a>
+        <button title="Change theme" id="theme-toggle" onclick="modeSwitcher()">
+            <div></div>
+        </button>
+    </div>
 </section>
 
 <section>
-    <!-- The Timeline -->
-
-    <ul class="timeline">
-
-        <!-- Item 1 -->
-        <li>
-            <div class="direction-r">
-                <div class="flag-wrapper">
-                    <span class="flag">Freelance</span>
-                    <span class="time-wrapper"><span class="time">2010 - 2016</span></span>
-                </div>
-                <div class="desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et dolore magna aliqua. Convallis convallis tellus id interdum. A lacus 
-                    vestibulum sed arcu non odio euismod lacinia. Orci a scelerisque purus semper eget duis. 
-                    Læs mere: <a href="https://tristanwhite.info" target="_top">https://tristanwhite.info</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Item 2 -->
-        <li>
-            <div class="direction-l">
-                <div class="flag-wrapper">
-                    <span class="flag">Rundhøjskolen</span>
-                    <span class="time-wrapper"><span class="time">2013 - 2016</span></span>
-                </div>
-                <div class="desc">
-                    Som <strong>IT-vejleder</strong> in metus vulputate eu scelerisque felis imperdiet. 
-                    Eget nunc scelerisque viverra mauris in. Quis imperdiet massa tincidunt nunc pulvinar sapien et. 
-                    Diam ut venenatis tellus in metus. Nisi porta lorem mollis aliquam ut porttitor leo a. Proin 
-                    sagittis nisl rhoncus mattis. Velit dignissim sodales ut eu sem integer vitae justo. Interdum 
-                    velit laoreet id donec ultrices tincidunt. Donec ultrices tincidunt arcu non sodales. 
-                    Lectus urna duis convallis convallis tellus. 
-                </div>
-            </div>
-        </li>
-
-        <!-- Item 3 -->
-        <li>
-            <div class="direction-r">
-                <div class="flag-wrapper">
-                    <span class="flag">Serverhosting A/S</span>
-                    <span class="time-wrapper"><span class="time">2012</span></span>
-                </div>
-                <div class="desc">
-                    Cras semper auctor neque vitae tempus quam pellentesque. Tempor orci dapibus ultrices
-                    in iaculis nunc sed augue. Urna porttitor rhoncus dolor purus non. 
-                </div>
-            </div>
-        </li>
 
 
-        <!-- Item 4 -->
-        <li>
-            <div class="direction-l">
-                <div class="flag-wrapper">
-                    <span class="flag">IT-teknolog</span>
-                    <span class="time-wrapper"><span class="time">2010 - 2012</span></span>
-                </div>
-                <div class="desc">
-                    Works well on mobile too! Try to scale down the window if you're on a pc
-                </div>
-            </div>
-        </li>
+    <h1>About Me</h1>
 
-    </ul>
+    <div class="entry">
+        <p>Hi, I’m Dario Loi, a 22 year old Computer Science Student at Sapienza University of Rome, I'm currently about
+            to start my Master's Degree in Artificial Intelligence and Robotics, after graduating with full honors in
+            Computer Science & Artificial Intelligence.</p>
 
-<!-- adding an empty line to separate the social profile links -->
-  <br></br>
-  <br></br>
-  <br></br>
+        <h5>Quick Bio</h5>
+
+        <p>I was born near Naples, Italy, where I lived until my 2nd year of High School, when I moved to Rome. From a
+            young
+            age I have always been interested in computers and technology, especially how programming allows you to
+            create
+            anything you can imagine. I started programming for fun before it was even a subject in school, and I have
+            been
+            doing it ever since; my first programming language was Visual Basic, but I quickly moved on to C++, which I
+            nowadays consider my favorite language. I also used Python as the main language for most of my Bachelor's
+            Degree courses, so I am well versed in various data science and machine learning libraries such as Pytorch,
+            Pandas and the other usual suspects.</p>
+        </p>
+
+        <br></br>
+
+        <h2 id="my-hobbies">My Hobbies</h2>
+
+        <p>Most of my hobbies revolve around music, I play the guitar (both classical and electric) and I am an avid
+            music
+            listener, my taste spans from classical music to metal and everything in between. I also enjoy playing video
+            games, my favorite genres are FPSs and strategy games, especially when they have complex mechanics. I also
+            enjoy
+            reading Isaac Asiimov's books.</p>
+
+        <br></br>
+
+        <h2 id="projects">Projects</h2>
+
+        <p>I have worked on a few projects, both personal and for college, here are some of them:</p>
+
+        <ul>
+            <li><a href="https://github.com/dario-loi/Spark">Spark</a> - A simple OpenGL renderer in C++ that I
+                worked
+                on in
+                my free time, to learn more about OpenGL and graphics programming.</li>
+            <li><a href="https://github.com/DD-ACSAI/chain-DB">Chain-DB</a> - A C++ CLI application that allows
+                management
+                of a fictitious logistics company, managing the company's vehicles, drivers and shipments and
+                plotting
+                courses through the A* algorithm. This was a group project for my Database course.</li>
+            <li><a href="https://github.com/Benjamin-Barda/mine-to-win">Mine-RCNN</a> - A Python/Pytorch
+                re-implementation
+                of the <a href="https://arxiv.org/abs/1506.01497">Faster-RCNN</a> paper, detecting entity
+                silhouettes in
+                the
+                sandbox game Minecraft, for my Deep Learning course.</li>
+            <li><a href="https://github.com/random-forest-multicore/MulticoreTree">CUDA Accelerated Decision
+                    Trees</a> -
+                A C
+                implementation of the <a href="https://en.wikipedia.org/wiki/Random_forest">Random Forest</a>
+                algorithm,
+                accelerated with CUDA, for my Parallel and Distributed Computing course.</li>
+            <li><a href="https://github.com/dario-loi/exposure-fusion">Exposure Fusion</a> - An OpenCV2
+                implementation
+                of
+                the <a href="https://web.stanford.edu/class/cs231m/project-1/exposure-fusion.pdf">Exposure
+                    Fusion</a>
+                algorithm, for my Computer Graphics course, includes homographic alignment between low resolution
+                images,
+                and works at blazing speeds.</li>
+        </ul>
+
+    </div>
+    <!-- About section -->
+
+    <!-- adding an empty line to separate the social profile links -->
+    <br></br>
+    <br></br>
+    <br></br>
 </section>
 
 
 
 <section>
-  <nav class="post-nav" /nav>
+    <nav class="post-nav" /nav>
 </section>
