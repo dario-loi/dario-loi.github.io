@@ -7,7 +7,7 @@ layout: compress
 {% include head.html %}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3EP7KLCYVP"></script>
-<script src="/assets/js/lazysizes.min.js" async=""></script>
+<script async src="/assets/js/lazysizes.min.js" async=""></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
@@ -89,7 +89,7 @@ layout: compress
 
 
 {% if page.url == '/' %}
-<script src="{{ site.url }}{{ site.baseurl }}/assets/js/simple-jekyll-search.js"></script>
+<script async src="{{ site.url }}{{ site.baseurl }}/assets/js/simple-jekyll-search.js"></script>
 <script>
   var sjs = SimpleJekyllSearch({
     searchInput: document.getElementById('search-input'),
