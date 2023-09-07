@@ -5,10 +5,16 @@
 
   <!-- Essential stylesheets (loaded synchronously) -->
   <link rel="stylesheet" href="{{ site.url }}{{ site.baseurl }}/assets/css/syntax.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  
   <!-- Preconnect to external domains -->
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- Load Font Awesome asynchronously and non-blocking -->
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </noscript>
+
   {% if site.googlewebfonts %}
     <link rel="preconnect" href="https://fonts.gstatic.com">
 
