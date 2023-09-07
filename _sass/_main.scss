@@ -168,6 +168,21 @@ body {
 a {
   color: var(--link-color);
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    
+  }
+
+  &:focus {
+    outline: 1px dotted var(--link-color);
+
+  }
+
+  &:active {
+    color: var(--link-color);
+    
+  }
 }
 
 .post p {

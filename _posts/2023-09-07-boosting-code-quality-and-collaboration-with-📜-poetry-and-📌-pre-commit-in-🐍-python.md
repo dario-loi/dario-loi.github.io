@@ -37,7 +37,7 @@ offer them a way to install a complete development environment with a single com
 and they will be able to work on the project without having to chase the required dependencies
 for hours on end.
 
-#### Getting Poetry
+### Getting Poetry
 
 Let's first use our package manager of choice to install poetry (or if you don't have one, you can 
 use `pipx`, all methods are listed in the [official documentation](https://python-poetry.org/docs/#installation)):
@@ -60,14 +60,13 @@ poetry config virtualenvs.in-project true
 
 with this, we are ready to start a new project!
 
-#### A Poetry showcase project: `dummy_API`
+### A Poetry showcase project: `dummy_API`
 
 Let's demonstrate how poetry works with a simple project: a dummy API that returns a "Hello World" message.
 For that, we will use the [FastAPI](https://fastapi.tiangolo.com/) library, which is a modern python framework
 for building APIs.
 
-![GIF showing how to initialize a project with Poetry](/assets/img/dummy_api.webp)
-*Here I initialize the `dummy_API` project, which creates a folder ready to use. I also add all the required dependencies, such as `fastapi` and `uvicorn`.*
+{% include lazyload.html src = "/assets/img/dummy_api.webp" alt = "GIF showing how to initialize a project with Poetry" title = "GIF showing how to initialize a project with Poetry" caption = "Here I initialize the `dummy_API` project, which creates a folder ready to use. I also add all the required dependencies, such as `fastapi` and `uvicorn`." %}
 
 If you followed along with the GIF, you should now have a folder called `dummy_API` with the following structure:
 
@@ -124,7 +123,7 @@ For example, say that you are building a data science project, and you would lik
 you can run `poetry add --group dev matplotlib` to install `matplotlib` only in the development environment, so that it won't be
 shipping with your project when you deploy it!
 
-##### Coding the API
+#### Coding the API
 
 
 
@@ -154,7 +153,7 @@ export, we would do so in the `__init__.py` file, with a very simple syntax:
 from .dummy_app import *
 ```
 
-##### Testing the API
+#### Testing the API
 
 Now that we have our API, we want to make sure that it works as intended, so we will write some unit tests for it. We will use the [pytest](https://docs.pytest.org/en/6.2.x/)
  framework, so make sure to install it with `poetry add --group dev pytest` before proceeding!
@@ -180,10 +179,10 @@ def test_get() -> None:
 Now that everything is in place, we can run our API with `poetry run uvicorn dummy_api.dummy_app:app --reload` and our tests with `poetry run pytest`[^3].
 If everything went well, you should see something like this:
 
-![GIF showing the tests running](/assets/img/test_api.webp)
-*Here I run the API and the tests, and everything works as expected!*
+{% include lazyload.html src = "/assets/img/run_api.webp" alt = "GIF showing the tests running" title = "GIF showing the tests running" caption = "Here I run the API and the tests, and everything works as expected!"%}
 
-#### What we got from Poetry
+
+### What we got from Poetry
 
 Now that our "project" is done, let's see what we got from using Poetry:
 
@@ -209,7 +208,7 @@ feasible! what we can do now is to *automate* the process of checking the code q
 providing everyone with an environment that comes pre-packaged with tools that 
 will automatically check new commits, and reject them if they contain *code smells*.
 
-#### Enter Pre-commit
+### Enter Pre-commit
 
 [Pre-commit](https://pre-commit.com/) is a tool that allows us to run *hooks* on our 
 repository as soon as we commit new code. These hooks can be anything from code formatters
@@ -289,12 +288,11 @@ repos:
 ```
 *Here is the `.yaml` that we end up with, feel free to use it as a starting point for your own projects!*
 
-#### Pre-commit in action
+### Pre-commit in action
 
 Now that tooling is ready, let's see what happens when we try to commit some code:
 
-![GIF showing the pre-commit hooks in action](/assets/img/precommit.webp)
-*Here we push a commit to our repository, and the pre-commit hooks run automatically, formatting our code and checking for errors. We can see that everything went through, hence the code is of good quality! if there were any errors, we would need to fix them and then run the commit again.*
+{%include lazyload.html src = "/assets/img/precommit.webp" alt = "GIF showing the pre-commit hooks in action" title = "GIF showing the pre-commit hooks in action" caption = "Here we push a commit to our repository, and the pre-commit hooks run automatically, formatting our code and checking for errors. We can see that everything went through, hence the code is of good quality! if there were any errors, we would need to fix them and then run the commit again."%}
 
 Having these checks at every commit gives us precious guarantees about the quality of our code,
 but we can only rely on them if we are sure that everyone is using the same tools. This is why
