@@ -2,14 +2,14 @@
 <!-- If javascript is not on. -->
 <noscript>
     <p>
-        <img src="{{include.src}}" alt="{{include.alt}}" title="{{include.title}}" />
+        <img src="{{include.src}}" alt="{{include.alt}}" title="{{include.title}}"/>
         <em>{{include.caption}}</em>
     </p>
 </noscript>
 
 <!-- If javascript is present. -->
 <p>
-    <img src="{{include.src}}" alt="{{include.alt}}" title="{{include.title}}" />
+    <img src="{{include.src}}" alt="{{include.alt}}" title="{{include.title}}" class="lazyload blur-up" />
     <em>{{include.caption}}</em>
 </p>
 {% endif %}
