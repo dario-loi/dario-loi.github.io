@@ -2,11 +2,16 @@
   "requires": true,
   "lockfileVersion": 1,
   "dependencies": {
-    "fuzzysearch": {
-      "integrity": "sha1-3/yA9tawQiPyImqnndGUIxCW0Ag=",
-      "resolved": "https://registry.npmjs.org/fuzzysearch/-/fuzzysearch-1.0.3.tgz",
-      "version": "1.0.3"
-    },
+    "purgecss": "^5.0.0",
     "simple-jekyll-search": "^1.9.2"
-  }
+  },
+  "name": "dario-loi.github.io",
+  "description": "Simple and minimal Jekyll blog.  Built on the [Gesko theme](https://github.com/DavideBri/Gesko)",
+  "version": "1.0.0",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
 }

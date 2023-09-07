@@ -8,3 +8,5 @@ _site
 .git
 .vscode
 .obsidian
+node_modules
+

@@ -179,7 +179,7 @@ def test_get() -> None:
 Now that everything is in place, we can run our API with `poetry run uvicorn dummy_api.dummy_app:app --reload` and our tests with `poetry run pytest`[^3].
 If everything went well, you should see something like this:
 
-{% include lazyload.html src = "/assets/img/run_api.webp" alt = "GIF showing the tests running" title = "GIF showing the tests running" caption = "Here I run the API and the tests, and everything works as expected!"%}
+{% include lazyload.html src = "/assets/img/test_api.webp" alt = "GIF showing the tests running" title = "GIF showing the tests running" caption = "Here I run the API and the tests, and everything works as expected!"%}
 
 
 ### What we got from Poetry

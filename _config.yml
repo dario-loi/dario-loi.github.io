@@ -59,6 +59,7 @@ sass:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-purgecss
   - jekyll-relative-links
   - jekyll_picture_tag
   - jekyll-toc
