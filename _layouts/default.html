@@ -5,15 +5,15 @@ layout: compress
 <!DOCTYPE html>
 <html lang="en">
 {% include head.html %}
- <!-- Global site tag (gtag.js) - Google Analytics -->
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-3EP7KLCYVP"></script>
- <script>
-   window.dataLayer = window.dataLayer || [];
-   function gtag() { dataLayer.push(arguments); }
-   gtag('js', new Date());
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3EP7KLCYVP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
 
-   gtag('config', 'G-3EP7KLCYVP');
- </script>
+  gtag('config', 'G-3EP7KLCYVP');
+</script>
 
 
 
@@ -23,7 +23,7 @@ layout: compress
     {% include anchor_headings.html html=content anchorBody="#" %}
   </main>
 
-  
+
 
   <script>
     function setTheme(theme) {
@@ -69,38 +69,38 @@ layout: compress
     {% endif %}
     {% if site.author.twitter %}
     <a href="https://twitter.com/{{ site.author.twitter }}" title="Twitter" target="_blank" rel="noopener noreferrer"><i
-      class="fa fa-brands fa-twitter" aria-hidden="true"></i></a>
+        class="fa fa-brands fa-twitter" aria-hidden="true"></i></a>
     {% endif %}
     {% if site.author.mastodon %}
     <a href="https://{{ site.author.mastodon }}" title="Twitter" target="_blank" rel="noopener noreferrer"><i
-      class="fa fa-brands fa-mastodon" aria-hidden="true"></i></a>
+        class="fa fa-brands fa-mastodon" aria-hidden="true"></i></a>
     {% endif %}
     {% if site.author.linkedin %}
-    <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}" title="Linkedin" target="_blank" rel="noopener noreferrer"><i
-      class="fa fa-brands fa-linkedin" aria-hidden="true"></i></a>
+    <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}" title="Linkedin" target="_blank"
+      rel="noopener noreferrer"><i class="fa fa-brands fa-linkedin" aria-hidden="true"></i></a>
     {% endif %}
     <a href="{{site.url}}{{ site.baseurl }}/atom.xml" title="Feed RSS" target="_blank" rel="noopener noreferrer"><i
         class="fa fa-solid fa-rss" aria-hidden="true"></i></a>
-    <a href="https://github.com/DavideBri/Gesko" title="Browse the code" target="_blank" rel="noopener noreferrer"><i
+    <a href="{{site.repo}}" title="Browse the code" target="_blank" rel="noopener noreferrer"><i
         class="fa fa-solid fa-code" aria-hidden="true"></i></a>
   </div>
 </footer>
 
 
 {% if page.url == '/' %}
-  <script src="{{ site.url }}{{ site.baseurl }}/assets/js/simple-jekyll-search.js"></script>
-  <script>
-    var sjs = SimpleJekyllSearch({
-      searchInput: document.getElementById('search-input'),
-      resultsContainer: document.getElementById('search-results'),
-		      json: '{{ site.url }}{{ site.baseurl }}/search.json',
-      searchResultTemplate: '<li><a href="{url}" title="{description}">{title}</a></li>',
-      noResultsText: 'No results found..',
-      limit: 10,
-      fuzzy: true,
-    })
-  </script>
-  {% endif %}
+<script src="{{ site.url }}{{ site.baseurl }}/assets/js/simple-jekyll-search.js"></script>
+<script>
+  var sjs = SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('search-results'),
+    json: '{{ site.url }}{{ site.baseurl }}/search.json',
+    searchResultTemplate: '<li><a href="{url}" title="{description}">{title}</a></li>',
+    noResultsText: 'No results found..',
+    limit: 10,
+    fuzzy: true,
+  })
+</script>
+{% endif %}
 
 
 </html>
