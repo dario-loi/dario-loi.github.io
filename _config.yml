@@ -64,6 +64,13 @@ plugins:
   - jekyll_picture_tag
   - jekyll-toc
 
+
+webrick:
+  headers:
+    "Cache-Control": "public, max-age=3600" # Cache resources for 1 hour (3600 seconds)
+    "Expires": "3600" # Set the Expires header to match the max-age value
+
+
 collections:
   pages:
     output: true
