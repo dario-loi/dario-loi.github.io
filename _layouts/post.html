@@ -3,21 +3,33 @@ layout: default
 ---
 
 
+
 <section class="post">
   <div class="flex-row-between">
-	  <a href="{{ site.url }}{{ site.baseurl }}/">« back</a>
+    <a href="{{ site.url }}{{ site.baseurl }}/">« back</a>
     <button title="Change theme" id="theme-toggle" onclick="modeSwitcher()">
       <div></div>
     </button>
   </div>
   {% assign minute=content | number_of_words | divided_by: 265 | plus: 1 %}
-  <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }} -  
+  <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }} -
     {% if page.minute %} {{ page.minute }} {% else %} {{ minute }} {% endif %}' read</time>
   <h1 class="title">{{ page.title }}</h1>
   <span class="meta">
     {% for tag in page.tags %}
-    <a href="{{ site.url }}{{ site.baseurl }}/tag/{{tag}}">{{tag}}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}</span>
-  {{ content }}
+    <a href="{{ site.url }}{{ site.baseurl }}/tag/{{tag}}">{{tag}}</a>{% unless forloop.last %}, {% endunless %}{%
+    endfor %}</span>
+
+  <div>
+    <div id="table-of-contents">
+      <h4>Table of Contents</h4>
+      {% toc %}
+    </div>
+    <br>
+    <div id="markdown-content">
+      {{ content }}
+    </div>
+  </div>
 </section>
 
 <section>
@@ -39,5 +51,5 @@ layout: default
 </section>
 
 {% if site.comments-enabled %}
-  {% include disqus.html %}
+{% include disqus.html %}
 {% endif %}

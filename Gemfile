@@ -4,6 +4,8 @@ gem 'jekyll'
 gem 'jekyll-paginate'
 gem 'jekyll-sitemap'
 gem 'jekyll-relative-links'
+gem 'jekyll_picture_tag', '~> 2.0'
+gem 'jekyll-toc'
 gem "tzinfo-data", "~> 1.2021"
 
 # windows specific
