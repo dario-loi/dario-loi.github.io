@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Boosting code quality and collaboration with 📜 Poetry and 📌 Pre-commit in 🐍 Python
+title: Boosting code quality and collaboration with Poetry and Pre-commit in Python
 description: This is a collection of short CSS snippets I thought might be useful for beginners
 summary: This is a collection of short CSS snippets I thought might be useful for beginners.
 tags: python devops coding
@@ -58,11 +58,14 @@ in the project's directory, so that our IDE can find them more easily:
 poetry config virtualenvs.in-project true 
 ```
 
-with this, we are ready to start a new project!
+With this, we are ready to start a new project!
 
 ### A Poetry showcase project: `dummy_API`
 
-Let's demonstrate how poetry works with a simple project: a dummy API that returns a "Hello World" message.
+To show where poetry really shines as a project management tool, we need an example that is 
+a bit more complex than a throwaway script, but still simple enough to fit into this 
+blog post: An API server that returns a simple JSON object.
+
 For that, we will use the [FastAPI](https://fastapi.tiangolo.com/) library, which is a modern python framework
 for building APIs.
 
@@ -82,13 +85,17 @@ If you followed along with the GIF, you should now have a folder called `dummy_A
 └── tree.md
 ```
 
-We can see that there are *two* folders, one is called `dummy_api` and the other `tests`.
-In the `dummy_api` we will have our code, which can then be exported as a python package, while in the `tests` folder
-we will have our unit tests, which will import the code from the `dummy_api` folder.
+We can see that poetry generated *two* folders, `dummy_api` and  `tests`.
+The `dummy_api` folder will be the root of our API project, which will be exported as a
+package, while the `tests` folder will group up all of our unit tests, which are necessary
+to ensure the correctness of our API.
 
-We also have a `pyproject.toml` file, which is the file that poetry uses to keep track of our dependencies, and a `poetry.lock` file,
-the `poetry.lock` file keeps track of the **exact** versions of our dependencies, so that we can recreate the same environment, whereas
-the `.toml` is more relaxed, and acts like a "wish list" for our libraries, letting poetry decide which versions to install.
+Having the tests separated from the actual implementation ensures that the way we test our API
+mirrors the way that our users will interact with it, which is a good practice to follow.
+
+Under the root of our project, we also have a `pyproject.toml` file, a the file that poetry uses to keep track of our dependencies, and a `poetry.lock` file.
+The `poetry.lock` file keeps track of the **exact** versions of our dependencies, so that we can recreate the same environment, whereas
+the `.toml` is more relaxed, and acts like a library *wish list*, letting poetry pick and choosse the best versions for our project depending on the environment.
 
 Let's see the contents of the `pyproject.toml` file before we get to code our API:
 
@@ -114,7 +121,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 ```
 
-In there we got some metadata about our project, such as the name, version, and description, as well as a list of dependencies.
+In there we got some metadata about our project, such as name, version, and description, as well as a list of dependencies.
 Notice how the dependencies are divided into two sections: `tool.poetry.dependencies` and `tool.poetry.group.dev.dependencies`,
 the first one is for dependencies that are required for the project to run, while the second one is for dependencies that are only
 required for development.
@@ -125,9 +132,7 @@ shipping with your project when you deploy it!
 
 #### Coding the API
 
-
-
-Now that we have seen how Poetry handles project initialization, let's get to coding our API![^skip]
+Now that we have seen how Poetry handles project initialization, let's get to coding our API!
 
 First, we will create our application in the `dummy_api` folder, in a file called `dummy_app.py`:
 
@@ -155,11 +160,15 @@ from .dummy_app import *
 
 #### Testing the API
 
-Now that we have our API, we want to make sure that it works as intended, so we will write some unit tests for it. We will use the [pytest](https://docs.pytest.org/en/6.2.x/)
- framework, so make sure to install it with `poetry add --group dev pytest` before proceeding!
+Now that we have coded our API server, we want to make sure that it works as intended, 
+so we will write some unit tests for it. We will use the [pytest](https://docs.pytest.org/en/6.2.x/)
+framework to write some test files under the `./tests` directory, 
+so make sure to install it with `poetry add --group dev pytest` before proceeding!
 
-To create a test, we will create a file in the `tests` folder, called `test_root.py`, the job of 
-this unit test is to check that the root endpoint returns a JSON object with the correct message.
+A `pytest` test is any python function that starts with `test_` that is contained in a python
+file that also starts with `test_`. For our API, there isn't really much to test but the
+single endpoint we have provided, hence we can create a test file called `test_root.py`, the job of 
+this unit test is to check that our API returns the correct JSON object when we call the root endpoint.
 
 ```python
 import requests as r
@@ -184,13 +193,15 @@ If everything went well, you should see something like this:
 
 ### What we got from Poetry
 
-Now that our "project" is done, let's see what we got from using Poetry:
+After showing what the project management lifecycle looks like with Poetry, let's see what are the 
+benefits that we get from using it over a simple `pip install`:
 
 - A virtual environment, which can be recreated by anyone with `poetry install`
 - A project structure that is `PyPI` ready, so that we can export our code as a python package with a simple `poetry publish`
 
-These are already great features, but we can do even **better** by adding more tools to our 
-now-reproducible environment!
+These are already great features, but we can do even **better**! By using Poetry, we can also
+add a series of development tools to our project and automatically deploy them on any developer's machine.
+We will see a possible setup in the next section.
 
 
 ## Integrating a CI/CD pipeline in our project
@@ -216,19 +227,20 @@ to linters, and are available for a wide variety of languages, not just python!
 
 The tools that we are going to use are:
 
-* [black](https://github.com/psf/black) - A code formatter that will provide us with uniform style across the codebase
-* [flake8](https://flake8.pycqa.org/en/latest/) - A linter that will check for code smells and potential bugs
-* [mypy](https://mypy.readthedocs.io/en/stable/) - A static type checker that will help us catch type errors
-* [pytest](https://docs.pytest.org/en/6.2.x/) - We already know this one! It will run our unit tests on every commit
+* [black](https://github.com/psf/black) --- A code formatter that will provide us with uniform style across the codebase
+* [flake8](https://flake8.pycqa.org/en/latest/) --- A linter that will check for code smells and potential bugs
+* [mypy](https://mypy.readthedocs.io/en/stable/) --- A static type checker that will help us catch type errors
+* [pytest](https://docs.pytest.org/en/6.2.x/) --- We already know this one! It will run our unit tests on every commit
 
-Let's use poetry to pull them all in!
+{% 
+  include note.html content = "If you want, you can use the command `poetry add --group dev pre-commit black flake8 mypy` to install all of the required depenedencies in 
+  your poetry virtual environment, so you can use them independently from `pre-commit`. Be aware that `pre-commit` will
+  install them in its own virtual environment automatically when it runs for the first time, so you don't *need* to do this step."
+%}
 
-```bash
-poetry add --group dev pre-commit black flake8 mypy
-```
+To set up `pre-commit` with the right tools, we need to create a `.pre-commit-config.yaml` file 
+in order to tell it what to run, in what order and with what arguments.
 
-Now that we got the good stuff, we still need to do a bit of work to create a `.yaml` file that will tell pre-commit to run all of 
-our tools on every commit.
 We do it with the following commands:
 
 ```bash 
@@ -238,8 +250,8 @@ poetry run pre-commit install # tells pre-commit to install the hooks in the .gi
 poetry run pre-commit sample-config > .pre-commit-config.yaml # gives us a sample .yaml file
 ```
 
-We are now left with a `.pre-commit-config.yaml` file that we can edit to our liking. Let's 
-add all of our tools to it and see what we get:
+This will set up `pre-commit` on our git repository and will give us a default `.pre-commit-config.yaml` file that we can edit to our liking. 
+A `.yaml` file that works for our project (using the tools that we mentioned above) looks like this:
 
 ```yaml
 # See https://pre-commit.com for more information
@@ -284,20 +296,19 @@ repos:
         args: [-v]
         always_run: true
         verbose: true
-
 ```
-*Here is the `.yaml` that we end up with, feel free to use it as a starting point for your own projects!*
+*Here is the `.yaml` that we end up with, feel free to use it as a starting point for your own python projects!*
 
 ### Pre-commit in action
 
-Now that tooling is ready, let's see what happens when we try to commit some code:
+Now that the tooling is ready, let's see what happens when we try to commit some code:
 
 {%include lazyload.html src = "/assets/img/precommit.webp" alt = "GIF showing the pre-commit hooks in action" title = "GIF showing the pre-commit hooks in action" caption = "Here we push a commit to our repository, and the pre-commit hooks run automatically, formatting our code and checking for errors. We can see that everything went through, hence the code is of good quality! if there were any errors, we would need to fix them and then run the commit again."%}
 
-Having these checks at every commit gives us precious guarantees about the quality of our code,
+Having these checks at every commit gives us precious guarantees on our code quality,
 but we can only rely on them if we are sure that everyone is using the same tools. This is why
 Poetry is so important: it allows us to bundle `pre-commit` with our project, so that everyone
-can run the hooks from day one!
+has to run the hooks from day *one*!
 
 ## Final thoughts
 
@@ -326,7 +337,6 @@ as you will reap the benefits for the rest of the project's lifetime!
 
 [^5]: And they also won't risk forgetting to install the pipeline altogether, which ensures that everyone is working under the same standards! 😄
 
-[^skip]: If you want to skip the coding part, you can jump to the next section [here](#integrating-a-cicd-pipeline-in-our-project).
 
 *[CI]: Continuous Integration
 *[CD]: Continuous Deployment
