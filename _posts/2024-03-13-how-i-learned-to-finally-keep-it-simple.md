@@ -24,7 +24,6 @@ Lately, youtube, reddit and the internet in general have been **absolutely flood
 
 This kind of [cultish](https://en.wikipedia.org/wiki/Cargo_cult_programming) behavior is the *antithesis* of productivity, and it's unfortunately something that happens too often when a bunch of software engineers all get together around the new shiny thing. In practice, Obsidian was "forcing" me to keep my notes in the way it preferred: scattered, unstructured and hyperlinked. It gets you to follow its formula and makes you think that by doing so you're building something extraordinary when really all that is happening is that you're losing a coherent view of the material.
 
-
 Don't get me wrong, Obsidian's system is sure to fit *some* use cases, but I don't believe it's the end-all be-all that current hype makes it out to be.
 
 ### My Realization
