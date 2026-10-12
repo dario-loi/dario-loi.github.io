@@ -7,7 +7,7 @@ import Article from "@dario-loi/polytope/astro/Article.astro";
 import PostHeader from "@dario-loi/polytope/astro/PostHeader.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Note from "@dario-loi/polytope/astro/Note.astro";
-import { entries, isoDay, longDate, neighbors, readingTime } from "../../lib/content";
+import { entries, isoDay, longDate, neighbors, preview, readingTime } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -19,6 +19,7 @@ interface Props { post: CollectionEntry<"blog">; newer?: CollectionEntry<"blog">
 const { post, newer, older } = Astro.props;
 const d = post.data;
 const { Content } = await render(post);
+const og = await preview(d.cover, d.coverAlt);
 ---
 <Base
   title={d.title}
@@ -28,6 +29,7 @@ const { Content } = await render(post);
   published={d.date}
   modified={d.updated}
   noindex={d.draft}
+  {...og}
   crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }, { name: d.title, href: `/blog/${post.id}/` }]}
 >
   <Article>

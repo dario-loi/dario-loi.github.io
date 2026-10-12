@@ -2,7 +2,7 @@
 // Every page: head tags (Polytope's <Seo>), the top bar, the page, and the footer.
 import "@dario-loi/polytope/css";
 import Seo from "@dario-loi/polytope/astro/Seo.astro";
-import type { Citation, Person } from "@dario-loi/polytope/astro/Seo.astro";
+import type { Citation, SeoImage } from "@dario-loi/polytope/astro/Seo.astro";
 import ultra from "@dario-loi/polytope/fonts/ultra-latin-400.woff2?url";
 import franklin from "@dario-loi/polytope/fonts/libre-franklin-latin-wght.woff2?url";
 import SiteBar from "../components/SiteBar.astro";
@@ -22,7 +22,8 @@ interface Props {
   published?: Date;
   modified?: Date;
   citation?: Citation;
-  image?: string;
+  /** The link-preview picture; the site card when left out. */
+  image?: SeoImage;
   imageAlt?: string;
   /** The trail from home to this page, for search results. */
   crumbs?: { name: string; href: string }[];
@@ -42,13 +43,25 @@ const tabs = [
   { label: "CV", href: cv.page, current: current === "CV", track: "cv-view" },
 ];
 
-const me: Person = {
+// The person and the site as schema.org records, written out here rather than through Seo's
+// `person` so they can carry the lab, the alma mater, and an id the site record points at.
+const home = new URL("/", Astro.site).href;
+const me = {
+  "@type": "Person",
+  "@id": `${home}#person`,
   name: person.name,
-  url: "/",
+  url: home,
+  image: new URL(person.photo, home).href,
   jobTitle: person.role,
-  affiliation: person.affiliation,
+  affiliation: { "@type": "Organization", name: person.affiliation, url: "https://www.northeastern.edu/" },
+  memberOf: { "@type": "Organization", name: person.lab.name, url: person.lab.href, parentOrganization: { "@type": "Organization", name: person.affiliation } },
+  alumniOf: { "@type": "CollegeOrUniversity", name: person.alumniOf },
+  knowsAbout: person.topics,
   sameAs: Object.values(person.profiles),
 };
+const website = { "@type": "WebSite", "@id": `${home}#website`, name: person.name, url: home, author: { "@id": me["@id"] } };
+const isHome = Astro.url.pathname === "/";
+const records = [...(profile ? [me] : []), ...(isHome ? [website] : [])];
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -68,7 +81,7 @@ const year = new Date().getFullYear();
       citation={citation}
       image={image ?? { src: "/og.png", width: 1200, height: 630 }}
       imageAlt={imageAlt ?? `${person.name}, ${person.lede}`}
-      person={profile ? me : undefined}
+      schema={records}
       breadcrumbs={crumbs}
       sitemap="/sitemap-index.xml"
     />
@@ -100,6 +113,7 @@ const year = new Date().getFullYear();
           <li><a href={person.profiles.scholar} data-track="profile-link" data-track-placement="footer" data-track-label="scholar">Google Scholar</a></li>
           <li><a href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
           <li><a href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
+          <li><a href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
           <li><a href="/rss.xml">RSS</a></li>
           <li><a href="/privacy/">Privacy</a></li>
         </ul>

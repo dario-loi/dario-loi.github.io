@@ -9,7 +9,7 @@ import Abstract from "@dario-loi/polytope/astro/Abstract.astro";
 import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
-import { cardComplex, entries, neighbors, pubVenue, seedOf } from "../../lib/content";
+import { cardComplex, entries, neighbors, preview, pubVenue, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -25,12 +25,15 @@ const venueLine = pubVenue(d, true);
 const links = [...d.links, { label: "BibTeX", href: "#cite", icon: "quote" as const }];
 const seed = seedOf(pub.id);
 const model = cardComplex(seed);
+// Previews show the card's crop of the paper's figure, else the key figure itself.
+const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
 ---
 <Base
   title={d.title}
   description={d.tldr ?? d.abstract.slice(0, 155)}
   current="Publications"
   noindex={d.draft}
+  {...og}
   citation={{
     title: d.title,
     authors: d.authors,

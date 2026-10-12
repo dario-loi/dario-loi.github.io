@@ -1,5 +1,7 @@
 // Reading the collections: drafts are dropped in production, and every list is newest first.
 import { getCollection, type CollectionEntry } from "astro:content";
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import type { Pub } from "@dario-loi/polytope/astro/PubList.astro";
 
 type Name = "blog" | "publications" | "projects";
@@ -9,6 +11,14 @@ export const visible = (entry: { data: { draft?: boolean } }) => import.meta.env
 export async function entries<N extends Name>(name: N): Promise<CollectionEntry<N>[]> {
   const all = (await getCollection(name, visible)) as CollectionEntry<N>[];
   return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+/** An entry's own link-preview picture, as a JPEG at most 1200px wide (previews do not all
+ *  read WebP). Without one the page keeps the site card. */
+export async function preview(src?: ImageMetadata, alt?: string) {
+  if (!src) return {};
+  const img = await getImage({ src, format: "jpeg", width: Math.min(1200, src.width) });
+  return { image: { src: img.src, width: Number(img.attributes.width), height: Number(img.attributes.height) }, imageAlt: alt };
 }
 
 /** Previous (newer) and next (older) neighbors of an entry in its list, for the pager. */

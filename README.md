@@ -48,7 +48,7 @@ Custom events, each with `page`, `source` (the referrer: `direct`, a host name, 
 | `cv-download` | A link to the CV PDF |
 | `cv-view` | A link to the CV page (top bar, menu, home) |
 | `email` | An email link (the address is assembled in the browser on use, never written in the HTML) |
-| `profile-link` | Google Scholar, GitHub, LinkedIn links (`label` names which) |
+| `profile-link` | Google Scholar, GitHub, LinkedIn, ORCID links (`label` names which) |
 | `paper-link` | OpenReview, PDF, arXiv, Code on a paper page (`label`) |
 | `bibtex-copy` | The Copy button on a paper's BibTeX (`label` is the paper) |
 | `project-link` | Links on a project page (`label`) |

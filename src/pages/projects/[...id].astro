@@ -8,7 +8,7 @@ import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import EntryHeader from "../../components/EntryHeader.astro";
-import { cardComplex, entries, neighbors, seedOf } from "../../lib/content";
+import { cardComplex, entries, neighbors, preview, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -22,12 +22,14 @@ const d = project.data;
 const { Content } = await render(project);
 const seed = seedOf(project.id);
 const model = cardComplex(seed);
+const og = await preview(d.cover, d.coverAlt);
 ---
 <Base
   title={d.title}
   description={d.description}
   current="Projects"
   noindex={d.draft}
+  {...og}
   crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }, { name: d.title, href: `/projects/${project.id}/` }]}
 >
   <Article>

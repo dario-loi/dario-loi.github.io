@@ -8,6 +8,12 @@ export const person = {
   role: "Ph.D. student in Computer Engineering",
   affiliation: "Northeastern University",
   city: "Boston",
+  lab: { name: "Mentis Laboratory", href: "https://mentis.info/" },
+  /** Research areas, as the lab's team page lists them, for search engines. */
+  topics: ["Machine learning", "Uncertainty quantification", "Geometric deep learning"],
+  alumniOf: "Sapienza University of Rome",
+  /** A square headshot in public/, for search engines; the pages do not show it. */
+  photo: "/dario-loi.jpg",
   /** The one-line description under the name, in search results, and in link previews. */
   lede: "Ph.D. student in Computer Engineering at Northeastern University, working on machine learning.",
   /** The address is split so it never appears whole in the HTML; js builds the mailto on use. */
@@ -17,6 +23,7 @@ export const person = {
     github: "https://github.com/dario-loi",
     linkedin: "https://www.linkedin.com/in/dario-loi-5182531b1",
     openreview: "https://openreview.net/profile?id=~Dario_Loi1",
+    orcid: "https://orcid.org/0009-0006-3753-5668",
   },
 };
 
