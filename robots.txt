@@ -3,3 +3,4 @@ layout: none
 ---
 User-agent: *
 Sitemap: https://dario-loi.github.io/sitemap.xml
+Sitemap: https://dario-loi.github.io/polytope/sitemap-index.xml
