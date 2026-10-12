@@ -1,0 +1,15 @@
+---
+// The mast of a list page: the title with its tomato full stop, an optional lede, and a count.
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
+interface Props { title: string; lede?: string; count?: string }
+const { title, lede, count } = Astro.props;
+---
+<Mast title={title} lede={lede} class="index-mast">
+  {count && <p slot="after" class="index-mast__count">{count}</p>}
+</Mast>
+<hr class="ply-rule" />
+<style is:global>
+  .index-mast { padding-block: var(--ply-space-7) var(--ply-space-6); }
+  .index-mast .ply-mast__title { --ply-size-display: clamp(2.75rem, 1.4rem + 3.6vw, 4.5rem); }
+  .index-mast__count { margin-top: var(--ply-space-4); font-size: var(--ply-size-sm); font-weight: var(--ply-weight-semibold); color: var(--ply-color-text-muted); font-variant-numeric: tabular-nums; }
+</style>

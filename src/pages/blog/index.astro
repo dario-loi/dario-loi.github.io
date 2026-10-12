@@ -1,0 +1,48 @@
+---
+import Base from "../../layouts/Base.astro";
+import Empty from "@dario-loi/polytope/astro/Empty.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+import IndexMast from "../../components/IndexMast.astro";
+import EntryCard from "../../components/EntryCard.astro";
+import CardGrid from "../../components/CardGrid.astro";
+import { entries, longDate, readingTime } from "../../lib/content";
+import { person } from "../../site";
+
+const posts = await entries("blog");
+const n = posts.length;
+---
+<Base title="Blog" description={`Writing by ${person.name} on research and engineering.`} current="Blog" noindex={n === 0} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
+  <IndexMast title="Blog" lede="Notes on research and engineering." count={n > 0 ? `${n} ${n === 1 ? "post" : "posts"}` : undefined} />
+  <div class="ply-container posts">
+    {n === 0 ? (
+      <Empty title="Nothing posted yet" body="Publications and projects are up in the meantime.">
+        <div class="ply-cluster" style="justify-content: center">
+          <Button href="/publications/">Publications</Button>
+          <Button href="/projects/" variant="secondary">Projects</Button>
+        </div>
+      </Empty>
+    ) : (
+      <CardGrid>
+        {posts.map((p, i) => (
+          <EntryCard
+            href={`/blog/${p.id}/`}
+            id={p.id}
+            title={p.data.title}
+            summary={p.data.description}
+            meta={[longDate(p.data.date), `${readingTime(p.body)} min read`]}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            size={i === 0 ? "lead" : "regular"}
+            level={2}
+            draft={p.data.draft}
+            track="open-post"
+            placement="blog"
+          />
+        ))}
+      </CardGrid>
+    )}
+  </div>
+</Base>
+<style>
+  .posts { padding-top: var(--ply-space-7); }
+</style>

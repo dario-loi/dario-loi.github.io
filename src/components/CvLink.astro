@@ -1,0 +1,15 @@
+---
+// A CV link. `download` points at the PDF when it exists (event "cv-download"); otherwise, and
+// for `view`, it opens the CV page (event "cv-view"). Every one says where it sits.
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import { cv } from "../site";
+interface Props { placement: string; mode?: "download" | "view"; variant?: "primary" | "secondary" | "ghost"; size?: "md" | "sm" }
+const { placement, mode = "view", variant = "secondary", size = "md" } = Astro.props;
+const pdf = mode === "download" && cv.pdf;
+const classes = ["ply-button", variant !== "primary" && `ply-button--${variant}`, size === "sm" && "ply-button--sm"];
+---
+{pdf ? (
+  <a class:list={classes} href={pdf} data-astro-prefetch="false" data-track="cv-download" data-track-placement={placement}><Icon name="download" /><slot name="download">CV (PDF)</slot></a>
+) : (
+  <a class:list={classes} href={cv.page} data-track="cv-view" data-track-placement={placement}><slot>CV</slot></a>
+)}

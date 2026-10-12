@@ -1,12 +1,26 @@
-tmp
-*.rdb
-.env
-.sass-cache
-.DS_Store
-_site
-.jekyll-cache
-.git
-.vscode
-.obsidian
-node_modules
+# build output
+dist/
+.astro/
 
+# dependencies
+node_modules/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# local tooling
+.venv/
+.vscode/
+.DS_Store
+
+# Local design-tool notes: product brief, surface briefs, captures, and tool state.
+# They stay on this machine only. DESIGN.md and .impeccable/design.json are public copies
+# of the Polytope design system and are committed.
+PRODUCT.md
+.impeccable/*
+!.impeccable/design.json
+
+# Browser automation logs
+.playwright-mcp/

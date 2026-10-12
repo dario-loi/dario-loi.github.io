@@ -1,0 +1,42 @@
+---
+import Base from "../../layouts/Base.astro";
+import Empty from "@dario-loi/polytope/astro/Empty.astro";
+import IndexMast from "../../components/IndexMast.astro";
+import EntryCard from "../../components/EntryCard.astro";
+import CardGrid from "../../components/CardGrid.astro";
+import { entries } from "../../lib/content";
+import { person } from "../../site";
+
+const projects = await entries("projects");
+const n = projects.length;
+---
+<Base title="Projects" description={`Software and research projects by ${person.name}.`} current="Projects" crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
+  <IndexMast title="Projects" lede="Software and course projects." count={n > 0 ? `${n} ${n === 1 ? "project" : "projects"}` : undefined} />
+  <div class="ply-container projects">
+    {n === 0 ? (
+      <Empty title="No projects listed yet" />
+    ) : (
+      <CardGrid>
+        {projects.map((p, i) => (
+          <EntryCard
+            href={`/projects/${p.id}/`}
+            id={p.id}
+            title={p.data.title}
+            summary={p.data.description}
+            meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context] : [])]}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            size={i === 0 ? "lead" : "regular"}
+            level={2}
+            draft={p.data.draft}
+            track="open-project"
+            placement="projects"
+          />
+        ))}
+      </CardGrid>
+    )}
+  </div>
+</Base>
+<style>
+  .projects { padding-top: var(--ply-space-7); }
+</style>

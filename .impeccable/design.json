@@ -1,0 +1,958 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T16:30:00.000Z",
+  "title": "Design System: Polytope",
+  "extensions": {
+    "colorMeta": {
+      "exhibit-black": {
+        "role": "neutral",
+        "displayName": "Exhibit Black",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "gallery-white": {
+        "role": "neutral",
+        "displayName": "Gallery White",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "gallery-wall": {
+        "role": "neutral",
+        "displayName": "Gallery Wall",
+        "canonical": "#EEF0EF",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "hairline-gray": {
+        "role": "neutral",
+        "displayName": "Hairline Gray",
+        "canonical": "#D9DAD6",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "caption-gray": {
+        "role": "neutral",
+        "displayName": "Caption Gray",
+        "canonical": "#4A4A47",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "quiet-gray": {
+        "role": "neutral",
+        "displayName": "Quiet Gray",
+        "canonical": "#6B6B66",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "panel-chalk": {
+        "role": "neutral",
+        "displayName": "Panel Chalk",
+        "canonical": "#F6F7F6",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "panel-gray": {
+        "role": "neutral",
+        "displayName": "Panel Gray",
+        "canonical": "#B9BAB4",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "tomato": {
+        "role": "primary",
+        "displayName": "Tomato",
+        "canonical": "#D9412B",
+        "tonalRamp": [
+          "#B8321F",
+          "#D9412B",
+          "#F0654F",
+          "#FBE3DE"
+        ]
+      },
+      "tomato-ink": {
+        "role": "primary",
+        "displayName": "Tomato Ink",
+        "canonical": "#B8321F",
+        "tonalRamp": [
+          "#B8321F",
+          "#D9412B",
+          "#F0654F",
+          "#FBE3DE"
+        ]
+      },
+      "tomato-bright": {
+        "role": "primary",
+        "displayName": "Tomato Bright",
+        "canonical": "#F0654F",
+        "tonalRamp": [
+          "#B8321F",
+          "#D9412B",
+          "#F0654F",
+          "#FBE3DE"
+        ]
+      },
+      "mustard": {
+        "role": "secondary",
+        "displayName": "Mustard",
+        "canonical": "#E9A81C",
+        "tonalRamp": [
+          "#7A5300",
+          "#E9A81C",
+          "#F2B83A",
+          "#FBEFD2"
+        ]
+      },
+      "mustard-light": {
+        "role": "secondary",
+        "displayName": "Mustard Light",
+        "canonical": "#F2B83A",
+        "tonalRamp": [
+          "#7A5300",
+          "#E9A81C",
+          "#F2B83A",
+          "#FBEFD2"
+        ]
+      },
+      "mustard-soft": {
+        "role": "secondary",
+        "displayName": "Mustard Soft",
+        "canonical": "#FBEFD2",
+        "tonalRamp": [
+          "#7A5300",
+          "#E9A81C",
+          "#F2B83A",
+          "#FBEFD2"
+        ]
+      },
+      "teal": {
+        "role": "tertiary",
+        "displayName": "Teal",
+        "canonical": "#0F6E73",
+        "tonalRamp": [
+          "#0F6E73",
+          "#5CC2C7",
+          "#DDF1F0"
+        ]
+      },
+      "teal-light": {
+        "role": "tertiary",
+        "displayName": "Teal Light",
+        "canonical": "#5CC2C7",
+        "tonalRamp": [
+          "#0F6E73",
+          "#5CC2C7",
+          "#DDF1F0"
+        ]
+      },
+      "cobalt": {
+        "role": "tertiary",
+        "displayName": "Cobalt",
+        "canonical": "#3A62C4",
+        "tonalRamp": [
+          "#1D336B",
+          "#2B4A99",
+          "#3A62C4",
+          "#6A8BD4",
+          "#95AEE3",
+          "#C2D1F0",
+          "#E3EAF8"
+        ]
+      },
+      "cobalt-light": {
+        "role": "tertiary",
+        "displayName": "Cobalt Light",
+        "canonical": "#95AEE3",
+        "tonalRamp": [
+          "#1D336B",
+          "#2B4A99",
+          "#3A62C4",
+          "#6A8BD4",
+          "#95AEE3",
+          "#C2D1F0",
+          "#E3EAF8"
+        ]
+      },
+      "after-hours-ground": {
+        "role": "neutral",
+        "displayName": "After Hours Ground",
+        "canonical": "#161615",
+        "tonalRamp": [
+          "#0B0B0A",
+          "#242423",
+          "#40403F",
+          "#5E5E5C",
+          "#80807F",
+          "#A5A5A3",
+          "#CACAC9",
+          "#EEEEED"
+        ]
+      },
+      "after-hours-panel": {
+        "role": "neutral",
+        "displayName": "After Hours Panel",
+        "canonical": "#262624",
+        "tonalRamp": [
+          "#141414",
+          "#1C1C1A",
+          "#262624",
+          "#3A3A37",
+          "#4A4A47",
+          "#6B6B66",
+          "#8F8F89",
+          "#B9BAB4",
+          "#D9DAD6",
+          "#EEF0EF",
+          "#F6F7F6"
+        ]
+      },
+      "after-hours-chalk": {
+        "role": "neutral",
+        "displayName": "After Hours Chalk",
+        "canonical": "#F2F2EE",
+        "tonalRamp": [
+          "#0B0B09",
+          "#242421",
+          "#40403D",
+          "#5E5E5A",
+          "#80807D",
+          "#A5A5A1",
+          "#CBCBC7",
+          "#EFEFEB"
+        ]
+      },
+      "viz-teal": {
+        "role": "data",
+        "displayName": "Chart Teal",
+        "canonical": "#009B93",
+        "tonalRamp": [
+          "#000F0D",
+          "#002B28",
+          "#014A46",
+          "#126C66",
+          "#1F938B",
+          "#3EBAB1",
+          "#6BE1D8",
+          "#B8FFF8"
+        ]
+      },
+      "viz-grass": {
+        "role": "data",
+        "displayName": "Chart Grass",
+        "canonical": "#4C8C2B",
+        "tonalRamp": [
+          "#021000",
+          "#0F2C01",
+          "#214C06",
+          "#366D16",
+          "#539333",
+          "#77B959",
+          "#9CE07F",
+          "#D1FEBF"
+        ]
+      },
+      "viz-sky": {
+        "role": "data",
+        "displayName": "Chart Sky",
+        "canonical": "#2E8FD0",
+        "tonalRamp": [
+          "#000C1B",
+          "#002740",
+          "#054469",
+          "#166394",
+          "#2487C8",
+          "#50ADF0",
+          "#99D2FF",
+          "#E1F1FE"
+        ]
+      },
+      "viz-mustard": {
+        "role": "data",
+        "displayName": "Chart Mustard",
+        "canonical": "#C28A0A",
+        "tonalRamp": [
+          "#130900",
+          "#322001",
+          "#543A06",
+          "#7B5600",
+          "#A77604",
+          "#D29929",
+          "#FABF57",
+          "#FEECCF"
+        ]
+      },
+      "viz-plum": {
+        "role": "data",
+        "displayName": "Chart Plum",
+        "canonical": "#9A3E96",
+        "tonalRamp": [
+          "#1A0019",
+          "#40003F",
+          "#6A0668",
+          "#8D3189",
+          "#B456AF",
+          "#DC7BD6",
+          "#FBAAF4",
+          "#FEE6FB"
+        ]
+      },
+      "viz-pink": {
+        "role": "data",
+        "displayName": "Chart Pink",
+        "canonical": "#E06C91",
+        "tonalRamp": [
+          "#1E0009",
+          "#460421",
+          "#78013A",
+          "#9C2E57",
+          "#C5547A",
+          "#EF799E",
+          "#FCB3C6",
+          "#FEE8ED"
+        ]
+      },
+      "status-good": {
+        "role": "status",
+        "displayName": "Status Good",
+        "canonical": "#1E7A3C",
+        "tonalRamp": [
+          "#001003",
+          "#032D11",
+          "#004E1F",
+          "#0E7133",
+          "#3E9555",
+          "#65BB79",
+          "#8BE29E",
+          "#C7FFD1"
+        ]
+      },
+      "status-warning": {
+        "role": "status",
+        "displayName": "Status Warning",
+        "canonical": "#F2B71F",
+        "tonalRamp": [
+          "#120900",
+          "#2F2202",
+          "#533B00",
+          "#77580A",
+          "#A17915",
+          "#CF9B11",
+          "#FBC030",
+          "#FFECC9"
+        ]
+      },
+      "status-serious": {
+        "role": "status",
+        "displayName": "Status Serious",
+        "canonical": "#E8743B",
+        "tonalRamp": [
+          "#1B0300",
+          "#401400",
+          "#6B2801",
+          "#97400F",
+          "#CB591B",
+          "#F47F47",
+          "#FAB99D",
+          "#FFE9E0"
+        ]
+      },
+      "status-critical": {
+        "role": "status",
+        "displayName": "Status Critical",
+        "canonical": "#B3261E",
+        "tonalRamp": [
+          "#1F0000",
+          "#4B0101",
+          "#7A0907",
+          "#AC1D17",
+          "#D64A3D",
+          "#F97869",
+          "#FDB6AB",
+          "#FEE9E5"
+        ]
+      }
+    },
+    "themes": {
+      "description": "Semantic color tokens per theme, from tokens/tokens.json (CSS custom properties --ply-color-*).",
+      "light": {
+        "bg": "#FFFFFF",
+        "surface-sunken": "#EEF0EF",
+        "panel": "#141414",
+        "panel-text": "#F6F7F6",
+        "panel-muted": "#B9BAB4",
+        "panel-rule": "#4A4A47",
+        "text": "#141414",
+        "text-muted": "#4A4A47",
+        "text-subtle": "#6B6B66",
+        "rule-strong": "#141414",
+        "rule": "#D9DAD6",
+        "accent": "#D9412B",
+        "accent-text": "#B8321F",
+        "on-accent": "#FFFFFF",
+        "link": "#0F6E73",
+        "link-hover": "#141414",
+        "note": "#E9A81C",
+        "note-soft": "#FBEFD2",
+        "focus": "#0F6E73",
+        "focus-on-panel": "#F2B83A",
+        "selection": "#E9A81C",
+        "code-comment": "#F2B83A",
+        "code-keyword": "#F0654F",
+        "code-string": "#5CC2C7",
+        "code-number": "#95AEE3"
+      },
+      "dark": {
+        "bg": "#161615",
+        "surface-sunken": "#1C1C1A",
+        "panel": "#262624",
+        "panel-text": "#F6F7F6",
+        "panel-muted": "#B9BAB4",
+        "panel-rule": "#4A4A47",
+        "text": "#F2F2EE",
+        "text-muted": "#B9BAB4",
+        "text-subtle": "#8F8F89",
+        "rule-strong": "#F2F2EE",
+        "rule": "#3A3A37",
+        "accent": "#F0654F",
+        "accent-text": "#F0654F",
+        "on-accent": "#141414",
+        "link": "#5CC2C7",
+        "link-hover": "#F2F2EE",
+        "note": "#E9A81C",
+        "note-soft": "#3A2F14",
+        "focus": "#F2B83A",
+        "focus-on-panel": "#F2B83A",
+        "selection": "#E9A81C",
+        "code-comment": "#F2B83A",
+        "code-keyword": "#F0654F",
+        "code-string": "#5CC2C7",
+        "code-number": "#95AEE3"
+      }
+    },
+    "dataviz": {
+      "categoricalOrder": [
+        "tomato",
+        "teal",
+        "cobalt",
+        "grass",
+        "sky",
+        "mustard",
+        "plum",
+        "pink"
+      ],
+      "categoricalLight": [
+        "#D9412B",
+        "#009B93",
+        "#3A62C4",
+        "#4C8C2B",
+        "#2E8FD0",
+        "#C28A0A",
+        "#9A3E96",
+        "#E06C91"
+      ],
+      "categoricalDark": [
+        "#E04B34",
+        "#00A39A",
+        "#5A7FDB",
+        "#5A9A35",
+        "#2E8FD0",
+        "#B98200",
+        "#9A52C8",
+        "#D9658B"
+      ],
+      "sequential": [
+        "#E3EAF8",
+        "#C2D1F0",
+        "#95AEE3",
+        "#6A8BD4",
+        "#3A62C4",
+        "#2B4A99",
+        "#1D336B"
+      ],
+      "ordinalSteps": "sequential steps 3 to 7",
+      "diverging": [
+        "#2B4A99",
+        "#6A8BD4",
+        "#C2D1F0",
+        "#D9DAD6",
+        "#F6C3B9",
+        "#E8765F",
+        "#B8321F"
+      ],
+      "status": {
+        "good": "#1E7A3C",
+        "warning": "#F2B71F",
+        "serious": "#E8743B",
+        "critical": "#B3261E"
+      },
+      "surface": {
+        "light": "#FFFFFF",
+        "dark": "#1C1C1A"
+      },
+      "validation": "Adjacent pairs checked for color vision deficiency: worst delta E 13.6 light and 13.6 dark; normal vision 18.0 light and 16.7 dark. Scatter and small multiples use the first three slots only."
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Mast page and chapter titles, sentence case, tomato full stop; sized to the longest word with a container query."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings in the reading column."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Top bar wordmark, pager titles, app and empty-state titles. The 24px floor for Ultra."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Third-level headings."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Paragraph under a mast title, capped at 36rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All running text in the 36rem reading column. From 100rem, docs and article text is 18px in a 38rem column."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Tabs, the search field, sidebar links, tables, notes, author lines (--ply-size-ui)."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Wall labels, tags, sidebar group headings, code bar text."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code, keys, numeric parameters; ligatures off."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tooltip-lift",
+        "value": "0 0.5rem 1.25rem rgb(0 0 0 / 0.2)",
+        "purpose": "Chart tooltips. Floating layers only."
+      },
+      {
+        "name": "card-lift",
+        "value": "0 0.5rem 1.5rem rgb(0 0 0 / 0.18)",
+        "purpose": "Citation cards over prose."
+      },
+      {
+        "name": "toast-lift",
+        "value": "0 0.75rem 2rem rgb(0 0 0 / 0.25)",
+        "purpose": "Toasts at the foot of the viewport."
+      },
+      {
+        "name": "input-hover-ring",
+        "value": "inset 0 0 0 1px var(--ply-color-rule-strong)",
+        "purpose": "Thickens a control border on hover; tomato on invalid fields."
+      }
+    ],
+    "borders": [
+      {
+        "name": "hair",
+        "value": "1px",
+        "purpose": "Rules between rows and list items."
+      },
+      {
+        "name": "control",
+        "value": "2px",
+        "purpose": "Buttons, inputs, segmented controls, search."
+      },
+      {
+        "name": "rule",
+        "value": "3px",
+        "purpose": "Exhibit rules under the top bar and between page regions; focus outline width."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-fast",
+        "value": "120ms",
+        "purpose": "Hover and color changes."
+      },
+      {
+        "name": "duration-base",
+        "value": "200ms",
+        "purpose": "Switches and floating cards."
+      },
+      {
+        "name": "duration-slow",
+        "value": "320ms",
+        "purpose": "Toast arrival."
+      },
+      {
+        "name": "duration-drop",
+        "value": "900ms",
+        "purpose": "One ball falling through the machine."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default for UI that arrives."
+      },
+      {
+        "name": "ease-gravity",
+        "value": "cubic-bezier(0.55, 0, 1, 0.45)",
+        "purpose": "Things that fall: machine balls, the loading indicator."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Show end states: the settled bell curve, a ball at rest."
+      }
+    ],
+    "layout": [
+      {
+        "name": "measure",
+        "value": "36rem",
+        "purpose": "Reading column; notes, code, and text share this edge."
+      },
+      {
+        "name": "measure-wide",
+        "value": "38rem",
+        "purpose": "Docs and article reading column from 100rem, with 18px text."
+      },
+      {
+        "name": "margin",
+        "value": "14rem",
+        "purpose": "Narrowest margin after the text, for sidenotes and margin figures; opens when ply-main has 52rem and widens with the page to 21rem."
+      },
+      {
+        "name": "gutter",
+        "value": "clamp(1rem, 0.2rem + 4vw, 4.5rem)",
+        "purpose": "Page side margin."
+      },
+      {
+        "name": "sidebar",
+        "value": "17.5rem",
+        "purpose": "Docs chapter sidebar from 56rem, with the on-this-page list under the current page."
+      },
+      {
+        "name": "toc",
+        "value": "15rem",
+        "purpose": "Article on-this-page rail at the start edge, from 80rem."
+      },
+      {
+        "name": "max",
+        "value": "90rem"
+      },
+      {
+        "name": "mast-exhibit",
+        "value": "35rem",
+        "purpose": "Right column of the mast from 64rem."
+      },
+      {
+        "name": "chart-min",
+        "value": "32rem",
+        "purpose": "Charts scroll sideways below this width."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "25rem",
+        "purpose": "Below: the Menu button shows only its icon."
+      },
+      {
+        "name": "pager",
+        "value": "30rem",
+        "purpose": "Below: previous and next stack."
+      },
+      {
+        "name": "phone",
+        "value": "40rem",
+        "purpose": "Below: icon-only search, chart scroll hint, stacked token tables."
+      },
+      {
+        "name": "sidebar",
+        "value": "56rem",
+        "purpose": "Docs chapter sidebar appears, with the on-this-page list under the current page; the text centres once there is room."
+      },
+      {
+        "name": "mast",
+        "value": "64rem",
+        "purpose": "Mast splits into title and exhibit."
+      },
+      {
+        "name": "article",
+        "value": "60rem",
+        "purpose": "Article margin opens after the text, and the text moves toward the centre."
+      },
+      {
+        "name": "topbar",
+        "value": "72rem",
+        "purpose": "Without js/topbar.js, chapter links show in the top bar and the details menu hides. With it, the links show wherever they fit."
+      },
+      {
+        "name": "toc",
+        "value": "80rem",
+        "purpose": "Article on-this-page rail appears at the start edge and the text is centred; below it the list sits in an On this page disclosure above the text."
+      },
+      {
+        "name": "sidenotes",
+        "value": "90rem",
+        "purpose": "Outside a ply-main column, sidenotes and margin blocks move to the margin. Inside one, they move whenever it has 52rem: the measure, a 2rem gap, the 14rem margin."
+      },
+      {
+        "name": "wide",
+        "value": "100rem",
+        "purpose": "Docs and article text steps to 18px in a 38rem column."
+      },
+      {
+        "name": "touch",
+        "value": "pointer: coarse",
+        "purpose": "Tabs, small buttons, the menu, segmented controls, slider rails, and sidebar links grow to 44px targets."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square black exhibit label; fills tomato ink on hover.",
+      "html": "<button class=\"ds-btn\">Copy install line</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.4rem 1.5rem; background: #141414; color: #fff; border: 2px solid #141414; border-radius: 0; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; text-align: center; text-wrap: balance; max-width: 100%; cursor: pointer; transition: background 120ms cubic-bezier(0.16,1,0.3,1), border-color 120ms cubic-bezier(0.16,1,0.3,1), transform 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover { background: #B8321F; border-color: #B8321F; } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline: 3px solid #0F6E73; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined square button; fills black on hover.",
+      "html": "<button class=\"ds-btn-secondary\">View source</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.4rem 1.5rem; background: transparent; color: #141414; border: 2px solid #141414; border-radius: 0; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; text-align: center; text-wrap: balance; max-width: 100%; cursor: pointer; transition: background 120ms cubic-bezier(0.16,1,0.3,1), color 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-secondary:hover { background: #141414; color: #fff; } .ds-btn-secondary:focus-visible { outline: 3px solid #0F6E73; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Borderless quiet action; gallery wall on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Reset</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.4rem 0.75rem; background: transparent; color: #141414; border: 2px solid transparent; border-radius: 0; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; text-align: center; text-wrap: balance; max-width: 100%; cursor: pointer; transition: background 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover { background: #EEF0EF; } .ds-btn-ghost:focus-visible { outline: 3px solid #0F6E73; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square white field with a 2px black border and a bold label above.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Name</span><input class=\"ds-input\" placeholder=\"John Doe\"></label>",
+      "css": ".ds-field { display: grid; gap: 0.5rem; max-width: 32rem; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; color: #141414; } .ds-field-label { font-size: 0.875rem; font-weight: 700; } .ds-input { width: 100%; min-height: 2.75rem; padding: 0 0.75rem; background: #fff; color: #141414; border: 2px solid #141414; border-radius: 0; font: inherit; font-size: 1rem; transition: box-shadow 120ms cubic-bezier(0.16,1,0.3,1); } .ds-input::placeholder { color: #6B6B66; } .ds-input:hover { box-shadow: inset 0 0 0 1px #141414; } .ds-input:focus-visible { outline: 3px solid #0F6E73; outline-offset: 2px; }"
+    },
+    {
+      "name": "Chapter Tabs",
+      "kind": "nav",
+      "refersTo": "tab-current",
+      "description": "Top bar chapter links; the current chapter is a black wall-label tab.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"ds-tab\" aria-current=\"page\" href=\"#\">Getting started</a><a class=\"ds-tab\" href=\"#\">Principles</a><a class=\"ds-tab\" href=\"#\">Foundations</a><a class=\"ds-tab\" href=\"#\">Tokens</a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 0.25rem; align-items: center; padding-bottom: 0.75rem; border-bottom: 3px solid #141414; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; } .ds-tab { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0 0.75rem; color: #4A4A47; font-size: 0.9375rem; font-weight: 500; text-decoration: none; transition: color 120ms cubic-bezier(0.16,1,0.3,1), background 120ms cubic-bezier(0.16,1,0.3,1); } .ds-tab:not([aria-current]):hover { color: #141414; background: #EEF0EF; } .ds-tab[aria-current] { background: #141414; color: #fff; font-weight: 600; } .ds-tab:focus-visible { outline: 3px solid #0F6E73; outline-offset: 2px; }"
+    },
+    {
+      "name": "Tags and Status",
+      "kind": "chip",
+      "refersTo": "wall-label",
+      "description": "Square tags; status always pairs a shape with a word.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-tag\">Astro</span><span class=\"ds-tag ds-tag-solid\">Stable</span><span class=\"ds-tag ds-tag-note\">New</span><span class=\"ds-status\"><i class=\"ds-dot\"></i>Running</span></div>",
+      "css": ".ds-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; } .ds-tag { display: inline-flex; font-size: 0.8125rem; font-weight: 700; line-height: 1.3; padding: 0.15rem 0.5rem; border: 1.5px solid currentColor; color: #141414; } .ds-tag-solid { background: #141414; color: #fff; border-color: #141414; } .ds-tag-note { background: #E9A81C; color: #141414; border-color: #E9A81C; } .ds-status { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #141414; } .ds-dot { width: 0.6875rem; height: 0.6875rem; border-radius: 999px; background: #D9412B; }"
+    },
+    {
+      "name": "Note",
+      "kind": "card",
+      "refersTo": "note",
+      "description": "Mustard note with black text and a ball mark, held to the reading measure.",
+      "html": "<aside class=\"ds-note\"><span class=\"ds-note-mark\"></span><p><b>Note.</b> Load the stylesheet once, in your layout head. <a href=\"#\">Installation</a></p></aside>",
+      "css": ".ds-note { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 0.75rem; align-items: start; max-width: 36rem; padding: 1rem 1.5rem; background: #E9A81C; color: #141414; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; font-size: 0.9375rem; line-height: 1.45; } .ds-note p { margin: 0; } .ds-note-mark { width: 0.875rem; height: 0.875rem; margin-top: 0.3rem; border-radius: 999px; background: #141414; } .ds-note a { color: #141414; font-weight: 600; text-decoration: underline 2px; text-underline-offset: 0.2em; } .ds-note a:hover { text-decoration-color: #D9412B; }"
+    },
+    {
+      "name": "Exhibit",
+      "kind": "custom",
+      "refersTo": "exhibit-panel",
+      "description": "The emblem: a Vietoris-Rips complex in a black panel, with a wall-label caption underneath.",
+      "html": "<figure class=\"ds-exhibit\"><div class=\"ds-panel\"><svg viewBox=\"0 0 100 56\" aria-hidden=\"true\"><polygon class=\"ds-tri\" points=\"21.36,6.86 35.16,11.83 23.8,18.15\"/><polygon class=\"ds-tri\" points=\"35.16,11.83 41.31,11 30.63,20.3\"/><polygon class=\"ds-tri\" points=\"35.16,11.83 41.31,11 46.6,15.81\"/><polygon class=\"ds-tri\" points=\"35.16,11.83 23.8,18.15 30.63,20.3\"/><polygon class=\"ds-tri\" points=\"41.31,11 52.45,7.76 46.6,15.81\"/><polygon class=\"ds-tri\" points=\"41.31,11 52.45,7.76 53.99,16.39\"/><polygon class=\"ds-tri\" points=\"41.31,11 46.6,15.81 53.99,16.39\"/><polygon class=\"ds-tri\" points=\"52.45,7.76 46.6,15.81 53.99,16.39\"/><polygon class=\"ds-tri\" points=\"68.72,8.12 76.42,8.67 67.09,15.9\"/><polygon class=\"ds-tri\" points=\"76.42,8.67 67.09,15.9 76.43,21.53\"/><polygon class=\"ds-tri\" points=\"10.67,18.66 23.8,18.15 15.1,25.08\"/><polygon class=\"ds-tri\" points=\"23.8,18.15 30.63,20.3 21.44,29.77\"/><polygon class=\"ds-tri\" points=\"23.8,18.15 30.63,20.3 29.9,26.16\"/><polygon class=\"ds-tri\" points=\"23.8,18.15 15.1,25.08 21.44,29.77\"/><polygon class=\"ds-tri\" points=\"23.8,18.15 15.1,25.08 29.9,26.16\"/><polygon class=\"ds-tri\" points=\"23.8,18.15 21.44,29.77 29.9,26.16\"/><polygon class=\"ds-tri\" points=\"30.63,20.3 21.44,29.77 29.9,26.16\"/><polygon class=\"ds-tri\" points=\"30.63,20.3 21.44,29.77 33.16,34.28\"/><polygon class=\"ds-tri\" points=\"30.63,20.3 29.9,26.16 33.16,34.28\"/><polygon class=\"ds-tri\" points=\"46.6,15.81 53.99,16.39 47.27,25.92\"/><polygon class=\"ds-tri\" points=\"53.99,16.39 47.27,25.92 53.83,30.39\"/><polygon class=\"ds-tri\" points=\"67.09,15.9 76.43,21.53 68.43,30.82\"/><polygon class=\"ds-tri\" points=\"76.43,21.53 90.86,20.27 79.24,25.78\"/><polygon class=\"ds-tri\" points=\"76.43,21.53 90.86,20.27 88.21,28.6\"/><polygon class=\"ds-tri\" points=\"76.43,21.53 68.43,30.82 79.24,25.78\"/><polygon class=\"ds-tri\" points=\"76.43,21.53 79.24,25.78 88.21,28.6\"/><polygon class=\"ds-tri\" points=\"90.86,20.27 79.24,25.78 88.21,28.6\"/><polygon class=\"ds-tri\" points=\"15.1,25.08 21.44,29.77 29.9,26.16\"/><polygon class=\"ds-tri\" points=\"15.1,25.08 21.44,29.77 12.05,36.64\"/><polygon class=\"ds-tri\" points=\"15.1,25.08 21.44,29.77 20.6,37.96\"/><polygon class=\"ds-tri\" points=\"15.1,25.08 12.05,36.64 20.6,37.96\"/><polygon class=\"ds-tri\" points=\"21.44,29.77 29.9,26.16 33.16,34.28\"/><polygon class=\"ds-tri\" points=\"21.44,29.77 12.05,36.64 20.6,37.96\"/><polygon class=\"ds-tri\" points=\"21.44,29.77 20.6,37.96 33.16,34.28\"/><polygon class=\"ds-tri\" points=\"47.27,25.92 53.83,30.39 46.49,34.86\"/><polygon class=\"ds-tri\" points=\"47.27,25.92 53.83,30.39 51.92,38.44\"/><polygon class=\"ds-tri\" points=\"47.27,25.92 46.49,34.86 51.92,38.44\"/><polygon class=\"ds-tri\" points=\"53.83,30.39 68.43,30.82 65.73,37.73\"/><polygon class=\"ds-tri\" points=\"53.83,30.39 46.49,34.86 51.92,38.44\"/><polygon class=\"ds-tri\" points=\"53.83,30.39 51.92,38.44 65.73,37.73\"/><polygon class=\"ds-tri\" points=\"68.43,30.82 65.73,37.73 75.8,40.39\"/><polygon class=\"ds-tri\" points=\"79.24,25.78 88.21,28.6 85.75,35.04\"/><polygon class=\"ds-tri\" points=\"12.05,36.64 20.6,37.96 20.79,45.27\"/><polygon class=\"ds-tri\" points=\"12.05,36.64 7.96,46.5 20.79,45.27\"/><line class=\"ds-edge\" x1=\"9.5\" y1=\"8.16\" x2=\"21.36\" y2=\"6.86\"/><line class=\"ds-edge\" x1=\"9.5\" y1=\"8.16\" x2=\"10.67\" y2=\"18.66\"/><line class=\"ds-edge\" x1=\"21.36\" y1=\"6.86\" x2=\"35.16\" y2=\"11.83\"/><line class=\"ds-edge\" x1=\"21.36\" y1=\"6.86\" x2=\"23.8\" y2=\"18.15\"/><line class=\"ds-edge\" x1=\"35.16\" y1=\"11.83\" x2=\"41.31\" y2=\"11\"/><line class=\"ds-edge\" x1=\"35.16\" y1=\"11.83\" x2=\"23.8\" y2=\"18.15\"/><line class=\"ds-edge\" x1=\"35.16\" y1=\"11.83\" x2=\"30.63\" y2=\"20.3\"/><line class=\"ds-edge\" x1=\"35.16\" y1=\"11.83\" x2=\"46.6\" y2=\"15.81\"/><line class=\"ds-edge\" x1=\"41.31\" y1=\"11\" x2=\"52.45\" y2=\"7.76\"/><line class=\"ds-edge\" x1=\"41.31\" y1=\"11\" x2=\"30.63\" y2=\"20.3\"/><line class=\"ds-edge\" x1=\"41.31\" y1=\"11\" x2=\"46.6\" y2=\"15.81\"/><line class=\"ds-edge\" x1=\"41.31\" y1=\"11\" x2=\"53.99\" y2=\"16.39\"/><line class=\"ds-edge\" x1=\"52.45\" y1=\"7.76\" x2=\"46.6\" y2=\"15.81\"/><line class=\"ds-edge\" x1=\"52.45\" y1=\"7.76\" x2=\"53.99\" y2=\"16.39\"/><line class=\"ds-edge\" x1=\"68.72\" y1=\"8.12\" x2=\"76.42\" y2=\"8.67\"/><line class=\"ds-edge\" x1=\"68.72\" y1=\"8.12\" x2=\"67.09\" y2=\"15.9\"/><line class=\"ds-edge\" x1=\"76.42\" y1=\"8.67\" x2=\"88.64\" y2=\"10.51\"/><line class=\"ds-edge\" x1=\"76.42\" y1=\"8.67\" x2=\"67.09\" y2=\"15.9\"/><line class=\"ds-edge\" x1=\"76.42\" y1=\"8.67\" x2=\"76.43\" y2=\"21.53\"/><line class=\"ds-edge\" x1=\"88.64\" y1=\"10.51\" x2=\"90.86\" y2=\"20.27\"/><line class=\"ds-edge\" x1=\"10.67\" y1=\"18.66\" x2=\"23.8\" y2=\"18.15\"/><line class=\"ds-edge\" x1=\"10.67\" y1=\"18.66\" x2=\"15.1\" y2=\"25.08\"/><line class=\"ds-edge\" x1=\"23.8\" y1=\"18.15\" x2=\"30.63\" y2=\"20.3\"/><line class=\"ds-edge\" x1=\"23.8\" y1=\"18.15\" x2=\"15.1\" y2=\"25.08\"/><line class=\"ds-edge\" x1=\"23.8\" y1=\"18.15\" x2=\"21.44\" y2=\"29.77\"/><line class=\"ds-edge\" x1=\"23.8\" y1=\"18.15\" x2=\"29.9\" y2=\"26.16\"/><line class=\"ds-edge\" x1=\"30.63\" y1=\"20.3\" x2=\"21.44\" y2=\"29.77\"/><line class=\"ds-edge\" x1=\"30.63\" y1=\"20.3\" x2=\"29.9\" y2=\"26.16\"/><line class=\"ds-edge\" x1=\"30.63\" y1=\"20.3\" x2=\"33.16\" y2=\"34.28\"/><line class=\"ds-edge\" x1=\"46.6\" y1=\"15.81\" x2=\"53.99\" y2=\"16.39\"/><line class=\"ds-edge\" x1=\"46.6\" y1=\"15.81\" x2=\"47.27\" y2=\"25.92\"/><line class=\"ds-edge\" x1=\"53.99\" y1=\"16.39\" x2=\"67.09\" y2=\"15.9\"/><line class=\"ds-edge\" x1=\"53.99\" y1=\"16.39\" x2=\"47.27\" y2=\"25.92\"/><line class=\"ds-edge\" x1=\"53.99\" y1=\"16.39\" x2=\"53.83\" y2=\"30.39\"/><line class=\"ds-edge\" x1=\"67.09\" y1=\"15.9\" x2=\"76.43\" y2=\"21.53\"/><line class=\"ds-edge\" x1=\"67.09\" y1=\"15.9\" x2=\"68.43\" y2=\"30.82\"/><line class=\"ds-edge\" x1=\"76.43\" y1=\"21.53\" x2=\"90.86\" y2=\"20.27\"/><line class=\"ds-edge\" x1=\"76.43\" y1=\"21.53\" x2=\"68.43\" y2=\"30.82\"/><line class=\"ds-edge\" x1=\"76.43\" y1=\"21.53\" x2=\"79.24\" y2=\"25.78\"/><line class=\"ds-edge\" x1=\"76.43\" y1=\"21.53\" x2=\"88.21\" y2=\"28.6\"/><line class=\"ds-edge\" x1=\"90.86\" y1=\"20.27\" x2=\"79.24\" y2=\"25.78\"/><line class=\"ds-edge\" x1=\"90.86\" y1=\"20.27\" x2=\"88.21\" y2=\"28.6\"/><line class=\"ds-edge\" x1=\"15.1\" y1=\"25.08\" x2=\"21.44\" y2=\"29.77\"/><line class=\"ds-edge\" x1=\"15.1\" y1=\"25.08\" x2=\"29.9\" y2=\"26.16\"/><line class=\"ds-edge\" x1=\"15.1\" y1=\"25.08\" x2=\"12.05\" y2=\"36.64\"/><line class=\"ds-edge\" x1=\"15.1\" y1=\"25.08\" x2=\"20.6\" y2=\"37.96\"/><line class=\"ds-edge\" x1=\"21.44\" y1=\"29.77\" x2=\"29.9\" y2=\"26.16\"/><line class=\"ds-edge\" x1=\"21.44\" y1=\"29.77\" x2=\"12.05\" y2=\"36.64\"/><line class=\"ds-edge\" x1=\"21.44\" y1=\"29.77\" x2=\"20.6\" y2=\"37.96\"/><line class=\"ds-edge\" x1=\"21.44\" y1=\"29.77\" x2=\"33.16\" y2=\"34.28\"/><line class=\"ds-edge\" x1=\"29.9\" y1=\"26.16\" x2=\"33.16\" y2=\"34.28\"/><line class=\"ds-edge\" x1=\"47.27\" y1=\"25.92\" x2=\"53.83\" y2=\"30.39\"/><line class=\"ds-edge\" x1=\"47.27\" y1=\"25.92\" x2=\"46.49\" y2=\"34.86\"/><line class=\"ds-edge\" x1=\"47.27\" y1=\"25.92\" x2=\"51.92\" y2=\"38.44\"/><line class=\"ds-edge\" x1=\"53.83\" y1=\"30.39\" x2=\"68.43\" y2=\"30.82\"/><line class=\"ds-edge\" x1=\"53.83\" y1=\"30.39\" x2=\"46.49\" y2=\"34.86\"/><line class=\"ds-edge\" x1=\"53.83\" y1=\"30.39\" x2=\"51.92\" y2=\"38.44\"/><line class=\"ds-edge\" x1=\"53.83\" y1=\"30.39\" x2=\"65.73\" y2=\"37.73\"/><line class=\"ds-edge\" x1=\"68.43\" y1=\"30.82\" x2=\"79.24\" y2=\"25.78\"/><line class=\"ds-edge\" x1=\"68.43\" y1=\"30.82\" x2=\"65.73\" y2=\"37.73\"/><line class=\"ds-edge\" x1=\"68.43\" y1=\"30.82\" x2=\"75.8\" y2=\"40.39\"/><line class=\"ds-edge\" x1=\"79.24\" y1=\"25.78\" x2=\"88.21\" y2=\"28.6\"/><line class=\"ds-edge\" x1=\"79.24\" y1=\"25.78\" x2=\"85.75\" y2=\"35.04\"/><line class=\"ds-edge\" x1=\"88.21\" y1=\"28.6\" x2=\"85.75\" y2=\"35.04\"/><line class=\"ds-edge\" x1=\"12.05\" y1=\"36.64\" x2=\"20.6\" y2=\"37.96\"/><line class=\"ds-edge\" x1=\"12.05\" y1=\"36.64\" x2=\"7.96\" y2=\"46.5\"/><line class=\"ds-edge\" x1=\"12.05\" y1=\"36.64\" x2=\"20.79\" y2=\"45.27\"/><line class=\"ds-edge\" x1=\"20.6\" y1=\"37.96\" x2=\"33.16\" y2=\"34.28\"/><line class=\"ds-edge\" x1=\"20.6\" y1=\"37.96\" x2=\"20.79\" y2=\"45.27\"/><line class=\"ds-edge\" x1=\"33.16\" y1=\"34.28\" x2=\"46.49\" y2=\"34.86\"/><line class=\"ds-edge\" x1=\"46.49\" y1=\"34.86\" x2=\"51.92\" y2=\"38.44\"/><line class=\"ds-edge\" x1=\"51.92\" y1=\"38.44\" x2=\"65.73\" y2=\"37.73\"/><line class=\"ds-edge\" x1=\"65.73\" y1=\"37.73\" x2=\"75.8\" y2=\"40.39\"/><line class=\"ds-edge\" x1=\"75.8\" y1=\"40.39\" x2=\"85.75\" y2=\"35.04\"/><line class=\"ds-edge\" x1=\"7.96\" y1=\"46.5\" x2=\"20.79\" y2=\"45.27\"/><circle class=\"ds-pt\" cx=\"9.5\" cy=\"8.16\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"21.36\" cy=\"6.86\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"35.16\" cy=\"11.83\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"41.31\" cy=\"11\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"52.45\" cy=\"7.76\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"68.72\" cy=\"8.12\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"76.42\" cy=\"8.67\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"88.64\" cy=\"10.51\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"10.67\" cy=\"18.66\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"23.8\" cy=\"18.15\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"30.63\" cy=\"20.3\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"46.6\" cy=\"15.81\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"53.99\" cy=\"16.39\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"67.09\" cy=\"15.9\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"76.43\" cy=\"21.53\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"90.86\" cy=\"20.27\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"15.1\" cy=\"25.08\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"21.44\" cy=\"29.77\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"29.9\" cy=\"26.16\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"47.27\" cy=\"25.92\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"53.83\" cy=\"30.39\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"68.43\" cy=\"30.82\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"79.24\" cy=\"25.78\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"88.21\" cy=\"28.6\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"12.05\" cy=\"36.64\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"20.6\" cy=\"37.96\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"33.16\" cy=\"34.28\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"46.49\" cy=\"34.86\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"51.92\" cy=\"38.44\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"65.73\" cy=\"37.73\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"75.8\" cy=\"40.39\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"85.75\" cy=\"35.04\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"7.96\" cy=\"46.5\" r=\"0.9\"/><circle class=\"ds-pt\" cx=\"20.79\" cy=\"45.27\" r=\"0.9\"/></svg></div><figcaption><b>A Vietoris-Rips complex.</b> Points closer than the radius join into edges, and three joined points fill a triangle.</figcaption></figure>",
+      "css": ".ds-exhibit { margin: 0; max-width: 35rem; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; } .ds-panel { aspect-ratio: 100 / 56; background: #141414; } .ds-panel svg { display: block; width: 100%; height: 100%; } .ds-tri { fill: #E9A81C; fill-opacity: 0.5; } .ds-edge { stroke: #F6F7F6; stroke-opacity: 0.7; stroke-width: 0.28; } .ds-pt { fill: #F6F7F6; transition: fill 120ms cubic-bezier(0.16,1,0.3,1); } .ds-pt:hover { fill: #D9412B; } .ds-exhibit figcaption { margin-top: 0.75rem; font-size: 0.875rem; line-height: 1.45; color: #4A4A47; } .ds-exhibit figcaption b { color: #141414; }"
+    },
+    {
+      "name": "Atlas",
+      "kind": "custom",
+      "refersTo": "exhibit-panel",
+      "description": "A CV as a 1-complex on the sphere: an orthographic globe in a black panel, drawn like the complex, with chalk points and great-circle route, mustard countries that hold a place, the tomato ball and dashed reach on the current place, and a wall-label caption that names the current entry, or counts places and moves.",
+      "html": "<figure class=\"ds-atlas\"><div class=\"ds-atlas-map\"><svg viewBox=\"0 0 100 70\" aria-hidden=\"true\"><circle class=\"ds-sea\" cx=\"50\" cy=\"35\" r=\"31\"/><path class=\"ds-grid\" d=\"M19 35h62M50 4v62M24 20h52M24 50h52\"/><path class=\"ds-land\" d=\"M30 18c8-5 18-4 22 2s-2 10 4 14 2 12-6 12-12 6-18 0-8-10-6-16 0-9 4-12z\"/><path class=\"ds-land\" d=\"M60 22c6-2 12 1 14 6s-3 8 1 12-4 9-9 6-8-8-7-13 -3-9 1-11z\"/><path class=\"ds-visited\" d=\"M36 24c4-2 9-1 10 3s-3 7-7 7-6-3-3-10z\"/><path class=\"ds-visited\" d=\"M63 27c3-1 6 1 6 4s-3 5-5 4-4-6-1-8z\"/><path class=\"ds-route\" d=\"M40 29Q52 18 66 31Q60 44 46 48\"/><circle class=\"ds-pt\" cx=\"40\" cy=\"29\" r=\"1.6\"/><circle class=\"ds-pt\" cx=\"66\" cy=\"31\" r=\"1.6\"/><circle class=\"ds-reach\" cx=\"46\" cy=\"48\" r=\"4.6\"/><circle class=\"ds-here\" cx=\"46\" cy=\"48\" r=\"2\"/></svg><span class=\"ds-atlas-tag\">Lisbon, Portugal</span></div><figcaption><b>Where I studied and worked.</b> 3 places, 3 moves between them.</figcaption></figure>",
+      "css": ".ds-atlas { margin: 0; max-width: 35rem; font-family: \"Libre Franklin\", \"Helvetica Neue\", Arial, sans-serif; } .ds-atlas-map { position: relative; aspect-ratio: 10 / 7; background: #141414; } .ds-atlas-map svg { display: block; width: 100%; height: 100%; } .ds-sea { fill: #F6F7F6; fill-opacity: 0.05; stroke: #F6F7F6; stroke-opacity: 0.3; stroke-width: 0.4; } .ds-grid { fill: none; stroke: #F6F7F6; stroke-opacity: 0.1; stroke-width: 0.25; } .ds-land { fill: #F6F7F6; fill-opacity: 0.13; stroke: #F6F7F6; stroke-opacity: 0.6; stroke-width: 0.25; } .ds-visited { fill: #E9A81C; fill-opacity: 0.5; } .ds-route { fill: none; stroke: #F6F7F6; stroke-opacity: 0.8; stroke-width: 0.4; } .ds-pt { fill: #F6F7F6; stroke: #141414; stroke-width: 0.5; transition: transform 120ms cubic-bezier(0.16,1,0.3,1); transform-box: fill-box; transform-origin: center; } .ds-pt:hover { transform: scale(1.3); } .ds-reach { fill: none; stroke: #D9412B; stroke-width: 0.5; stroke-dasharray: 1.2 0.9; } .ds-here { fill: #D9412B; stroke: #141414; stroke-width: 0.5; } .ds-atlas-tag { position: absolute; left: 51%; top: 64%; padding: 0.15rem 0.45rem; background: #F6F7F6; color: #141414; font-size: 0.8125rem; font-weight: 700; line-height: 1.3; white-space: nowrap; } .ds-atlas figcaption { margin-top: 0.5rem; font-size: 0.875rem; line-height: 1.45; color: #4A4A47; } .ds-atlas figcaption b { color: #141414; }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "custom",
+      "refersTo": "code-block",
+      "description": "Code in a black panel at the reading measure; mustard comments read first.",
+      "html": "<div class=\"ds-code\"><div class=\"ds-code-bar\"><span>sh</span><button class=\"ds-copy\">Copy</button></div><pre><span class=\"c\"># install from git</span>\n<span class=\"k\">npm</span> install <span class=\"s\">github:dario-loi/polytope</span></pre></div>",
+      "css": ".ds-code { max-width: 36rem; background: #141414; color: #F6F7F6; } .ds-code-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.5rem 0.5rem 1.5rem; border-bottom: 1px solid #4A4A47; font-family: \"JetBrains Mono\", ui-monospace, Menlo, monospace; font-size: 0.8125rem; color: #B9BAB4; } .ds-copy { background: transparent; color: #F6F7F6; border: 1px solid #4A4A47; font-family: \"Libre Franklin\", Arial, sans-serif; font-size: 0.8125rem; font-weight: 600; padding: 0.3rem 0.6rem; cursor: pointer; } .ds-copy:hover { border-color: #F6F7F6; } .ds-copy:focus-visible { outline: 3px solid #F2B83A; outline-offset: 2px; } .ds-code pre { margin: 0; padding: 1rem 1.5rem; font-family: \"JetBrains Mono\", ui-monospace, Menlo, monospace; font-size: 0.875rem; line-height: 1.7; font-variant-ligatures: none; overflow-x: auto; } .ds-code .c { color: #F2B83A; } .ds-code .k { color: #F0654F; } .ds-code .s { color: #5CC2C7; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A World of Numbers",
+    "overview": "Polytope is set as a hands-on mathematics exhibition, after the 1961 exhibition by Charles and Ray Eames. The page is a white gallery. Content hangs on it in exhibit-black panels, regions are divided by heavy 3px rules, titles are cut in wood type, and every chapter opens with a working model the reader can run. The models are real: the emblem is a Vietoris-Rips complex whose radius the reader drags, and a Galton board drops balls live and settles into a bell curve.\n\nColor is scarce and each color has one job. Tomato marks the current location and the moving part. Mustard marks notes and always carries black text. Teal marks links and links are always underlined. Everything else is black, white, and gallery gray. Density is calm: a 36rem reading column, wide gutters, generous space between sections, with tables and code held to the same edge as the prose.\n\nCorners are square. The only round things are things that are round in the world: balls, points, radio buttons, status dots. Depth comes from black panels against white and from heavy rules; shadows appear only under layers that float above the page. Dark mode is the exhibition after hours: the ground goes near black and panels sit one step lighter than the ground.",
+    "keyCharacteristics": [
+      "White gallery ground, exhibit-black panels, 3px black rules between regions.",
+      "Ultra wood-type titles in sentence case ending in a tomato full stop.",
+      "Tomato for where you are and what moves; mustard for notes; teal for links.",
+      "Square corners everywhere except balls and points.",
+      "A working model in a black panel with a wall-label caption opens every chapter.",
+      "A Vietoris-Rips complex is the emblem: it opens the home page and draws the favicon.",
+      "One signature moment of motion per page; reduced motion shows the end state."
+    ],
+    "rules": [
+      {
+        "name": "The One Moving Part Rule",
+        "body": "Tomato marks the current location and the thing that moves, and the small marks that lead the eye to them: the full stop, list markers, reference numbers. It never fills a panel or colors a paragraph.",
+        "section": "colors"
+      },
+      {
+        "name": "The Black Text on Mustard Rule",
+        "body": "Mustard always carries exhibit-black text, in both themes, including links inside notes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Underlined Link Rule",
+        "body": "Links are teal and always underlined. Color alone never marks a link.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mark and Word Rule",
+        "body": "Status and note kind are carried by a shape and a word: ball for note, triangle for warning, check for success, cross for danger. Color never carries status alone.",
+        "section": "colors"
+      },
+      {
+        "name": "The Wood Type Rule",
+        "body": "Ultra is for titles only, at 24px and up, in sentence case. Everything that gets read is Libre Franklin.",
+        "section": "typography"
+      },
+      {
+        "name": "The Full Stop Rule",
+        "body": "Mast titles and the wordmark end in a tomato full stop that never wraps away from its word.",
+        "section": "typography"
+      },
+      {
+        "name": "The Wall and Panel Rule",
+        "body": "Depth is a black panel on a white wall. Shadows belong only to layers that float and go away.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Only Round Things Rule",
+        "body": "If it is not a ball or a point, its corners are square.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do open every chapter landing with a working model in a black panel, captioned underneath like a wall label.",
+      "Do keep text, tables, and code in one column on the same 36rem edge, with notes and margin figures beside it; never let a block straddle the edge between text and margin.",
+      "Do end mast titles in a tomato full stop and size them to the longest word.",
+      "Do use ease-out (`cubic-bezier(0.16, 1, 0.3, 1)`) for things that arrive and the gravity curve (`cubic-bezier(0.55, 0, 1, 0.45)`) for things that fall.",
+      "Do give each page one signature moment of motion and show the end state under reduced motion.",
+      "Do assign chart colors in the fixed slot order and limit scatter plots and small multiples to the first three.",
+      "Do check every new color pair with the contrast script in both themes (WCAG AA: 4.5:1 for text, 3:1 for marks, rings, and borders).",
+      "Do write plain, specific copy with no dashes as punctuation and no sales words."
+    ],
+    "donts": [
+      "Don't use tomato for anything other than the current location, a moving part, or the small marks that lead to them.",
+      "Don't put white or colored text on mustard.",
+      "Don't show a link without its underline.",
+      "Don't set Ultra below 24px, in all caps, or for running text.",
+      "Don't round a corner unless the shape is a ball or a point.",
+      "Don't put shadows on panels, buttons, cards, or anything that stays on the page.",
+      "Don't let color carry status by itself; pair it with a shape and a word.",
+      "Don't cycle chart colors past the eighth slot or reorder them."
+    ]
+  }
+}

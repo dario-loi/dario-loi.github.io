@@ -1,0 +1,122 @@
+---
+import Base from "../layouts/Base.astro";
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
+import Complex from "@dario-loi/polytope/astro/Complex.astro";
+import PubList from "@dario-loi/polytope/astro/PubList.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import EntryCard from "../components/EntryCard.astro";
+import CardGrid from "../components/CardGrid.astro";
+import SectionHead from "../components/SectionHead.astro";
+import EmailLink from "../components/EmailLink.astro";
+import CvLink from "../components/CvLink.astro";
+import { entries, longDate, pubRow, seedOf } from "../lib/content";
+import { cv, person } from "../site";
+
+const pubs = await entries("publications");
+const selected = pubs.filter((p) => p.data.selected);
+const shownPubs = (selected.length > 0 ? selected : pubs).slice(0, 5);
+const projects = await entries("projects");
+const featured = projects.filter((p) => p.data.featured).slice(0, 3);
+const posts = (await entries("blog")).slice(0, 3);
+
+const pubRows = shownPubs.map(pubRow);
+---
+<Base description={`${person.name}, ${person.lede}`} current="About" profile>
+  <Mast title={person.name} lede={person.lede}>
+    <div slot="after" class="ply-cluster home-actions">
+      <Button href="#publications">Publications</Button>
+      <CvLink placement="home-mast" mode="view" />
+      <EmailLink placement="home-mast" />
+    </div>
+    <figure class="ply-exhibit" slot="exhibit">
+      <Complex label={`A Vietoris-Rips complex seeded from the name ${person.name}`} autoplay="visible" seed={seedOf(person.name)} />
+      <figcaption><b>A Vietoris-Rips complex drawn from my name.</b> Sheaf neural networks, part of my research, learn on structures like this one.</figcaption>
+    </figure>
+  </Mast>
+  <hr class="ply-rule" />
+
+  <div class="ply-container">
+    <section class="home-section home-about" aria-labelledby="about">
+      <h2 id="about">About</h2>
+      <div class="ply-prose">
+        <p>I started my Ph.D. in Computer Engineering at Northeastern University in Boston in September 2026. I work on machine learning.</p>
+        <p>Before Northeastern I studied at Sapienza University of Rome, where I earned a B.S. in Applied Computer Science and Artificial Intelligence with full honors and an M.S. in Artificial Intelligence and Robotics. I also build <a href="/projects/polytope/">Polytope</a>, the design system this site runs on.</p>
+      </div>
+      <ul class="home-profiles" role="list">
+        <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.scholar} data-track="profile-link" data-track-placement="home-about" data-track-label="scholar"><Icon name="external" />Google Scholar</a></li>
+        <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.github} data-track="profile-link" data-track-placement="home-about" data-track-label="github"><Icon name="code" />GitHub</a></li>
+        <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.linkedin} data-track="profile-link" data-track-placement="home-about" data-track-label="linkedin"><Icon name="external" />LinkedIn</a></li>
+      </ul>
+    </section>
+
+    <section id="publications" class="home-section" aria-labelledby="publications-h">
+      <SectionHead id="publications-h" title={selected.length > 0 ? "Selected publications" : "Publications"} more={{ label: "All publications", href: "/publications/" }} />
+      <PubList pubs={pubRows} me={person.name} label="Selected publications" />
+    </section>
+
+    {featured.length > 0 && (
+      <section class="home-section" aria-labelledby="projects-h">
+        <SectionHead id="projects-h" title="Projects" more={{ label: "All projects", href: "/projects/" }} />
+        <CardGrid>
+          {featured.map((p) => (
+            <EntryCard
+              href={`/projects/${p.id}/`}
+              id={p.id}
+              title={p.data.title}
+              summary={p.data.description}
+              meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context.split(",")[0]] : [])]}
+              cover={p.data.cover}
+              draft={p.data.draft}
+              track="open-project"
+              placement="home"
+            />
+          ))}
+        </CardGrid>
+      </section>
+    )}
+
+    {posts.length > 0 && (
+      <section class="home-section" aria-labelledby="writing-h">
+        <SectionHead id="writing-h" title="Writing" more={{ label: "All posts", href: "/blog/" }} />
+        <CardGrid>
+          {posts.map((p) => (
+            <EntryCard
+              href={`/blog/${p.id}/`}
+              id={p.id}
+              title={p.data.title}
+              summary={p.data.description}
+              meta={[longDate(p.data.date)]}
+              cover={p.data.cover}
+              draft={p.data.draft}
+              track="open-post"
+              placement="home"
+            />
+          ))}
+        </CardGrid>
+      </section>
+    )}
+
+    <section class="home-section home-close" aria-labelledby="contact-h">
+      <h2 id="contact-h">Get in touch</h2>
+      <p class="home-close__text">Always happy to chat.</p>
+      <div class="ply-cluster">
+        <EmailLink placement="home-close" variant="primary">Email me</EmailLink>
+        {cv.pdf ? <CvLink placement="home-close" mode="download" /> : <CvLink placement="home-close" mode="view">See the CV</CvLink>}
+      </div>
+    </section>
+  </div>
+</Base>
+<style>
+  .home-actions { margin-top: var(--ply-space-6); }
+  .home-section { margin-top: var(--ply-space-8); }
+  .home-about { display: grid; gap: var(--ply-space-4) var(--ply-space-8); padding-top: var(--ply-space-2); }
+  .home-about h2 { margin-bottom: var(--ply-space-2); }
+  .home-profiles { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
+  @media (min-width: 64rem) {
+    .home-about { grid-template-columns: 17rem minmax(0, 1fr); align-items: start; }
+    .home-about h2 { grid-row: span 2; }
+  }
+  .home-close { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); padding-top: var(--ply-space-6); display: grid; gap: var(--ply-space-4); }
+  .home-close__text { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); max-width: var(--ply-layout-measure); }
+</style>

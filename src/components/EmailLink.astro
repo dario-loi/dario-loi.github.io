@@ -1,0 +1,12 @@
+---
+// A mailto link whose address is assembled in the browser on use (src/scripts/track.ts), so
+// scrapers that read the HTML never see it, in any form. Without script it leads to the
+// footer, which points to another way to get in touch. Renders as a Polytope button unless
+// `plain` is set.
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import { person } from "../site";
+interface Props { placement: string; variant?: "primary" | "secondary" | "ghost"; size?: "md" | "sm"; plain?: boolean; icon?: boolean }
+const { placement, variant = "ghost", size = "md", plain = false, icon = true } = Astro.props;
+const classes = plain ? undefined : ["ply-button", variant !== "primary" && `ply-button--${variant}`, size === "sm" && "ply-button--sm"];
+---
+<a class:list={classes} href="#contact" data-email-user={person.email.user} data-email-domain={person.email.domain} data-track="email" data-track-placement={placement}>{icon && <Icon name="mail" />}<slot>Email</slot></a>

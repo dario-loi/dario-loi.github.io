@@ -1,0 +1,39 @@
+---
+title: "Implicit Inversion turns CLIP into a Decoder"
+authors:
+  - "Antonio D'Orazio"
+  - "Maria Rosaria Briglia"
+  - "Donato Crisostomi"
+  - "Dario Loi"
+  - "Emanuele Rodolà"
+  - "Iacopo Masi"
+venue: "ICLR 2026"
+venueFull: "The Fourteenth International Conference on Learning Representations"
+kind: conference
+format: "Poster"
+date: 2026-04-23
+tldr: "We turn the discriminative CLIP model into a generator capable of addressing multiple tasks, such as text-to-image synthesis, style transfer, and image editing, without fine-tuning."
+abstract: "CLIP is a discriminative model trained to align images and text in a shared embedding space. Due to its multimodal structure, it serves as the backbone of many generative pipelines, where a decoder is trained to map from the shared space back to images. We show that image synthesis is nevertheless possible using CLIP alone—without a pre-trained generative decoder or CLIP tuning. Our approach optimizes a frequency-aware implicit neural representation that encourages coarse-to-fine generation by stratifying frequencies across network layers. To stabilize this inverse mapping, we introduce adversarially robust initialization, a lightweight Orthogonal Procrustes projection to align local text and image embeddings, and a blending loss that anchors outputs to natural image statistics. With CLIP frozen, this framework unlocks capabilities such as text-to-image generation, style transfer, and image reconstruction. Our findings suggest that discriminative models may hold untapped generative potential, hidden in plain sight."
+keywords: ["Model inversion", "Text to image", "CLIP", "Implicit neural representations"]
+links:
+  - { label: "OpenReview", href: "https://openreview.net/forum?id=hvukI2ws5O", icon: paper }
+  - { label: "PDF", href: "https://openreview.net/pdf?id=hvukI2ws5O", icon: download }
+  - { label: "arXiv", href: "https://arxiv.org/abs/2505.23161", icon: external }
+  - { label: "Code", href: "https://github.com/OmnAI-Lab/implicit-inversion", icon: code }
+arxiv: "2505.23161"
+pdf: "https://openreview.net/pdf?id=hvukI2ws5O"
+selected: true
+cover: ./implicit-inversion-samples.webp
+coverAlt: "Eight images generated from text prompts with a frozen CLIP model and no decoder, taken from Figure 1."
+figure: ./implicit-inversion-figure1.webp
+figureAlt: "Twelve images generated from text prompts, each above its prompt: six scenes such as Prague castle and Grand Canyon at sunset, and six MS-COCO captions such as a pastry store with cupcakes on display."
+figureCaption: "<b>Decoder-free text-to-image synthesis.</b> CLIP<sup>-1</sup> inverts CLIP's image encoder using implicit neural representations, enabling text-to-image synthesis <em>without any fine-tuning or dedicated generative decoder</em>. All samples are generated with CLIP ViT-B/32, with <em>top</em> rows showing generic scene prompts and <em>bottom</em> rows illustrating complex captions from MS-COCO."
+bibtex: |
+  @inproceedings{dorazio2026implicit,
+    title     = {Implicit Inversion turns {CLIP} into a Decoder},
+    author    = {Antonio D'Orazio and Maria Rosaria Briglia and Donato Crisostomi and Dario Loi and Emanuele Rodol{\`a} and Iacopo Masi},
+    booktitle = {The Fourteenth International Conference on Learning Representations},
+    year      = {2026},
+    url       = {https://openreview.net/forum?id=hvukI2ws5O}
+  }
+---

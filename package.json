@@ -1,17 +1,29 @@
 {
-  "requires": true,
-  "lockfileVersion": 1,
-  "dependencies": {
-    "purgecss": "^5.0.0",
-    "simple-jekyll-search": "^1.9.2"
-  },
   "name": "dario-loi.github.io",
-  "description": "Simple and minimal Jekyll blog.  Built on the [Gesko theme](https://github.com/DavideBri/Gesko)",
-  "version": "1.0.0",
-  "main": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "private": true,
+  "type": "module",
+  "description": "Personal academic site of Dario Loi, built with Astro and the Polytope design system.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12"
   },
-  "author": "",
-  "license": "MIT"
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "design:check": "polytope-design --check"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.3",
+    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@dario-loi/polytope": "^0.6.0",
+    "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.0"
+  }
 }

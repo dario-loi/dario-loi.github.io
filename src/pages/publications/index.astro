@@ -1,0 +1,63 @@
+---
+import Base from "../../layouts/Base.astro";
+import Empty from "@dario-loi/polytope/astro/Empty.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import IndexMast from "../../components/IndexMast.astro";
+import EntryCard from "../../components/EntryCard.astro";
+import CardGrid from "../../components/CardGrid.astro";
+import { entries } from "../../lib/content";
+import { person } from "../../site";
+
+const pubs = await entries("publications");
+const years = [...new Set(pubs.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+const n = pubs.length;
+---
+<Base title="Publications" description={`Publications by ${person.name}, with abstracts, code, and BibTeX.`} current="Publications" crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }]}>
+  <IndexMast title="Publications" count={n > 0 ? `${n} ${n === 1 ? "paper" : "papers"}` : undefined} />
+  <div class="ply-container">
+    {n === 0 ? (
+      <Empty title="No papers listed yet">
+        <Button href={person.profiles.scholar} variant="secondary"><Icon name="external" />Google Scholar</Button>
+      </Empty>
+    ) : (
+      <div class="pub-wall">
+        {years.map((y) => (
+          <section class="pub-wall__year" aria-labelledby={`y-${y}`}>
+            <h2 class="pub-wall__label" id={`y-${y}`}>{y}</h2>
+            <CardGrid>
+              {pubs.filter((p) => p.data.date.getUTCFullYear() === y).map((p) => (
+                <EntryCard
+                  href={`/publications/${p.id}/`}
+                  id={p.id}
+                  title={p.data.title}
+                  summary={p.data.tldr}
+                  meta={[[p.data.venue, p.data.format].filter(Boolean).join(", ")]}
+                  kind={p.data.award ?? (p.data.kind === "preprint" ? "Preprint" : undefined)}
+                  cover={p.data.cover}
+                  size={p.id === pubs[0].id ? "lead" : "regular"}
+                  draft={p.data.draft}
+                  track="open-publication"
+                  placement="publications"
+                >
+                  <p class="pub-card__authors">{p.data.authors.map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
+                </EntryCard>
+              ))}
+            </CardGrid>
+          </section>
+        ))}
+      </div>
+    )}
+  </div>
+</Base>
+<style>
+  .pub-wall { padding-top: var(--ply-space-6); display: grid; gap: var(--ply-space-7); }
+  .pub-wall__year { display: grid; gap: var(--ply-space-5); }
+  .pub-wall__year + .pub-wall__year { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); padding-top: var(--ply-space-6); }
+  .pub-wall__label { font-size: var(--ply-size-3xl); line-height: 1; font-variant-numeric: tabular-nums; }
+  @media (min-width: 64rem) {
+    .pub-wall__year { grid-template-columns: 9rem minmax(0, 1fr); gap: var(--ply-space-6); align-items: start; }
+  }
+  .pub-card__authors { font-size: var(--ply-size-sm); color: var(--ply-color-text-muted); line-height: var(--ply-leading-normal); }
+  .pub-card__authors .ply-me { color: var(--ply-color-text); font-weight: var(--ply-weight-semibold); }
+</style>

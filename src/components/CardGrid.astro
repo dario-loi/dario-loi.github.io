@@ -1,0 +1,13 @@
+---
+// A gallery wall of entry cards: one column on phones, two on tablets, three from 64rem.
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+<div class:list={["card-grid", className]}>
+  <slot />
+</div>
+<style is:global>
+  .card-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ply-space-7) var(--ply-space-6); }
+  @media (min-width: 40rem) { .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

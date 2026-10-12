@@ -1,0 +1,65 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import Article from "@dario-loi/polytope/astro/Article.astro";
+import PostHeader from "@dario-loi/polytope/astro/PostHeader.astro";
+import Pager from "@dario-loi/polytope/astro/Pager.astro";
+import Note from "@dario-loi/polytope/astro/Note.astro";
+import { entries, isoDay, longDate, neighbors, readingTime } from "../../lib/content";
+import { person } from "../../site";
+
+export const getStaticPaths = (async () => {
+  const posts = await entries("blog");
+  return posts.map((post) => ({ params: { id: post.id }, props: { post, ...neighbors(posts, post.id) } }));
+}) satisfies GetStaticPaths;
+
+interface Props { post: CollectionEntry<"blog">; newer?: CollectionEntry<"blog">; older?: CollectionEntry<"blog"> }
+const { post, newer, older } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+---
+<Base
+  title={d.title}
+  description={d.description}
+  current="Blog"
+  type="article"
+  published={d.date}
+  modified={d.updated}
+  noindex={d.draft}
+  crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }, { name: d.title, href: `/blog/${post.id}/` }]}
+>
+  <Article>
+    <PostHeader slot="header" title={d.title} lede={d.description} date={d.date} minutes={readingTime(post.body)} tags={d.tags} locale="en-US" />
+    {d.draft && <Note kind="warning" title="Draft">This post is a draft. It shows in development and is left out of the published site.</Note>}
+    {d.cover && (
+      <figure class="ply-figure post__cover">
+        <Image src={d.cover} alt={d.coverAlt ?? ""} widths={[640, 1280]} sizes="(min-width: 40rem) 38rem, 100vw" />
+      </figure>
+    )}
+    <Content />
+    <p class="post__byline ply-small ply-muted">
+      Written by {person.name}. <time datetime={isoDay(d.date)}>{longDate(d.date)}</time>.
+      {d.updated && <>Updated <time datetime={isoDay(d.updated)}>{longDate(d.updated)}</time>.</>}
+    </p>
+  </Article>
+  <div class="ply-container ply-article ply-article--head post__foot">
+    <div class="ply-article__main">
+      <Pager
+        label="More posts"
+        prev={newer && { label: newer.data.title, href: `/blog/${newer.id}/` }}
+        next={older && { label: older.data.title, href: `/blog/${older.id}/` }}
+      />
+    </div>
+  </div>
+</Base>
+<style>
+  /* The draft note and cover lead the text; the byline closes it. */
+  :global(.ply-article .ply-prose) > :global(.ply-note) { margin-bottom: var(--ply-space-6); }
+  .post__cover { margin-top: 0; }
+  .post__byline { margin-top: var(--ply-space-7); }
+  /* The pager lines up with the text column, under the article's own bottom padding. */
+  .post__foot { padding-bottom: var(--ply-space-8); }
+  .post__foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
+</style>

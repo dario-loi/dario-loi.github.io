@@ -1,0 +1,45 @@
+---
+import Base from "../layouts/Base.astro";
+import Atlas from "@dario-loi/polytope/astro/Atlas.astro";
+import AtlasStop from "@dario-loi/polytope/astro/AtlasStop.astro";
+import PubList from "@dario-loi/polytope/astro/PubList.astro";
+import CvLink from "../components/CvLink.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { entries, pubRow } from "../lib/content";
+import EmailLink from "../components/EmailLink.astro";
+import { cvEntries } from "../data/cv";
+import { cv, person } from "../site";
+
+const pubs = (await entries("publications")).map(pubRow);
+---
+<Base title="CV" description={`Curriculum vitae of ${person.name}: education and research, with a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
+  <div class="ply-container cv-atlas">
+    <Atlas label={`Where ${person.name} has studied and worked`}>
+      <Fragment slot="head">
+        <!-- "Curriculum" sets wider than the 0.76em-per-character estimate the mast sizing assumes. -->
+        <h1 class="ply-mast__title" style="--_chars: 13">Curriculum <span class="ply-nowrap">vitae<span class="ply-mast__stop" aria-hidden="true">.</span></span></h1>
+        <p class="ply-mast__lede">{person.name}, {person.role} at {person.affiliation}.</p>
+        <div class="ply-cluster cv-actions">
+          {cv.pdf && <CvLink placement="cv-head" mode="download" variant="primary"><Fragment slot="download">Full CV as PDF</Fragment></CvLink>}
+          <EmailLink placement="cv-head" variant={cv.pdf ? "ghost" : "primary"} />
+        </div>
+      </Fragment>
+      {cvEntries.map((e) => (
+        <AtlasStop level={2} title={e.title} org={e.org} kind={e.draft ? `${e.kind} (draft)` : e.kind} place={e.place} lat={e.lat} lon={e.lon} from={e.from} to={e.to}>
+          {e.text && <p>{e.text}</p>}
+        </AtlasStop>
+      ))}
+    </Atlas>
+    {pubs.length > 0 && (
+      <section class="cv-pubs" aria-labelledby="cv-pubs-h">
+        <SectionHead id="cv-pubs-h" title="Publications" more={{ label: "All publications", href: "/publications/" }} />
+        <PubList pubs={pubs} me={person.name} label="Publications" />
+      </section>
+    )}
+  </div>
+</Base>
+<style>
+  .cv-atlas { padding-block-start: var(--ply-space-6); }
+  .cv-actions { margin-top: var(--ply-space-5); }
+  .cv-pubs { margin-top: var(--ply-space-6); }
+</style>

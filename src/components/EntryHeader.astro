@@ -1,0 +1,19 @@
+---
+// Header of a post or project page: title in wood type, a lede, a meta line, and actions.
+// `stop` ends the title in the tomato full stop, for pages that are sections, not entries.
+interface Props { title: string; lede?: string; meta?: string[]; stop?: boolean }
+const { title, lede, meta = [], stop = false } = Astro.props;
+---
+<header class="entry-head">
+  <h1 class="entry-head__title">{title}{stop && <span class="ply-mast__stop" aria-hidden="true">.</span>}</h1>
+  {lede && <p class="entry-head__lede">{lede}</p>}
+  {meta.length > 0 && <p class="entry-head__meta">{meta.map((m) => <span>{m}</span>)}</p>}
+  <slot />
+</header>
+<style is:global>
+  .entry-head { display: grid; gap: var(--ply-space-4); padding-block: var(--ply-space-7); }
+  .entry-head__title { font-size: clamp(var(--ply-size-2xl), 1.2rem + 3vw, var(--ply-size-4xl)); line-height: 1.02; max-width: 22ch; text-wrap: balance; }
+  .entry-head__lede { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); max-width: var(--ply-layout-measure); }
+  .entry-head__meta { display: flex; flex-wrap: wrap; gap: var(--ply-space-1) var(--ply-space-4); font-size: var(--ply-size-sm); font-weight: var(--ply-weight-semibold); color: var(--ply-color-text-muted); font-variant-numeric: tabular-nums; }
+  .entry-head__meta span:first-child { color: var(--ply-color-text); }
+</style>

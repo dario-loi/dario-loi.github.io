@@ -1,0 +1,20 @@
+---
+// Umami Cloud: cookieless analytics with no consent banner. It sets no cookies and stores
+// nothing on the visitor's device. Visits are grouped by a hash of IP and user agent whose
+// salt rotates monthly, and the IP itself is never stored, so a visitor cannot be followed
+// across sites. It runs only on the production host, only when the build has a website id,
+// and never for a browser that sends Do Not Track.
+import { analytics } from "../site";
+const on = import.meta.env.PROD && Boolean(analytics.websiteId);
+---
+{on && (
+  <script
+    is:inline
+    defer
+    src={analytics.src}
+    data-website-id={analytics.websiteId}
+    data-domains={analytics.domains}
+    data-do-not-track="true"
+    data-exclude-hash="true"
+  ></script>
+)}

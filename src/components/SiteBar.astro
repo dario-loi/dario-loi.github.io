@@ -1,0 +1,35 @@
+---
+// The site's top bar: Polytope's TopBar markup with the wordmark's tomato full stop, and
+// the CV tab tracked like every other CV link. Tabs show where they fit and fold into the
+// chapter menu where they do not (polytope js/topbar.js).
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import ThemeToggle from "@dario-loi/polytope/astro/ThemeToggle.astro";
+import { person, siteMeta } from "../site";
+
+export interface Tab { label: string; href: string; current?: boolean; track?: string }
+interface Props { tabs: Tab[] }
+const { tabs } = Astro.props;
+---
+<header class="ply-topbar">
+  <div class="ply-container ply-topbar__inner">
+    <a class="ply-wordmark" href="/">{person.name}<span class="ply-wordmark__stop" aria-hidden="true">.</span></a>
+    <nav class="ply-topbar__links" aria-label="Sections">
+      {tabs.map((t) => (
+        <a class="ply-tab" href={t.href} aria-current={t.current ? "page" : undefined} data-track={t.track} data-track-placement={t.track && "topbar"}>{t.label}</a>
+      ))}
+    </nav>
+    <div class="ply-topbar__tools">
+      <a class="ply-button ply-button--ghost ply-button--icon ply-button--sm ply-hide-narrow" href={siteMeta.repo} aria-label="Source of this site on GitHub"><Icon name="code" /></a>
+      <ThemeToggle />
+      <details class="ply-menu ply-menu--chapters">
+        <summary class="ply-button ply-button--secondary ply-button--sm"><Icon name="menu" /><span class="ply-menu__word">Menu</span></summary>
+        <nav class="ply-menu__panel" aria-label="Sections">
+          {tabs.map((t) => (
+            <a class="ply-tab" href={t.href} aria-current={t.current ? "page" : undefined} data-track={t.track} data-track-placement={t.track && "menu"}>{t.label}</a>
+          ))}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+<script>import "@dario-loi/polytope/js/topbar.js";</script>

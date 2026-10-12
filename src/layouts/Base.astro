@@ -1,0 +1,131 @@
+---
+// Every page: head tags (Polytope's <Seo>), the top bar, the page, and the footer.
+import "@dario-loi/polytope/css";
+import Seo from "@dario-loi/polytope/astro/Seo.astro";
+import type { Citation, Person } from "@dario-loi/polytope/astro/Seo.astro";
+import ultra from "@dario-loi/polytope/fonts/ultra-latin-400.woff2?url";
+import franklin from "@dario-loi/polytope/fonts/libre-franklin-latin-wght.woff2?url";
+import SiteBar from "../components/SiteBar.astro";
+import EmailLink from "../components/EmailLink.astro";
+import Analytics from "../components/Analytics.astro";
+import { entries } from "../lib/content";
+import { cv, person, siteMeta } from "../site";
+
+export type Section = "About" | "Publications" | "Projects" | "Blog" | "CV";
+interface Props {
+  /** The page's own title; the tab reads "{title} - Dario Loi" except on the home page. */
+  title?: string;
+  description?: string;
+  current?: Section;
+  noindex?: boolean;
+  type?: "website" | "article" | "profile";
+  published?: Date;
+  modified?: Date;
+  citation?: Citation;
+  image?: string;
+  imageAlt?: string;
+  /** The trail from home to this page, for search results. */
+  crumbs?: { name: string; href: string }[];
+  /** Search-index the page as a person's profile (home and CV). */
+  profile?: boolean;
+}
+const { title, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false } = Astro.props;
+const headTitle = title ? `${title} - ${person.name}` : `${person.name}, ${person.role}`;
+
+// The Blog tab appears once there is a post to read.
+const hasPosts = (await entries("blog")).length > 0;
+const tabs = [
+  { label: "About", href: "/", current: current === "About" },
+  { label: "Publications", href: "/publications/", current: current === "Publications" },
+  { label: "Projects", href: "/projects/", current: current === "Projects" },
+  ...(hasPosts ? [{ label: "Blog", href: "/blog/", current: current === "Blog" }] : []),
+  { label: "CV", href: cv.page, current: current === "CV", track: "cv-view" },
+];
+
+const me: Person = {
+  name: person.name,
+  url: "/",
+  jobTitle: person.role,
+  affiliation: person.affiliation,
+  sameAs: Object.values(person.profiles),
+};
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Seo
+      title={headTitle}
+      description={description}
+      type={type ?? (profile ? "profile" : undefined)}
+      siteName={person.name}
+      locale="en_US"
+      noindex={noindex}
+      published={published}
+      modified={modified}
+      citation={citation}
+      image={image ?? { src: "/og.png", width: 1200, height: 630 }}
+      imageAlt={imageAlt ?? `${person.name}, ${person.lede}`}
+      person={profile ? me : undefined}
+      breadcrumbs={crumbs}
+      sitemap="/sitemap-index.xml"
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />
+    <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#141414" />
+    <script is:inline>try{var t=localStorage.getItem("ply-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+    <Analytics />
+  </head>
+  <body>
+    <a class="ply-skip" href="#main">Skip to content</a>
+    <SiteBar tabs={tabs} />
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-foot">
+      <div class="ply-container site-foot__inner">
+        <div class="site-foot__who">
+          <p><span class="ply-display site-foot__name">{person.name}</span></p>
+          <p class="ply-small ply-muted">{person.role}, {person.affiliation}, {person.city}.</p>
+          <p class="ply-small" id="contact">
+            <EmailLink placement="footer" plain icon={false}>Email</EmailLink>
+            <noscript><span class="ply-muted">Email links need JavaScript; <a href={person.profiles.linkedin}>LinkedIn</a> works without it.</span></noscript>
+          </p>
+        </div>
+        <ul class="site-foot__links ply-small" role="list">
+          <li><a href={person.profiles.scholar} data-track="profile-link" data-track-placement="footer" data-track-label="scholar">Google Scholar</a></li>
+          <li><a href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
+          <li><a href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+        </ul>
+      </div>
+      <div class="ply-container">
+        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href={siteMeta.polytope}>Polytope</a>. <a href={siteMeta.repo}>Source</a>.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+<script>
+  import "@dario-loi/polytope/js/copy.js";
+  import "@dario-loi/polytope/js/scroll.js";
+  import "../scripts/track.ts";
+</script>
+<style is:global>
+  /* A row of tags. Inside .ply-prose, list items would otherwise take the prose list spacing. */
+  .tag-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
+  .ply-prose .tag-list { padding-inline-start: 0; }
+  .tag-list > li, .ply-prose .tag-list > li + li { margin: 0; }
+  .site-foot { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); margin-top: var(--ply-space-9); }
+  .site-foot__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: var(--ply-space-5) var(--ply-space-7); padding-block: var(--ply-space-6) var(--ply-space-4); }
+  .site-foot__who { display: grid; gap: var(--ply-space-2); }
+  .site-foot__name { font-size: var(--ply-size-xl); line-height: 1; }
+  .site-foot__links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
+  .site-foot__links a { display: inline-flex; align-items: center; min-height: 1.5rem; }
+  .site-foot__colophon { padding-block: var(--ply-space-4) var(--ply-space-7); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
+  @media (pointer: coarse) { .site-foot__links a { min-height: 2.75rem; } }
+</style>

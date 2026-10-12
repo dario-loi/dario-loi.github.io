@@ -1,0 +1,46 @@
+---
+title: "Writing on this site"
+description: "A sample post that shows every piece a post can use: headings, notes, sidenotes, math, code, tables, and figures. Draft only; replace it with a real first post."
+date: 2026-10-12
+tags: ["Meta"]
+draft: true
+---
+import Note from "@dario-loi/polytope/astro/Note.astro";
+import Sidenote from "@dario-loi/polytope/astro/Sidenote.astro";
+import Equation from "@dario-loi/polytope/astro/Equation.astro";
+import M from "@dario-loi/polytope/astro/M.astro";
+
+This post exists to show how a post looks. It is a draft, so it renders under `npm run dev` and is left out of the production build. Copy this file, change the front matter, set `draft: false`, and the post appears on the blog, on the home page, and in the RSS feed.
+
+## Front matter
+
+Every post starts with a title, a one or two sentence description (it becomes the card summary and the search snippet), a date, and optional tags. A `cover` image, placed next to the file, replaces the generated complex on the card.
+
+<Note>The card for each post draws a small complex seeded from the file name, so every post gets its own emblem without any image work.</Note>
+
+## Prose and sidenotes
+
+Body text sits in a reading column of about 68 characters. A sidenote sits in the margin on wide screens and under the paragraph on narrow ones.<Sidenote n={1}>Like this one.</Sidenote> Links are teal and always underlined, as in [the Polytope docs](https://dario-loi.github.io/polytope/).
+
+## Math
+
+Inline math such as <M tex={String.raw`f_\theta(x)`} /> and display equations with a number:
+
+<Equation tex={String.raw`\mathcal{L}(\theta) = \mathbb{E}_{x \sim p}\left[ \lVert x - g_\theta(f_\theta(x)) \rVert^2 \right]`} num={1} />
+
+## Code
+
+```python
+import polytope_theme as ply
+
+ply.use("light")  # figures match the page
+```
+
+## Tables
+
+| Model | Params | Accuracy |
+|---|--:|--:|
+| Baseline | 11M | 0.81 |
+| Ours | 12M | 0.86 |
+
+The numbers in this table are example content.

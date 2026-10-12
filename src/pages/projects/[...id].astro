@@ -1,0 +1,80 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import Article from "@dario-loi/polytope/astro/Article.astro";
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import Pager from "@dario-loi/polytope/astro/Pager.astro";
+import Complex from "@dario-loi/polytope/astro/Complex.astro";
+import EntryHeader from "../../components/EntryHeader.astro";
+import { cardComplex, entries, neighbors, seedOf } from "../../lib/content";
+import { person } from "../../site";
+
+export const getStaticPaths = (async () => {
+  const projects = await entries("projects");
+  return projects.map((project) => ({ params: { id: project.id }, props: { project, ...neighbors(projects, project.id) } }));
+}) satisfies GetStaticPaths;
+
+interface Props { project: CollectionEntry<"projects">; newer?: CollectionEntry<"projects">; older?: CollectionEntry<"projects"> }
+const { project, newer, older } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const seed = seedOf(project.id);
+const model = cardComplex(seed);
+---
+<Base
+  title={d.title}
+  description={d.description}
+  current="Projects"
+  noindex={d.draft}
+  crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }, { name: d.title, href: `/projects/${project.id}/` }]}
+>
+  <Article>
+    <div slot="header" class="project-head">
+      <EntryHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : [])]}>
+        {d.links.length > 0 && (
+          <div class="ply-cluster">
+            {d.links.map((l, i) => (
+              <a class:list={["ply-button ply-button--sm", i > 0 && "ply-button--secondary"]} href={l.href} data-track="project-link" data-track-placement="project-header" data-track-label={`${project.id}:${l.label}`}>{l.icon && <Icon name={l.icon} />}{l.label}</a>
+            ))}
+          </div>
+        )}
+      </EntryHeader>
+      <figure class="ply-exhibit project-head__exhibit">
+        {d.cover ? (
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt={d.coverAlt ?? ""} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+        ) : (
+          <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the project's name`} />
+        )}
+        {d.cover && <figcaption>{d.coverAlt}</figcaption>}
+      </figure>
+    </div>
+    <Content />
+    {d.tags.length > 0 && <ul class="tag-list project-body__tags" role="list" aria-label="Topics">{d.tags.map((t) => <li class="ply-tag">{t}</li>)}</ul>}
+  </Article>
+  <div class="ply-container ply-article ply-article--head project-foot">
+    <div class="ply-article__main">
+      <Pager
+        label="More projects"
+        prev={newer && { label: newer.data.title, href: `/projects/${newer.id}/` }}
+        next={older && { label: older.data.title, href: `/projects/${older.id}/` }}
+      />
+    </div>
+  </div>
+</Base>
+<style>
+  /* The exhibit stacks under the header, then hangs in the margin column beside it once
+     the article has one. */
+  .project-head { display: grid; gap: 0 var(--ply-space-6); }
+  .project-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
+  .project-head__exhibit img { display: block; width: 100%; height: auto; }
+  .project-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
+  @media (min-width: 60rem) {
+    .project-head { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
+    .project-head__exhibit { margin-block: var(--ply-space-7); }
+  }
+  .project-body__tags { margin-top: var(--ply-space-6); }
+  .project-foot { padding-bottom: var(--ply-space-8); }
+  .project-foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
+</style>
