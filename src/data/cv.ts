@@ -60,7 +60,7 @@ const all: CvEntry[] = [
     draft: true,
   },
   {
-    title: "M.S. in Artificial Intelligence and Robotics",
+    title: "M.S. in Computer Science",
     org: "Sapienza University of Rome",
     kind: "Education",
     ...ROME,
