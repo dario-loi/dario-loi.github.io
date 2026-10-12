@@ -13,7 +13,7 @@ const blog = defineCollection({
     z.object({
       title: z.string(),
       /** One or two sentences: the card summary and the search description. */
-      description: z.string(),
+      description: z.string().max(160),
       date: z.coerce.date(),
       updated: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]),
@@ -40,6 +40,10 @@ const publications = defineCollection({
       /** A distinction, such as "Best paper award". Shown on the card and beside the venue. */
       award: z.string().optional(),
       date: z.coerce.date(),
+      /** The tab and search-result title, for a paper title too long to fit in 70 characters. */
+      shortTitle: z.string().optional(),
+      /** The search-result and link-preview summary; defaults to the TL;DR. */
+      description: z.string().max(160).optional(),
       tldr: z.string().optional(),
       abstract: z.string(),
       keywords: z.array(z.string()).default([]),
@@ -72,7 +76,7 @@ const projects = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      description: z.string(),
+      description: z.string().max(160),
       /** When the project started; orders the list. */
       date: z.coerce.date(),
       /** Where it came from, such as "Course project, Deep Learning, Sapienza University of Rome". */

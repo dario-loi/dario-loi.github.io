@@ -29,8 +29,8 @@ const model = cardComplex(seed);
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
 ---
 <Base
-  title={d.title}
-  description={d.tldr ?? d.abstract.slice(0, 155)}
+  title={d.shortTitle ?? d.title}
+  description={d.description ?? d.tldr ?? d.abstract.slice(0, 155)}
   current="Publications"
   noindex={d.draft}
   {...og}
