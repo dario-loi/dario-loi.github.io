@@ -40,10 +40,12 @@ const publications = defineCollection({
       /** A distinction, such as "Best paper award". Shown on the card and beside the venue. */
       award: z.string().optional(),
       date: z.coerce.date(),
-      /** The tab and search-result title, for a paper title too long to fit in 70 characters. */
+      /** The tab and search-result title, for a paper title longer than 70 characters. */
       shortTitle: z.string().optional(),
-      /** The search-result and link-preview summary; defaults to the TL;DR. */
+      /** The search-result and link-preview summary, in plain text; defaults to the TL;DR. */
       description: z.string().max(160).optional(),
+      /** TL;DR, abstract, and figure caption take inline TeX as $...$. Fields with TeX go in
+       *  single quotes, since double-quoted YAML turns backslashes into escapes. */
       tldr: z.string().optional(),
       abstract: z.string(),
       keywords: z.array(z.string()).default([]),

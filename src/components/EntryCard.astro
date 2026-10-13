@@ -12,6 +12,7 @@ interface Props {
   href: string;
   title: string;
   id: string;
+  /** Plain text; a "summary" slot replaces it with markup, such as a TL;DR with math. */
   summary?: string;
   /** Short facts under the title, such as a venue and a date. */
   meta?: string[];
@@ -51,7 +52,7 @@ const H = `h${level}` as "h3";
   <div class="entry-card__body">
     <H class="entry-card__title"><a href={href} data-track={track} data-track-placement={placement} data-track-label={id}>{title}</a></H>
     {meta.length > 0 && <p class="entry-card__meta">{meta.map((m) => <span>{m}</span>)}</p>}
-    {summary && <p class="entry-card__summary">{summary}</p>}
+    {Astro.slots.has("summary") ? <p class="entry-card__summary"><slot name="summary" /></p> : summary && <p class="entry-card__summary">{summary}</p>}
     {tags.length > 0 && (
       <ul class="tag-list" role="list" aria-label="Topics">
         {tags.map((t) => <li class="ply-tag">{t}</li>)}

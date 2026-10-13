@@ -4,6 +4,7 @@ import Empty from "@dario-loi/polytope/astro/Empty.astro";
 import Button from "@dario-loi/polytope/astro/Button.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import IndexMast from "../../components/IndexMast.astro";
+import Tex from "../../components/Tex.astro";
 import EntryCard from "../../components/EntryCard.astro";
 import CardGrid from "../../components/CardGrid.astro";
 import { entries } from "../../lib/content";
@@ -31,7 +32,6 @@ const n = pubs.length;
                   href={`/publications/${p.id}/`}
                   id={p.id}
                   title={p.data.title}
-                  summary={p.data.tldr}
                   meta={[[p.data.venue, p.data.format].filter(Boolean).join(", ")]}
                   kind={p.data.award ?? (p.data.kind === "preprint" ? "Preprint" : undefined)}
                   cover={p.data.cover}
@@ -40,6 +40,7 @@ const n = pubs.length;
                   track="open-publication"
                   placement="publications"
                 >
+                  {p.data.tldr && <Tex slot="summary" text={p.data.tldr} />}
                   <p class="pub-card__authors">{p.data.authors.map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
                 </EntryCard>
               ))}

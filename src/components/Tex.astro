@@ -1,0 +1,32 @@
+---
+// Prose from front matter with inline math: each $...$ renders through KaTeX at build time, as
+// Polytope's <M> does, and the rest is written out as is. `html` passes trusted inline HTML
+// (figure captions) through; otherwise the text is escaped. Write a literal dollar sign as \$.
+import katex from "katex";
+import "katex/dist/katex.min.css";
+interface Props { text: string; html?: boolean }
+const { text, html = false } = Astro.props;
+
+const escape = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const prose = (s: string) => (html ? s : escape(s)).replace(/\\\$/g, "$");
+let out = "";
+let last = 0;
+for (const m of text.matchAll(/(?<!\\)\$(.+?)(?<!\\)\$/g)) {
+  const tex = m[1];
+  // A double-quoted YAML string turns \t, \b, \n... into control characters (\times becomes a
+  // tab and "imes"). Catch that here instead of rendering wrong math.
+  if (/[\u0000-\u0008\u000b-\u001f]|\t/.test(tex)) {
+    throw new Error(`Math contains a control character: ${JSON.stringify(tex)}. Put the field in single quotes in the front matter.`);
+  }
+  out += prose(text.slice(last, m.index));
+  out += `<span class="ply-math tex__math">${katex.renderToString(tex, { displayMode: false, throwOnError: false, output: "htmlAndMathml" })}</span>`;
+  last = m.index + m[0].length;
+}
+out += prose(text.slice(last));
+---
+<Fragment set:html={out} />
+<style>
+  /* KaTeX lets inline math break after an operator, which splits a short formula such as
+     nd x nd across lines; prose formulas here are short, so each stays on one line. */
+  :global(.tex__math) { white-space: nowrap; }
+</style>

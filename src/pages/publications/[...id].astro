@@ -9,6 +9,7 @@ import Abstract from "@dario-loi/polytope/astro/Abstract.astro";
 import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
+import Tex from "../../components/Tex.astro";
 import { cardComplex, entries, neighbors, preview, pubVenue, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
@@ -30,6 +31,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
 ---
 <Base
   title={d.shortTitle ?? d.title}
+  unnamed
   description={d.description ?? d.tldr ?? d.abstract.slice(0, 155)}
   current="Publications"
   noindex={d.draft}
@@ -56,7 +58,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
           {d.figureSize === "column"
             ? <Image src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" />
             : <Image src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" />}
-          {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Fragment set:html={d.figureCaption} /></figcaption>}
+          {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
         </figure>
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
@@ -69,8 +71,8 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
         </figure>
       )}
     </div>
-    {d.tldr && <p class="paper__tldr"><span class="ply-label">In short</span> {d.tldr}</p>}
-    <Abstract><p>{d.abstract}</p></Abstract>
+    {d.tldr && <p class="paper__tldr"><span class="ply-label">In short</span> <Tex text={d.tldr} /></p>}
+    <Abstract><p><Tex text={d.abstract} /></p></Abstract>
     {d.keywords.length > 0 && (
       <ul class="tag-list paper__keywords" role="list" aria-label="Keywords">{d.keywords.map((k) => <li class="ply-tag">{k}</li>)}</ul>
     )}
