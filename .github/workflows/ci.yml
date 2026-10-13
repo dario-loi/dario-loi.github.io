@@ -1,0 +1,37 @@
+# Check every pull request (Dependabot's included) the way a deploy would build it, before it
+# reaches master: a clean install from the lockfile, the type check, the Polytope design copies,
+# and the build. Nothing is deployed from here.
+name: Check
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npm run check
+      # A Polytope update must come with DESIGN.md and .impeccable/design.json synced to it
+      # (npx @dario-loi/polytope), so this fails on a Polytope bump until they are.
+      - name: Design system copies
+        run: npm run design:check
+      - name: Build
+        run: npm run build

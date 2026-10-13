@@ -4,7 +4,26 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      # Astro and its integrations release together, so they update together.
+      astro:
+        patterns: ["astro", "@astrojs/*"]
+      # Everything else that is not a major version, in one PR. Polytope is left out so its
+      # updates arrive alone, with the DESIGN.md sync they need.
+      minor-and-patch:
+        patterns: ["*"]
+        exclude-patterns: ["@dario-loi/polytope"]
+        update-types: ["minor", "patch"]
+    ignore:
+      # astro check does not support TypeScript 7.0, and @astrojs/check 0.9 peer-requires
+      # ^5 || ^6. Astro's TypeScript 7 checker (@astrojs/ts-content-mapper) needs 7.1+. Remove
+      # this once Astro supports it.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      actions:
+        patterns: ["*"]
