@@ -57,7 +57,7 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
 >
   <Article>
     <div slot="header" class:list={["paper-head", !d.figure && "paper-head--exhibit"]}>
-      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((name) => ({ name }))} links={links} />
+      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((name) => ({ name }))} me={person.name} links={links} />
       {/* The key figure leads the page, under the header and at its width. A paper without
           one hangs its card's image, or the complex seeded from its name, beside the header. */}
       {d.figure ? (
