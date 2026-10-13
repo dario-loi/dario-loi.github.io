@@ -14,20 +14,28 @@ import { plyTables } from "./src/lib/hast-ply-tables.mjs";
 const requireJson = createRequire(import.meta.url);
 const codeTheme = requireJson("@dario-loi/polytope/code-theme.json");
 
+// Entries of a collection, as paths from the project root, and whether one is a draft.
+const entryFiles = (dir) => readdirSync(dir).filter((f) => /^[^_].*\.mdx?$/.test(f)).map((f) => dir + f);
+const isDraft = (file) => /^draft:\s*true\s*$/m.test(readFileSync(file, "utf8").split("---")[1] ?? "");
+const picturesOf = (file) => [...readFileSync(file, "utf8").matchAll(/\.\/([\w.-]+\.(?:webp|png|jpe?g|avif|svg))/g)].map((m) => file.replace(/[^/]+$/, m[1]));
+
 // While every post is a draft the blog index is an empty state, kept out of search and the sitemap.
-const blogDir = new URL("./src/content/blog/", import.meta.url);
-const hasPosts = readdirSync(blogDir)
-  .filter((f) => /^[^_].*\.mdx?$/.test(f))
-  .some((f) => !/^draft:\s*true\s*$/m.test(readFileSync(new URL(f, blogDir), "utf8").split("---")[1] ?? ""));
+const hasPosts = entryFiles("src/content/blog/").some((f) => !isDraft(f));
 
 // Each page's lastmod in the sitemap: the date of the last commit that touched what the page is
 // made from. An entry page is its own file and the pictures it names; a list page is its page
 // file and the entries it shows. A paper's date is not used, since it says when the paper came
-// out, not when its page last changed. Without full history (a shallow clone) there is no lastmod.
+// out, not when its page last changed. Drafts, and the pictures they name, never count: they are
+// not on the site, so editing one changes no page. Without full history (a shallow clone) there
+// is no lastmod.
 const git = (...args) => {
   try { return execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; }
 };
 const fullHistory = git("rev-parse", "--is-shallow-repository") === "false";
+const notDrafts = ["blog", "publications", "projects"]
+  .flatMap((c) => entryFiles(`src/content/${c}/`).filter(isDraft))
+  .flatMap((f) => [f, ...picturesOf(f)])
+  .map((f) => `:(exclude)${f}`);
 const pageSources = {
   "/": ["src/pages/index.astro", "src/content"],
   "/cv/": ["src/pages/cv.astro", "src/data/cv.ts", "src/content/publications"],
@@ -42,12 +50,11 @@ function sourcesOf(path) {
   const dir = `src/content/${entry[1]}/`;
   const file = [".md", ".mdx"].map((ext) => dir + entry[2] + ext).find((f) => existsSync(f));
   if (!file) return undefined;
-  const pictures = [...readFileSync(file, "utf8").matchAll(/\.\/([\w.-]+\.(?:webp|png|jpe?g|avif|svg))/g)].map((m) => dir + m[1]);
-  return [file, ...pictures];
+  return [file, ...picturesOf(file)];
 }
 function lastmod(url) {
   const paths = fullHistory && sourcesOf(new URL(url).pathname);
-  return (paths && git("log", "-1", "--format=%cI", "--", ...paths)) || undefined;
+  return (paths && git("log", "-1", "--format=%cI", "--", ...paths, ...notDrafts)) || undefined;
 }
 
 export default defineConfig({
