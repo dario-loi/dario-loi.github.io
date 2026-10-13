@@ -42,4 +42,7 @@ const pubs = (await entries("publications")).map(pubRow);
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
   .cv-pubs { margin-top: var(--ply-space-6); }
+  /* The globe's caption ends with a line on how to drag it; the globe needs no instructions.
+     Hidden by Polytope's own class, so an update that renames it only brings the line back. */
+  .cv-atlas :global(.ply-atlas__hint) { display: none; }
 </style>

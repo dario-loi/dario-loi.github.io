@@ -22,6 +22,8 @@ const PISA = { place: "Pisa, Italy", lat: 43.72, lon: 10.4 };
 const XIAN = { place: "Xi'an, China", lat: 34.25, lon: 108.98 };
 const RIO = { place: "Rio de Janeiro, Brazil", lat: -22.91, lon: -43.17 };
 const TRONDHEIM = { place: "Trondheim, Norway", lat: 63.43, lon: 10.4 };
+const OXFORD = { place: "Oxford, United Kingdom", lat: 51.75, lon: -1.26 };
+const ROCCELLA = { place: "Roccella Ionica, Italy", lat: 38.32, lon: 16.4 };
 
 const all: CvEntry[] = [
   {
@@ -54,6 +56,20 @@ const all: CvEntry[] = [
     ...PISA,
     from: "2025-12",
     to: "2026-06",
+  },
+  {
+    title: "ROCKIN' AI 2.0",
+    org: "Roccella Conference on Inference and AI",
+    kind: "Conference",
+    ...ROCCELLA,
+    from: "2025-09",
+  },
+  {
+    title: "Summer school, Representation Learning and Generative AI",
+    org: "Oxford Machine Learning Summer School (OxML)",
+    kind: "Education",
+    ...OXFORD,
+    from: "2025-08",
   },
   {
     title: "Summer camp, Information Technology",
