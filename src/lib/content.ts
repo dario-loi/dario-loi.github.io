@@ -99,7 +99,7 @@ export const pubRow = (p: CollectionEntry<"publications">): Pub => ({
   year: p.data.date.getUTCFullYear(),
   title: p.data.title,
   href: `/publications/${p.id}/`,
-  authors: foldAuthors(p.data.authors, person.name),
+  authors: foldAuthors(p.data.authors.map((a) => a.name), person.name),
   venue: pubVenue(p.data),
   // The PDF link is left out when OpenReview or arXiv already leads to the paper.
   links: p.data.links

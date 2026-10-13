@@ -6,6 +6,15 @@ import { z } from "astro/zod";
 
 const icon = z.enum(["paper", "code", "data", "quote", "external", "download"]);
 const link = z.object({ label: z.string(), href: z.string(), icon: icon.optional() });
+// A paper's author: a name, or a name with the numbers of their affiliations (counting from 1
+// in the paper's `affiliations`) and an asterisk that the paper's `starNote` explains. Both
+// forms come out as the object, so pages read one shape.
+const author = z
+  .union([
+    z.string(),
+    z.object({ name: z.string(), affiliations: z.array(z.number().int().positive()).default([]), starred: z.boolean().default(false) }),
+  ])
+  .transform((a) => (typeof a === "string" ? { name: a, affiliations: [] as number[], starred: false } : a));
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
@@ -29,7 +38,11 @@ const publications = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      authors: z.array(z.string()).min(1),
+      authors: z.array(author).min(1),
+      /** Affiliations as the paper lists them, in its order; authors point at them by number. */
+      affiliations: z.array(z.string()).default([]),
+      /** What an author's asterisk means, in the paper's words, such as "Corresponding author". */
+      starNote: z.string().optional(),
       /** Short venue as it should be cited, such as "ICLR 2026". */
       venue: z.string(),
       /** Full venue name, for Google Scholar and the paper header. */
@@ -70,6 +83,11 @@ const publications = defineCollection({
       /** Figure caption; inline HTML such as <sup> and <em> is allowed. */
       figureCaption: z.string().optional(),
       draft: z.boolean().default(false),
+    }).superRefine((d, ctx) => {
+      // Every affiliation number points at a listed affiliation.
+      for (const a of d.authors) for (const n of a.affiliations) {
+        if (n > d.affiliations.length) ctx.addIssue({ code: "custom", message: `${a.name}: affiliation ${n} is not in the ${d.affiliations.length} listed`, path: ["authors"] });
+      }
     }),
 });
 
