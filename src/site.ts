@@ -21,7 +21,7 @@ export const person = {
   profiles: {
     scholar: "https://scholar.google.com/citations?user=r0Ty-c8AAAAJ",
     github: "https://github.com/dario-loi",
-    linkedin: "https://www.linkedin.com/in/dario-loi-5182531b1",
+    linkedin: "https://www.linkedin.com/in/dario-loi",
     openreview: "https://openreview.net/profile?id=~Dario_Loi1",
     orcid: "https://orcid.org/0009-0006-3753-5668",
   },
