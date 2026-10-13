@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Article from "@dario-loi/polytope/astro/Article.astro";
 import PaperHeader from "@dario-loi/polytope/astro/PaperHeader.astro";
@@ -10,7 +10,7 @@ import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import Tex from "../../components/Tex.astro";
-import { cardComplex, entries, neighbors, preview, pubVenue, seedOf } from "../../lib/content";
+import { cardComplex, entries, neighbors, pictureFormats, preview, pubVenue, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -63,14 +63,14 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
       {d.figure ? (
         <figure class:list={["ply-figure paper__figure", d.figureSize === "column" && "paper__figure--column"]}>
           {d.figureSize === "column"
-            ? <Image src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" />
-            : <Image src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" />}
+            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" />
+            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" />}
           {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
         </figure>
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><Picture {...pictureFormats} src={d.cover} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
           ) : (
             <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the paper's name`} />
           )}

@@ -1,14 +1,14 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Article from "@dario-loi/polytope/astro/Article.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import EntryHeader from "../../components/EntryHeader.astro";
-import { cardComplex, entries, neighbors, preview, seedOf } from "../../lib/content";
+import { cardComplex, entries, neighbors, pictureFormats, preview, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -45,7 +45,7 @@ const og = await preview(d.cover, d.coverAlt);
       </EntryHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Picture {...pictureFormats} src={d.cover} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
         ) : (
           <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the project's name`} />
         )}

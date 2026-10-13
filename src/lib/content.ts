@@ -1,7 +1,7 @@
 // Reading the collections: drafts are dropped in production, and every list is newest first.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
-import type { ImageMetadata } from "astro";
+import type { ImageMetadata, ImageOutputFormat } from "astro";
 import type { Pub } from "@dario-loi/polytope/astro/PubList.astro";
 
 type Name = "blog" | "publications" | "projects";
@@ -12,6 +12,9 @@ export async function entries<N extends Name>(name: N): Promise<CollectionEntry<
   const all = (await getCollection(name, visible)) as CollectionEntry<N>[];
   return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
+
+/** Formats for every <Picture> on the site: AVIF where the browser takes it, else WebP. */
+export const pictureFormats: { formats: ImageOutputFormat[]; fallbackFormat: ImageOutputFormat } = { formats: ["avif", "webp"], fallbackFormat: "webp" };
 
 /** An entry's own link-preview picture, as a JPEG at most 1200px wide (previews do not all
  *  read WebP). Without one the page keeps the site card. */

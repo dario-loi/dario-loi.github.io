@@ -34,6 +34,14 @@ jobs:
           cache: npm
       - name: Install
         run: npm ci
+      # Encoded images (AVIF is slow to encode), restored after npm ci, which clears node_modules.
+      # Astro names each entry by its source and settings, so an older cache only adds misses.
+      - name: Image cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.astro/assets
+          key: astro-assets-${{ hashFiles('src/content/**/*.webp', 'src/content/**/*.png', 'src/content/**/*.jpg', 'package-lock.json') }}
+          restore-keys: astro-assets-
       - name: Build
         run: npm run build
         env:
