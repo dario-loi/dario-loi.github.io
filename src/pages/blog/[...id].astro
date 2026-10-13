@@ -41,10 +41,7 @@ const og = await preview(d.cover, d.coverAlt);
       </figure>
     )}
     <Content />
-    <p class="post__byline ply-small ply-muted">
-      Written by {person.name}. <time datetime={isoDay(d.date)}>{longDate(d.date)}</time>.
-      {d.updated && <>Updated <time datetime={isoDay(d.updated)}>{longDate(d.updated)}</time>.</>}
-    </p>
+    {d.updated && <p class="post__byline ply-small ply-muted">Updated <time datetime={isoDay(d.updated)}>{longDate(d.updated)}</time>.</p>}
   </Article>
   <div class="ply-container ply-article ply-article--head post__foot">
     <div class="ply-article__main">
