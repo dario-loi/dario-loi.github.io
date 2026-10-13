@@ -45,11 +45,12 @@ const og = await preview(d.cover, d.coverAlt);
       </EntryHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt={d.coverAlt ?? ""} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
         ) : (
           <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the project's name`} />
         )}
-        {d.cover && <figcaption>{d.coverAlt}</figcaption>}
+        {/* The caption describes the picture, so the picture itself carries no alt text. */}
+        {d.cover && d.coverAlt && <figcaption><b>{d.title}.</b> {d.coverAlt}</figcaption>}
       </figure>
     </div>
     <Content />
@@ -77,6 +78,5 @@ const og = await preview(d.cover, d.coverAlt);
     .project-head__exhibit { margin-block: var(--ply-space-7); }
   }
   .project-body__tags { margin-top: var(--ply-space-6); }
-  .project-foot { padding-bottom: var(--ply-space-8); }
   .project-foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

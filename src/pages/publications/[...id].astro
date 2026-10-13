@@ -28,6 +28,13 @@ const seed = seedOf(pub.id);
 const model = cardComplex(seed);
 // Previews show the card's crop of the paper's figure, else the key figure itself.
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
+// Long BibTeX fields wrap rather than scroll, so the whole entry reads before it is copied. They
+// hang under the column where the first field's value starts, or, on phones, just past the
+// field names, which leaves the values more room.
+const bibtex = d.bibtex.trim();
+const field = bibtex.match(/^([ \t]*)\w+[ \t]*=[ \t]*\{?/m);
+const hang = field?.[0].length ?? 2;
+const hangNarrow = (field?.[1].length ?? 2) + 4;
 ---
 <Base
   title={d.shortTitle ?? d.title}
@@ -63,7 +70,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt={d.coverAlt ?? ""} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><Image src={d.cover} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
           ) : (
             <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the paper's name`} />
           )}
@@ -78,7 +85,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
     )}
     <Content />
     <h2 id="cite" class="paper__cite">Cite</h2>
-    <div id="bibtex"><BibTeX entry={d.bibtex.trim()} /></div>
+    <div id="bibtex" style={`--hang: ${hang}ch; --hang-narrow: ${hangNarrow}ch`}><BibTeX entry={bibtex} /></div>
   </Article>
   <div class="ply-container ply-article ply-article--head paper__foot">
     <div class="ply-article__main">
@@ -125,6 +132,8 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
   .paper__tldr { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); }
   .paper__tldr .ply-label { vertical-align: 0.2em; margin-inline-end: var(--ply-space-2); }
   .paper__cite { margin-top: var(--ply-space-8); }
-  .paper__foot { padding-bottom: var(--ply-space-8); }
+  #bibtex :global(pre) { white-space: pre-wrap; overflow-wrap: anywhere; }
+  #bibtex :global(.line) { --_hang: var(--hang); display: inline-block; padding-inline-start: var(--_hang); text-indent: calc(-1 * var(--_hang)); }
+  @media (max-width: 40rem) { #bibtex :global(.line) { --_hang: var(--hang-narrow); } }
   .paper__foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

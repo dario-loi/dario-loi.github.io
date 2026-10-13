@@ -78,9 +78,16 @@ export function cardComplex(seed: number) {
   return { points, radius: 0.16 };
 }
 
-/** "ICLR 2026, Poster" or "METACOG-26, Top 3 paper": the venue as lists show it. */
-export const pubVenue = (d: CollectionEntry<"publications">["data"], full = false) =>
-  [full ? (d.venueFull ?? d.venue) : d.venue, d.format, d.award].filter(Boolean).join(", ");
+/** "ICLR 2026, Poster" or "METACOG-26, Top 3 paper": the venue as lists show it. `full` is the
+ *  paper page's line: the full name keeps the short one that lists and citations use, as in
+ *  "The Fourteenth International Conference on Learning Representations (ICLR 2026), Poster",
+ *  and a preprint gives its month, as in "Preprint, August 2026". */
+export function pubVenue(d: CollectionEntry<"publications">["data"], full = false) {
+  let venue = d.venue;
+  if (full && d.venueFull) venue = d.venueFull.includes(d.venue) ? d.venueFull : `${d.venueFull} (${d.venue})`;
+  else if (full && d.kind === "preprint") venue = `${d.venue}, ${MONTHS[d.date.getUTCMonth()]} ${d.date.getUTCFullYear()}`;
+  return [venue, d.format, d.award].filter(Boolean).join(", ");
+}
 
 /** A publication as a row of Polytope's PubList, linking to its page. */
 export const pubRow = (p: CollectionEntry<"publications">): Pub => ({

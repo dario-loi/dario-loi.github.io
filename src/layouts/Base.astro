@@ -38,7 +38,7 @@ const { title, unnamed = false, description = siteMeta.description, current, noi
 const named = title && !unnamed ? `${title} - ${person.name}` : "";
 const headTitle = !title ? `${person.name}, ${person.role}` : named && named.length <= 70 ? named : title;
 
-// The Blog tab appears once there is a post to read.
+// The Blog tab, and the RSS links, appear once there is a post to read.
 const hasPosts = (await entries("blog")).length > 0;
 const tabs = [
   { label: "About", href: "/", current: current === "About" },
@@ -91,7 +91,7 @@ const year = new Date().getFullYear();
       sitemap="/sitemap-index.xml"
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />
+    {hasPosts && <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#141414" />
@@ -107,7 +107,7 @@ const year = new Date().getFullYear();
     <footer class="site-foot">
       <div class="ply-container site-foot__inner">
         <div class="site-foot__who">
-          <p><span class="ply-display site-foot__name">{person.name}</span></p>
+          <p><span class="ply-display site-foot__name">{person.name}<span class="ply-wordmark__stop" aria-hidden="true">.</span></span></p>
           <p class="ply-small ply-muted">{person.role}, {person.affiliation}, {person.city}.</p>
           <p class="ply-small" id="contact">
             <EmailLink placement="footer" plain icon={false}>Email</EmailLink>
@@ -119,7 +119,7 @@ const year = new Date().getFullYear();
           <li><a href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
           <li><a href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
           <li><a href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
-          <li><a href="/rss.xml">RSS</a></li>
+          {hasPosts && <li><a href="/rss.xml">RSS</a></li>}
           <li><a href="/privacy/">Privacy</a></li>
         </ul>
       </div>
