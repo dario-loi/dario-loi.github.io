@@ -6,8 +6,9 @@
 //
 // Every event also carries the page it fired on and where the visitor came from: "direct",
 // another site's host name, or "internal:/path" for a page on this site. Nothing is stored in
-// the browser; when Umami is absent (no id, blocked, Do Not Track) the call is a no-op.
-type Umami = { track: (name: string, data?: Record<string, string>) => void };
+// the browser; when Umami is absent (no id, blocked, Do Not Track) the call is a no-op. The
+// returned promise settles once Umami has sent the event, for a page that leaves right after.
+type Umami = { track: (name: string, data?: Record<string, string>) => Promise<unknown> | void };
 declare global { interface Window { umami?: Umami } }
 
 function source() {
@@ -35,7 +36,7 @@ export function track(name: string, el?: HTMLElement) {
   const data: Record<string, string> = { page: location.pathname, source: source(), ...campaign() };
   if (el?.dataset.trackPlacement) data.placement = el.dataset.trackPlacement;
   if (el?.dataset.trackLabel) data.label = el.dataset.trackLabel;
-  try { window.umami?.track(name, data); } catch {}
+  try { return window.umami?.track(name, data); } catch {}
 }
 
 // The address is never whole in the HTML: [data-email-user] and [data-email-domain] are joined

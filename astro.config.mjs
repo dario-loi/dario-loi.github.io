@@ -21,6 +21,8 @@ const picturesOf = (file) => [...readFileSync(file, "utf8").matchAll(/\.\/([\w.-
 
 // While every post is a draft the blog index is an empty state, kept out of search and the sitemap.
 const hasPosts = entryFiles("src/content/blog/").some((f) => !isDraft(f));
+// Pages with nothing to index: the CV's share address only forwards to the PDF.
+const unlisted = ["/cv/pdf/"];
 
 // Each page's lastmod in the sitemap: the date of the last commit that touched what the page is
 // made from. An entry page is its own file and the pictures it names; a list page is its page
@@ -64,7 +66,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => hasPosts || !page.endsWith("/blog/"),
+      filter: (page) => (hasPosts || !page.endsWith("/blog/")) && !unlisted.some((p) => page.endsWith(p)),
       serialize: (item) => ({ ...item, lastmod: lastmod(item.url) }),
     }),
   ],

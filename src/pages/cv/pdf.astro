@@ -1,0 +1,38 @@
+---
+// The CV's address for sharing (applications, emails, slides). A PDF runs no script, and GitHub
+// Pages keeps no logs, so opening /dario-loi-cv.pdf directly is never counted. This page is
+// counted (a page view and a "cv-download" event placed "link", carrying any utm_ tags in its
+// address), then hands over to the PDF. Share /cv/pdf/?utm_source=... to tell links apart.
+import Base from "../../layouts/Base.astro";
+import Empty from "@dario-loi/polytope/astro/Empty.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+import { cv, person } from "../../site";
+
+const target = cv.pdf ?? cv.page;
+---
+<Base title="CV (PDF)" description={`Curriculum vitae of ${person.name}, as a PDF.`} current="CV" noindex>
+  <div class="ply-container cv-pdf">
+    <Empty title="Opening the CV" body="If the PDF does not open on its own, use the button below.">
+      <div class="ply-cluster" style="justify-content: center">
+        <a class="ply-button" href={target} data-cv-pdf data-astro-prefetch="false" data-track="cv-download" data-track-placement="link">Open the PDF</a>
+        <Button href={cv.page} variant="secondary">CV page</Button>
+      </div>
+    </Empty>
+  </div>
+</Base>
+<script>
+  import { track } from "../../scripts/track";
+  // Leave once the page has loaded (Umami sends its page view then) and the event is sent, or
+  // after two seconds whatever happens, so a blocked or slow Umami never holds the visitor here.
+  // Both requests use keepalive, so leaving does not cancel them. replace() keeps this page out
+  // of history, so Back from the PDF returns to wherever the link was.
+  const link = document.querySelector<HTMLAnchorElement>("a[data-cv-pdf]");
+  if (link) {
+    const loaded = new Promise((r) => (document.readyState === "complete" ? r(0) : addEventListener("load", r, { once: true })));
+    const sent = loaded.then(() => track("cv-download", link));
+    Promise.race([sent, new Promise((r) => setTimeout(r, 2000))]).finally(() => location.replace(link.href));
+  }
+</script>
+<style>
+  .cv-pdf { padding-block: var(--ply-space-8); }
+</style>
