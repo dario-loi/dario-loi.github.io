@@ -1,0 +1,42 @@
+---
+title: "AutoBench: Automating LLM Evaluation through Reciprocal Peer Assessment"
+shortTitle: "AutoBench: Automating LLM Evaluation"
+description: "Language models write, answer, and judge each other's tasks, and judges count for more as they prove reliable. The rankings correlate with MMLU-Pro and GPQA."
+authors:
+  - "Dario Loi"
+  - "Elena Maria Muià"
+  - "Federico Siciliano"
+  - "Giovanni Trappolini"
+  - "Vincenzo Crisà"
+  - "Peter Kruger"
+  - "Fabrizio Silvestri"
+venue: "Preprint"
+kind: preprint
+date: 2025-10-26
+tldr: "Language models take turns writing tasks, answering them, and judging each other's answers. Weighting each judge by its reliability gives rankings that correlate with MMLU-Pro (78%) and GPQA (63%)."
+abstract: "We present AutoBench, a fully automated and self-sustaining framework for evaluating Large Language Models (LLMs) through reciprocal peer assessment. This paper provides a rigorous scientific validation of the AutoBench methodology, originally developed as an open-source project by eZecute S.R.L. Unlike static benchmarks that suffer from test-set contamination and limited adaptability, AutoBench dynamically generates novel evaluation tasks while models alternately serve as question generators, contestants, and judges across diverse domains. An iterative weighting mechanism amplifies the influence of consistently reliable evaluators, aggregating peer judgments into consensus-based rankings that reflect collective model agreement. Our experiments demonstrate strong correlations with established benchmarks including MMLU-Pro and GPQA (respectively 78% and 63%), validating this peer-driven evaluation paradigm. The multi-judge design significantly outperforms single-judge baselines, confirming that distributed evaluation produces more robust and human-consistent assessments. AutoBench offers a scalable, contamination-resistant alternative to static benchmarks for the continuous evaluation of evolving language models."
+keywords: ["LLM evaluation", "LLM-as-a-judge", "Peer assessment", "Benchmarks"]
+links:
+  - { label: "arXiv", href: "https://arxiv.org/abs/2510.22593", icon: external }
+  - { label: "PDF", href: "https://arxiv.org/pdf/2510.22593", icon: download }
+  - { label: "AutoBench", href: "https://autobench.org/", icon: external }
+arxiv: "2510.22593"
+pdf: "https://arxiv.org/pdf/2510.22593"
+selected: true
+cover: ./autobench-card.webp
+coverAlt: "Six rows of Figure 3 of the paper: the mean score each of six judge models gives twelve answering models, with a harsh judge in red between lenient judges in teal."
+figure: ./autobench-figure1.webp
+figureNum: 1
+figureAlt: "The AutoBench loop in three stages. One: a model generates a task and the other models validate it. Two: every model answers. Three: the models rank one another's answers into a judgment matrix, which, weighted by each judge's reliability, updates the model scores and the judge weights for the next round. An inset shows a contestant and a judge joined by one judgment."
+figureCaption: "Diagram of the AutoBench framework."
+bibtex: |
+  @misc{loi2025autobench,
+    title         = {{AutoBench}: Automating {LLM} Evaluation through Reciprocal Peer Assessment},
+    author        = {Dario Loi and Elena Maria Mui{\`a} and Federico Siciliano and Giovanni Trappolini and Vincenzo Cris{\`a} and Peter Kruger and Fabrizio Silvestri},
+    year          = {2025},
+    eprint        = {2510.22593},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.CL},
+    url           = {https://arxiv.org/abs/2510.22593}
+  }
+---
