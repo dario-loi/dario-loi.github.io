@@ -98,6 +98,7 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
   </div>
 </Base>
 <script>
+  import { AUTHOR_FOLD, keptWhenFolded } from "../../lib/authors";
   // The BibTeX block's own Copy button reports that the entry was copied.
   for (const b of document.querySelectorAll<HTMLElement>("#bibtex .ply-code__copy")) {
     b.dataset.track = "bibtex-copy";
@@ -110,6 +111,31 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
     a.dataset.track = "paper-link";
     a.dataset.trackPlacement = "paper-header";
     a.dataset.trackLabel = a.textContent?.trim() ?? "";
+  }
+  // A long author list folds as it does in lists (src/lib/authors.ts): the first names, mine, and
+  // the last, each gap marked, with a button for the rest. Without script, and on paper, it
+  // shows whole.
+  for (const list of document.querySelectorAll<HTMLUListElement>(".paper-head .ply-authors")) {
+    const names = [...list.children] as HTMLLIElement[];
+    if (names.length <= AUTHOR_FOLD.over) continue;
+    const shown = keptWhenFolded(names.length, names.findIndex((li) => li.classList.contains("ply-me")));
+    names.forEach((li, i) => {
+      if (shown(i)) return;
+      li.classList.add("paper-authors__more");
+      if (shown(i - 1)) li.before(Object.assign(document.createElement("li"), { className: "paper-authors__gap", textContent: "..." }));
+    });
+    for (const gap of list.querySelectorAll(".paper-authors__gap")) gap.setAttribute("aria-hidden", "true");
+    const button = Object.assign(document.createElement("button"), { type: "button", className: "paper-authors__toggle" });
+    const set = (open: boolean) => {
+      list.classList.toggle("paper-authors--folded", !open);
+      button.setAttribute("aria-expanded", String(open));
+      button.textContent = open ? "Show fewer authors" : `Show all ${names.length} authors`;
+    };
+    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
+    const item = document.createElement("li");
+    item.append(button);
+    list.append(item);
+    set(false);
   }
 </script>
 <style>
@@ -128,6 +154,16 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
     .paper-head--exhibit { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
     .paper-head--exhibit :global(.ply-paper) { padding-bottom: var(--ply-space-7); }
     .paper-head__exhibit { margin-block: var(--ply-space-7); }
+  }
+  /* The folded author list (see the script): hidden names and the gap marks trade places. */
+  .paper-head :global(.paper-authors--folded .paper-authors__more), .paper-head :global(.ply-authors:not(.paper-authors--folded) .paper-authors__gap) { display: none; }
+  .paper-head :global(.paper-authors__gap) { color: var(--ply-color-text-muted); }
+  .paper-head :global(.paper-authors__toggle) { display: inline-flex; align-items: center; min-height: 1.75rem; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: var(--ply-size-ui); font-weight: var(--ply-weight-semibold); cursor: pointer; text-decoration: underline var(--ply-border-control) var(--ply-color-rule); text-underline-offset: 0.25em; }
+  .paper-head :global(.paper-authors__toggle:hover) { text-decoration-color: var(--ply-color-accent); }
+  @media (pointer: coarse) { .paper-head :global(.paper-authors__toggle) { min-height: 2.75rem; } }
+  @media print {
+    .paper-head :global(.paper-authors--folded .paper-authors__more) { display: revert; }
+    .paper-head :global(:is(.paper-authors__gap, .paper-authors__toggle)) { display: none; }
   }
   .paper__tldr { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); }
   .paper__tldr .ply-label { vertical-align: 0.2em; margin-inline-end: var(--ply-space-2); }

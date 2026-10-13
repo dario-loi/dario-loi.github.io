@@ -8,6 +8,7 @@ import Tex from "../../components/Tex.astro";
 import EntryCard from "../../components/EntryCard.astro";
 import CardGrid from "../../components/CardGrid.astro";
 import { entries } from "../../lib/content";
+import { foldAuthors } from "../../lib/authors";
 import { person } from "../../site";
 
 const pubs = await entries("publications");
@@ -41,7 +42,7 @@ const n = pubs.length;
                   placement="publications"
                 >
                   {p.data.tldr && <Tex slot="summary" text={p.data.tldr} />}
-                  <p class="pub-card__authors">{p.data.authors.map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
+                  <p class="pub-card__authors">{foldAuthors(p.data.authors, person.name).map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
                 </EntryCard>
               ))}
             </CardGrid>

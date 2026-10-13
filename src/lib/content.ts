@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
 import type { ImageMetadata, ImageOutputFormat } from "astro";
 import type { Pub } from "@dario-loi/polytope/astro/PubList.astro";
+import { foldAuthors } from "./authors";
+import { person } from "../site";
 
 type Name = "blog" | "publications" | "projects";
 
@@ -97,7 +99,7 @@ export const pubRow = (p: CollectionEntry<"publications">): Pub => ({
   year: p.data.date.getUTCFullYear(),
   title: p.data.title,
   href: `/publications/${p.id}/`,
-  authors: p.data.authors,
+  authors: foldAuthors(p.data.authors, person.name),
   venue: pubVenue(p.data),
   // The PDF link is left out when OpenReview or arXiv already leads to the paper.
   links: p.data.links
