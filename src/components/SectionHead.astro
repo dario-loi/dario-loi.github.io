@@ -6,12 +6,16 @@ const { title, id, more } = Astro.props;
 ---
 <div class="section-head">
   <h2 id={id}>{title}</h2>
-  {more && <a class="section-head__more" href={more.href}>{more.label}<Icon name="arrow-right" /></a>}
+  {more && <a class="section-head__more ply-target" href={more.href}>{more.label}<Icon name="arrow-right" /></a>}
 </div>
 <style is:global>
   .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--ply-space-2) var(--ply-space-5); margin-bottom: var(--ply-space-6); }
-  .section-head__more { display: inline-flex; align-items: center; gap: var(--ply-space-2); min-height: 1.5rem; font-size: var(--ply-size-ui); }
+  /* 24px tall, in Polytope's components layer so .ply-target (a utility) raises it to 44px
+     under a finger. The layer order is restated so this sheet never sets it first. */
+  @layer ply.reset, ply.base, ply.layout, ply.components, ply.utilities;
+  @layer ply.components {
+    .section-head__more { display: inline-flex; align-items: center; gap: var(--ply-space-2); min-height: 1.5rem; font-size: var(--ply-size-ui); }
+  }
   .section-head__more .ply-icon { transition: transform var(--ply-duration-fast) var(--ply-ease-out); }
   .section-head__more:hover .ply-icon { transform: translateX(0.2em); }
-  @media (pointer: coarse) { .section-head__more { min-height: 2.75rem; } }
 </style>

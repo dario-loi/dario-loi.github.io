@@ -3,8 +3,6 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
 import type { ImageMetadata, ImageOutputFormat } from "astro";
 import type { Pub } from "@dario-loi/polytope/astro/PubList.astro";
-import { foldAuthors } from "./authors";
-import { person } from "../site";
 
 type Name = "blog" | "publications" | "projects";
 
@@ -17,6 +15,14 @@ export async function entries<N extends Name>(name: N): Promise<CollectionEntry<
 
 /** Formats for every <Picture> on the site: AVIF where the browser takes it, else WebP. */
 export const pictureFormats: { formats: ImageOutputFormat[]; fallbackFormat: ImageOutputFormat } = { formats: ["avif", "webp"], fallbackFormat: "webp" };
+
+/** Settings for a <Cover> in a Polytope Card's "figure" slot. A lead card's panel takes about
+ *  half the row, and it is the first thing on its list page, so its cover loads first. */
+export const cardPicture = (lead = false) => ({
+  widths: [480, 800, 1200],
+  sizes: lead ? "(min-width: 64rem) 50vw, 100vw" : "(min-width: 64rem) 30vw, 100vw",
+  ...(lead ? { loading: "eager" as const, fetchpriority: "high" as const } : {}),
+});
 
 /** An entry's own link-preview picture, as a JPEG at most 1200px wide (previews do not all
  *  read WebP). Without one the page keeps the site card. */
@@ -52,37 +58,6 @@ export function seedOf(s: string) {
   return h >>> 0 || 1;
 }
 
-/** Triangle count of the complex Polytope's <Complex> draws for these settings (same
- *  generator and layout as @dario-loi/polytope Complex.astro). */
-function triangles(points: number, radius: number, seed: number) {
-  let s = seed >>> 0 || 1;
-  const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const cols = Math.ceil(Math.sqrt(points * 1.8)), rows = Math.ceil(points / cols);
-  const pts = Array.from({ length: points }, (_, i) => {
-    const c = i % cols, r = Math.floor(i / cols);
-    return [6 + ((c + 0.15 + rand() * 0.7) / cols) * 88, 5 + ((r + 0.15 + rand() * 0.7) / rows) * 46];
-  });
-  const R = radius * 100;
-  const adj = pts.map(() => new Set<number>());
-  for (let i = 0; i < points; i++) for (let j = i + 1; j < points; j++) {
-    if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) <= R) { adj[i].add(j); adj[j].add(i); }
-  }
-  let t = 0;
-  for (let i = 0; i < points; i++) for (const j of adj[i]) if (j > i) for (const k of adj[i]) if (k > j && adj[j].has(k)) t++;
-  return t;
-}
-
-/** Settings for an entry's card complex: points vary with the seed, and the radius is the
- *  smallest that fills about 0.6 triangles per point, so every card
- *  reads as points, edges, and a few filled faces, never an empty field or a solid one. */
-export function cardComplex(seed: number) {
-  const points = 24 + (seed % 9);
-  for (let r = 0.12; r <= 0.2; r += 0.005) {
-    if (triangles(points, r, seed) >= Math.round(points * 0.6)) return { points, radius: Math.round(r * 1000) / 1000 };
-  }
-  return { points, radius: 0.16 };
-}
-
 /** "ICLR 2026, Poster" or "METACOG-26, Top 3 paper": the venue as lists show it. `full` is the
  *  paper page's line: the full name keeps the short one that lists and citations use, as in
  *  "The Fourteenth International Conference on Learning Representations (ICLR 2026), Poster",
@@ -99,7 +74,7 @@ export const pubRow = (p: CollectionEntry<"publications">): Pub => ({
   year: p.data.date.getUTCFullYear(),
   title: p.data.title,
   href: `/publications/${p.id}/`,
-  authors: foldAuthors(p.data.authors.map((a) => a.name), person.name),
+  authors: p.data.authors.map((a) => a.name),
   venue: pubVenue(p.data),
   // The PDF link is left out when OpenReview or arXiv already leads to the paper.
   links: p.data.links

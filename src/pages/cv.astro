@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Atlas from "@dario-loi/polytope/astro/Atlas.astro";
 import AtlasStop from "@dario-loi/polytope/astro/AtlasStop.astro";
+import MastTitle from "@dario-loi/polytope/astro/MastTitle.astro";
 import PubList from "@dario-loi/polytope/astro/PubList.astro";
 import CvLink from "../components/CvLink.astro";
 import SectionHead from "../components/SectionHead.astro";
@@ -14,10 +15,9 @@ const pubs = (await entries("publications")).map(pubRow);
 ---
 <Base title="CV" description={`Curriculum vitae of ${person.name}: education and research, with a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
   <div class="ply-container cv-atlas">
-    <Atlas label="Where the work has taken me">
+    <Atlas label="Where the work has taken me" quiet>
       <Fragment slot="head">
-        <!-- "Curriculum" sets wider than the 0.76em-per-character estimate the mast sizing assumes. -->
-        <h1 class="ply-mast__title" style="--_chars: 13">Curriculum <span class="ply-nowrap">vitae<span class="ply-mast__stop" aria-hidden="true">.</span></span></h1>
+        <MastTitle title="Curriculum vitae" />
         <p class="ply-mast__lede">{person.role} at {person.affiliation}.</p>
         <div class="ply-cluster cv-actions">
           {cv.pdf && <CvLink placement="cv-head" mode="download" variant="primary"><Fragment slot="download">Full CV as PDF</Fragment></CvLink>}
@@ -33,7 +33,7 @@ const pubs = (await entries("publications")).map(pubRow);
     {pubs.length > 0 && (
       <section class="cv-pubs" aria-labelledby="cv-pubs-h">
         <SectionHead id="cv-pubs-h" title="Publications" more={{ label: "All publications", href: "/publications/" }} />
-        <PubList pubs={pubs} me={person.name} label="Publications" />
+        <PubList pubs={pubs} me={person.name} label={false} fold={12} />
       </section>
     )}
   </div>
@@ -42,8 +42,4 @@ const pubs = (await entries("publications")).map(pubRow);
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
   .cv-pubs { margin-top: var(--ply-space-6); }
-  /* With no entry current, the globe's caption adds a count of places and a line on how to
-     drag; the label says enough. Hidden by Polytope's own classes, so an update that renames
-     them only brings the lines back. */
-  .cv-atlas :global(:is(.ply-atlas__tally, .ply-atlas__hint)) { display: none; }
 </style>

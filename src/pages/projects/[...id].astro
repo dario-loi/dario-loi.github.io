@@ -1,14 +1,14 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
-import { Picture } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Article from "@dario-loi/polytope/astro/Article.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import EntryHeader from "../../components/EntryHeader.astro";
-import { cardComplex, entries, neighbors, pictureFormats, preview, seedOf } from "../../lib/content";
+import Cover from "../../components/Cover.astro";
+import { entries, neighbors, preview, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -21,7 +21,6 @@ const { project, newer, older } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
 const seed = seedOf(project.id);
-const model = cardComplex(seed);
 const og = await preview(d.cover, d.coverAlt);
 ---
 <Base
@@ -45,9 +44,9 @@ const og = await preview(d.cover, d.coverAlt);
       </EntryHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Picture {...pictureFormats} src={d.cover} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" loading="eager" fetchpriority="high" /></div>
         ) : (
-          <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the project's name`} />
+          <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the project's name`} />
         )}
         {/* The caption describes the picture, so the picture itself carries no alt text. */}
         {d.cover && d.coverAlt && <figcaption><b>{d.title}.</b> {d.coverAlt}</figcaption>}
@@ -60,6 +59,8 @@ const og = await preview(d.cover, d.coverAlt);
     <div class="ply-article__main">
       <Pager
         label="More projects"
+        prevText="Newer"
+        nextText="Older"
         prev={newer && { label: newer.data.title, href: `/projects/${newer.id}/` }}
         next={older && { label: older.data.title, href: `/projects/${older.id}/` }}
       />
@@ -68,10 +69,11 @@ const og = await preview(d.cover, d.coverAlt);
 </Base>
 <style>
   /* The exhibit stacks under the header, then hangs in the margin column beside it once
-     the article has one. */
+     the article has one. Without a cover it is the project card's complex, drawn as
+     Polytope's Card draws it, from the same seed. */
   .project-head { display: grid; gap: 0 var(--ply-space-6); }
   .project-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
-  .project-head__exhibit img { display: block; width: 100%; height: auto; }
+  .project-head__exhibit img { width: 100%; height: auto; }
   .project-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
   @media (min-width: 60rem) {
     .project-head { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }

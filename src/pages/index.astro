@@ -5,12 +5,13 @@ import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import PubList from "@dario-loi/polytope/astro/PubList.astro";
 import Button from "@dario-loi/polytope/astro/Button.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
-import EntryCard from "../components/EntryCard.astro";
-import CardGrid from "../components/CardGrid.astro";
+import Card from "@dario-loi/polytope/astro/Card.astro";
+import Cover from "../components/Cover.astro";
+import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import SectionHead from "../components/SectionHead.astro";
 import EmailLink from "../components/EmailLink.astro";
 import CvLink from "../components/CvLink.astro";
-import { entries, longDate, pubRow, seedOf } from "../lib/content";
+import { cardPicture, entries, longDate, pubRow, seedOf } from "../lib/content";
 import { cv, person } from "../site";
 
 const pubs = await entries("publications");
@@ -25,7 +26,7 @@ const pubRows = shownPubs.map(pubRow);
 <Base description={`${person.name}, ${person.lede}`} current="About" profile>
   <Mast title={person.name} lede={person.lede}>
     <div slot="after" class="ply-cluster home-actions">
-      <Button href="#publications">Publications</Button>
+      <Button href="/publications/">Publications</Button>
       <CvLink placement="home-mast" mode="view" />
       <EmailLink placement="home-mast" />
     </div>
@@ -53,7 +54,7 @@ const pubRows = shownPubs.map(pubRow);
 
     <section id="publications" class="home-section" aria-labelledby="publications-h">
       <SectionHead id="publications-h" title={selected.length > 0 ? "Selected publications" : "Publications"} more={{ label: "All publications", href: "/publications/" }} />
-      <PubList pubs={pubRows} me={person.name} label="Selected publications" />
+      <PubList pubs={pubRows} me={person.name} label={false} fold={12} />
     </section>
 
     {featured.length > 0 && (
@@ -61,17 +62,17 @@ const pubRows = shownPubs.map(pubRow);
         <SectionHead id="projects-h" title="Projects" more={{ label: "All projects", href: "/projects/" }} />
         <CardGrid>
           {featured.map((p) => (
-            <EntryCard
+            <Card
               href={`/projects/${p.id}/`}
-              id={p.id}
               title={p.data.title}
               summary={p.data.description}
               meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context.split(",")[0]] : [])]}
-              cover={p.data.cover}
-              draft={p.data.draft}
-              track="open-project"
-              placement="home"
-            />
+              badge={p.data.draft ? "Draft" : undefined}
+              seed={seedOf(p.id)}
+              link={{ "data-track": "open-project", "data-track-placement": "home", "data-track-label": p.id }}
+            >
+              {p.data.cover && <Cover slot="figure" {...cardPicture()} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+            </Card>
           ))}
         </CardGrid>
       </section>
@@ -82,17 +83,17 @@ const pubRows = shownPubs.map(pubRow);
         <SectionHead id="writing-h" title="Writing" more={{ label: "All posts", href: "/blog/" }} />
         <CardGrid>
           {posts.map((p) => (
-            <EntryCard
+            <Card
               href={`/blog/${p.id}/`}
-              id={p.id}
               title={p.data.title}
               summary={p.data.description}
               meta={[longDate(p.data.date)]}
-              cover={p.data.cover}
-              draft={p.data.draft}
-              track="open-post"
-              placement="home"
-            />
+              badge={p.data.draft ? "Draft" : undefined}
+              seed={seedOf(p.id)}
+              link={{ "data-track": "open-post", "data-track-placement": "home", "data-track-label": p.id }}
+            >
+              {p.data.cover && <Cover slot="figure" {...cardPicture()} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+            </Card>
           ))}
         </CardGrid>
       </section>

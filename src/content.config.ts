@@ -29,6 +29,8 @@ const blog = defineCollection({
       /** A figure for the card and the top of the post. Without one, the card draws a complex. */
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /** The cover as a dark page shows it, for a light screenshot that would glare there. */
+      coverDark: image().optional(),
       draft: z.boolean().default(false),
     }),
 });
@@ -72,6 +74,8 @@ const publications = defineCollection({
       /** Card and header panel image. Without one, both draw a complex seeded from the id. */
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /** The cover as a dark page shows it, for a light screenshot that would glare there. */
+      coverDark: image().optional(),
       /** The paper's key figure, shown above the abstract. */
       figure: image().optional(),
       /** "wide" is a full-width paper figure; "column" keeps a single-column figure near the
@@ -107,6 +111,8 @@ const projects = defineCollection({
       featured: z.boolean().default(false),
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /** The cover as a dark page shows it, for a light screenshot that would glare there. */
+      coverDark: image().optional(),
       draft: z.boolean().default(false),
     }),
 });

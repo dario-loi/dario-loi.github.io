@@ -94,7 +94,8 @@ const year = new Date().getFullYear();
     {hasPosts && <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
-    <meta name="theme-color" content="#141414" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)" />
     <script is:inline>try{var t=localStorage.getItem("ply-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
     <Analytics />
   </head>
@@ -115,12 +116,12 @@ const year = new Date().getFullYear();
           </p>
         </div>
         <ul class="site-foot__links ply-small" role="list">
-          <li><a href={person.profiles.scholar} data-track="profile-link" data-track-placement="footer" data-track-label="scholar">Google Scholar</a></li>
-          <li><a href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
-          <li><a href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
-          <li><a href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
-          {hasPosts && <li><a href="/rss.xml">RSS</a></li>}
-          <li><a href="/privacy/">Privacy</a></li>
+          <li><a class="ply-target" href={person.profiles.scholar} data-track="profile-link" data-track-placement="footer" data-track-label="scholar">Google Scholar</a></li>
+          <li><a class="ply-target" href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
+          <li><a class="ply-target" href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
+          <li><a class="ply-target" href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
+          {hasPosts && <li><a class="ply-target" href="/rss.xml">RSS</a></li>}
+          <li><a class="ply-target" href="/privacy/">Privacy</a></li>
         </ul>
       </div>
       <div class="ply-container">
@@ -133,8 +134,31 @@ const year = new Date().getFullYear();
   import "@dario-loi/polytope/js/copy.js";
   import "@dario-loi/polytope/js/scroll.js";
   import "../scripts/track.ts";
+  // The browser's bar takes the page's ground: the system theme's by default (the theme-color
+  // metas), and the theme switch's once a theme is chosen.
+  const ground = { light: "#FFFFFF", dark: "#161615" };
+  const paintBar = () => {
+    const theme = document.documentElement.dataset.theme;
+    if (theme !== "light" && theme !== "dark") return;
+    for (const m of document.querySelectorAll('meta[name="theme-color"]')) m.setAttribute("content", ground[theme]);
+  };
+  paintBar();
+  new MutationObserver(paintBar).observe(document.documentElement, { attributeFilter: ["data-theme"] });
 </script>
 <style is:global>
+  /* Sizes that a Polytope utility may override sit in Polytope's components layer, under its
+     utilities layer: a footer link is 24px tall, and .ply-target raises it to 44px under a
+     finger. The layer order is restated so this sheet never sets it first. */
+  @layer ply.reset, ply.base, ply.layout, ply.components, ply.utilities;
+  @layer ply.components {
+    .site-foot__links a { display: inline-flex; align-items: center; min-height: 1.5rem; }
+  }
+  /* A cover with a dark twin (Cover.astro) shows the one for the theme in use, the switch's
+     or else the system's, and prints the light one. Nothing else may set their display. */
+  @media screen { :root[data-theme="light"] .theme-dark-only, :root[data-theme="dark"] .theme-light-only { display: none; } }
+  @media screen and (prefers-color-scheme: light) { :root:not([data-theme]) .theme-dark-only { display: none; } }
+  @media screen and (prefers-color-scheme: dark) { :root:not([data-theme]) .theme-light-only { display: none; } }
+  @media print { .theme-dark-only { display: none; } }
   /* A row of tags. Inside .ply-prose, list items would otherwise take the prose list spacing. */
   .tag-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
   .ply-prose .tag-list { padding-inline-start: 0; }
@@ -144,7 +168,7 @@ const year = new Date().getFullYear();
   .site-foot__who { display: grid; gap: var(--ply-space-2); }
   .site-foot__name { font-size: var(--ply-size-xl); line-height: 1; }
   .site-foot__links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
-  .site-foot__links a { display: inline-flex; align-items: center; min-height: 1.5rem; }
   .site-foot__colophon { padding-block: var(--ply-space-4) var(--ply-space-7); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
-  @media (pointer: coarse) { .site-foot__links a { min-height: 2.75rem; } }
+  /* A printed page ends with its own content. */
+  @media print { .site-foot { display: none; } }
 </style>

@@ -10,7 +10,8 @@ import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import Tex from "../../components/Tex.astro";
-import { cardComplex, entries, neighbors, pictureFormats, preview, pubVenue, seedOf } from "../../lib/content";
+import Cover from "../../components/Cover.astro";
+import { entries, neighbors, pictureFormats, preview, pubVenue, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -25,16 +26,8 @@ const { Content } = await render(pub);
 const venueLine = pubVenue(d, true);
 const links = [...d.links, { label: "BibTeX", href: "#cite", icon: "quote" as const }];
 const seed = seedOf(pub.id);
-const model = cardComplex(seed);
 // Previews show the card's crop of the paper's figure, else the key figure itself.
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
-// Long BibTeX fields wrap rather than scroll, so the whole entry reads before it is copied. They
-// hang under the column where the first field's value starts, or, on phones, just past the
-// field names, which leaves the values more room.
-const bibtex = d.bibtex.trim();
-const field = bibtex.match(/^([ \t]*)\w+[ \t]*=[ \t]*\{?/m);
-const hang = field?.[0].length ?? 2;
-const hangNarrow = (field?.[1].length ?? 2) + 4;
 ---
 <Base
   title={d.shortTitle ?? d.title}
@@ -57,22 +50,23 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
 >
   <Article>
     <div slot="header" class:list={["paper-head", !d.figure && "paper-head--exhibit"]}>
-      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} />
+      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12} />
       {/* The key figure leads the page, under the header and at its width. A paper without
-          one hangs its card's image, or the complex seeded from its name, beside the header. */}
+          one hangs its card's image, or its card's complex (drawn as Polytope's Card draws
+          it, from the same seed), beside the header. */}
       {d.figure ? (
         <figure class:list={["ply-figure paper__figure", d.figureSize === "column" && "paper__figure--column"]}>
           {d.figureSize === "column"
-            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" />
-            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" />}
+            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" loading="eager" fetchpriority="high" />
+            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" loading="eager" fetchpriority="high" />}
           {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
         </figure>
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Picture {...pictureFormats} src={d.cover} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" loading="eager" fetchpriority="high" /></div>
           ) : (
-            <Complex seed={seed} points={model.points} radius={model.radius} label={`${d.title}: a complex drawn from the paper's name`} />
+            <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the paper's name`} />
           )}
           {d.cover && <figcaption><b>{d.venue}.</b> {d.coverAlt}</figcaption>}
         </figure>
@@ -85,12 +79,14 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
     )}
     <Content />
     <h2 id="cite" class="paper__cite">Cite</h2>
-    <div id="bibtex" style={`--hang: ${hang}ch; --hang-narrow: ${hangNarrow}ch`}><BibTeX entry={bibtex} /></div>
+    <div id="bibtex"><BibTeX entry={d.bibtex.trim()} /></div>
   </Article>
   <div class="ply-container ply-article ply-article--head paper__foot">
     <div class="ply-article__main">
       <Pager
         label="More publications"
+        prevText="Newer"
+        nextText="Older"
         prev={newer && { label: newer.data.shortTitle ?? newer.data.title, href: `/publications/${newer.id}/` }}
         next={older && { label: older.data.shortTitle ?? older.data.title, href: `/publications/${older.id}/` }}
       />
@@ -98,7 +94,6 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
   </div>
 </Base>
 <script>
-  import { AUTHOR_FOLD, keptWhenFolded } from "../../lib/authors";
   // The BibTeX block's own Copy button reports that the entry was copied.
   for (const b of document.querySelectorAll<HTMLElement>("#bibtex .ply-code__copy")) {
     b.dataset.track = "bibtex-copy";
@@ -112,31 +107,6 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
     a.dataset.trackPlacement = "paper-header";
     a.dataset.trackLabel = a.textContent?.trim() ?? "";
   }
-  // A long author list folds as it does in lists (src/lib/authors.ts): the first names, mine, and
-  // the last, each gap marked, with a button for the rest. Without script, and on paper, it
-  // shows whole.
-  for (const list of document.querySelectorAll<HTMLUListElement>(".paper-head .ply-authors")) {
-    const names = [...list.children] as HTMLLIElement[];
-    if (names.length <= AUTHOR_FOLD.over) continue;
-    const shown = keptWhenFolded(names.length, names.findIndex((li) => li.classList.contains("ply-me")));
-    names.forEach((li, i) => {
-      if (shown(i)) return;
-      li.classList.add("paper-authors__more");
-      if (shown(i - 1)) li.before(Object.assign(document.createElement("li"), { className: "paper-authors__gap", textContent: "..." }));
-    });
-    for (const gap of list.querySelectorAll(".paper-authors__gap")) gap.setAttribute("aria-hidden", "true");
-    const button = Object.assign(document.createElement("button"), { type: "button", className: "paper-authors__toggle" });
-    const set = (open: boolean) => {
-      list.classList.toggle("paper-authors--folded", !open);
-      button.setAttribute("aria-expanded", String(open));
-      button.textContent = open ? "Show fewer authors" : `Show all ${names.length} authors`;
-    };
-    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
-    const item = document.createElement("li");
-    item.append(button);
-    list.append(item);
-    set(false);
-  }
 </script>
 <style>
   /* Header and key figure share the head's width; the figure stops at 52rem, or near its
@@ -148,28 +118,15 @@ const hangNarrow = (field?.[1].length ?? 2) + 4;
   /* Without a key figure, the exhibit stacks under the header, then hangs in the margin
      column beside it once the article has one. */
   .paper-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
-  .paper-head__exhibit img { display: block; width: 100%; height: auto; }
+  .paper-head__exhibit img { width: 100%; height: auto; }
   .paper-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
   @media (min-width: 60rem) {
     .paper-head--exhibit { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
     .paper-head--exhibit :global(.ply-paper) { padding-bottom: var(--ply-space-7); }
     .paper-head__exhibit { margin-block: var(--ply-space-7); }
   }
-  /* The folded author list (see the script): hidden names and the gap marks trade places. */
-  .paper-head :global(.paper-authors--folded .paper-authors__more), .paper-head :global(.ply-authors:not(.paper-authors--folded) .paper-authors__gap) { display: none; }
-  .paper-head :global(.paper-authors__gap) { color: var(--ply-color-text-muted); }
-  .paper-head :global(.paper-authors__toggle) { display: inline-flex; align-items: center; min-height: 1.75rem; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: var(--ply-size-ui); font-weight: var(--ply-weight-semibold); cursor: pointer; text-decoration: underline var(--ply-border-control) var(--ply-color-rule); text-underline-offset: 0.25em; }
-  .paper-head :global(.paper-authors__toggle:hover) { text-decoration-color: var(--ply-color-accent); }
-  @media (pointer: coarse) { .paper-head :global(.paper-authors__toggle) { min-height: 2.75rem; } }
-  @media print {
-    .paper-head :global(.paper-authors--folded .paper-authors__more) { display: revert; }
-    .paper-head :global(:is(.paper-authors__gap, .paper-authors__toggle)) { display: none; }
-  }
   .paper__tldr { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); }
   .paper__tldr .ply-label { vertical-align: 0.2em; margin-inline-end: var(--ply-space-2); }
   .paper__cite { margin-top: var(--ply-space-8); }
-  #bibtex :global(pre) { white-space: pre-wrap; overflow-wrap: anywhere; }
-  #bibtex :global(.line) { --_hang: var(--hang); display: inline-block; padding-inline-start: var(--_hang); text-indent: calc(-1 * var(--_hang)); }
-  @media (max-width: 40rem) { #bibtex :global(.line) { --_hang: var(--hang-narrow); } }
   .paper__foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

@@ -2,9 +2,10 @@
 import Base from "../../layouts/Base.astro";
 import Empty from "@dario-loi/polytope/astro/Empty.astro";
 import IndexMast from "../../components/IndexMast.astro";
-import EntryCard from "../../components/EntryCard.astro";
-import CardGrid from "../../components/CardGrid.astro";
-import { entries } from "../../lib/content";
+import Card from "@dario-loi/polytope/astro/Card.astro";
+import Cover from "../../components/Cover.astro";
+import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
+import { cardPicture, entries, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 const projects = await entries("projects");
@@ -18,20 +19,20 @@ const n = projects.length;
     ) : (
       <CardGrid>
         {projects.map((p, i) => (
-          <EntryCard
+          <Card
             href={`/projects/${p.id}/`}
-            id={p.id}
             title={p.data.title}
             summary={p.data.description}
             meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context] : [])]}
             tags={p.data.tags}
-            cover={p.data.cover}
-            size={i === 0 ? "lead" : "regular"}
             level={2}
-            draft={p.data.draft}
-            track="open-project"
-            placement="projects"
-          />
+            lead={i === 0}
+            badge={p.data.draft ? "Draft" : undefined}
+            seed={seedOf(p.id)}
+            link={{ "data-track": "open-project", "data-track-placement": "projects", "data-track-label": p.id }}
+          >
+            {p.data.cover && <Cover slot="figure" {...cardPicture(i === 0)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+          </Card>
         ))}
       </CardGrid>
     )}

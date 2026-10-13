@@ -9,6 +9,7 @@ links:
   - { label: "Documentation", href: "https://dario-loi.github.io/polytope/", icon: external }
   - { label: "Code", href: "https://github.com/dario-loi/polytope", icon: code }
 cover: ./polytope.webp
+coverDark: ./polytope-dark.webp
 coverAlt: "The Polytope documentation site: a wood-type title beside a black panel holding a live Vietoris-Rips complex with a radius slider."
 ---
 

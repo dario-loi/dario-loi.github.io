@@ -5,15 +5,18 @@ import Button from "@dario-loi/polytope/astro/Button.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import IndexMast from "../../components/IndexMast.astro";
 import Tex from "../../components/Tex.astro";
-import EntryCard from "../../components/EntryCard.astro";
-import CardGrid from "../../components/CardGrid.astro";
-import { entries } from "../../lib/content";
-import { foldAuthors } from "../../lib/authors";
+import Card from "@dario-loi/polytope/astro/Card.astro";
+import Cover from "../../components/Cover.astro";
+import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
+import { foldAuthors } from "@dario-loi/polytope/astro/authors.ts";
+import { cardPicture, entries, pubRow, seedOf } from "../../lib/content";
 import { person } from "../../site";
 
 const pubs = await entries("publications");
 const years = [...new Set(pubs.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
 const n = pubs.length;
+// A card's links: the paper's own (as the publication lists show them), then its BibTeX.
+const cardLinks = (p: (typeof pubs)[number]) => [...(pubRow(p).links ?? []), { label: "BibTeX", href: `/publications/${p.id}/#cite` }];
 ---
 <Base title="Publications" description={`Publications by ${person.name}, with abstracts, code, and BibTeX.`} current="Publications" crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }]}>
   <IndexMast title="Publications" count={n > 0 ? `${n} ${n === 1 ? "paper" : "papers"}` : undefined} />
@@ -29,21 +32,20 @@ const n = pubs.length;
             <h2 class="pub-wall__label" id={`y-${y}`}>{y}</h2>
             <CardGrid>
               {pubs.filter((p) => p.data.date.getUTCFullYear() === y).map((p) => (
-                <EntryCard
+                <Card
                   href={`/publications/${p.id}/`}
-                  id={p.id}
                   title={p.data.title}
                   meta={[[p.data.venue, p.data.format].filter(Boolean).join(", ")]}
-                  kind={p.data.award ?? (p.data.kind === "preprint" ? "Preprint" : undefined)}
-                  cover={p.data.cover}
-                  size={p.id === pubs[0].id ? "lead" : "regular"}
-                  draft={p.data.draft}
-                  track="open-publication"
-                  placement="publications"
+                  badge={[...(p.data.draft ? ["Draft"] : []), ...(p.data.award ? [p.data.award] : [])]}
+                  lead={p.id === pubs[0].id}
+                  seed={seedOf(p.id)}
+                  link={{ "data-track": "open-publication", "data-track-placement": "publications", "data-track-label": p.id }}
                 >
+                  {p.data.cover && <Cover slot="figure" {...cardPicture(p.id === pubs[0].id)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
                   {p.data.tldr && <Tex slot="summary" text={p.data.tldr} />}
                   <p class="pub-card__authors">{foldAuthors(p.data.authors.map((a) => a.name), person.name).map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
-                </EntryCard>
+                  <p class="ply-pub__links">{cardLinks(p).map((l) => <a href={l.href} data-track="paper-link" data-track-placement="publications-card" data-track-label={`${p.id}:${l.label}`}>{l.label}</a>)}</p>
+                </Card>
               ))}
             </CardGrid>
           </section>
