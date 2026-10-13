@@ -6,7 +6,7 @@ const on = Boolean(analytics.websiteId);
 ---
 <Base title="Privacy" description="What this site measures, and what it does not." crumbs={[{ name: person.name, href: "/" }, { name: "Privacy", href: "/privacy/" }]}>
   <div class="ply-container">
-    <EntryHeader title="Privacy" stop lede="This site counts visits in aggregate. It sets no cookies and keeps nothing on your device, so there is no consent banner." />
+    <EntryHeader title="Privacy" stop lede="This site counts visits in aggregate. It sets no cookies and stores no identifiers on your device, so there is no consent banner." />
   </div>
   <hr class="ply-rule" />
   <div class="ply-container privacy">
@@ -16,7 +16,7 @@ const on = Boolean(analytics.websiteId);
       <p>A few clicks are counted as events: opening or downloading the CV, following an email or profile link, opening a post, paper, or project from a list, following a paper or project link, and copying a paper's BibTeX. Each event records where on the page the link sits and which page or site you came from, so I can tell which parts of the site are useful.</p>
       <h2>What is not</h2>
       <ul>
-        <li>No cookies, local storage, or other identifiers are written to your device.</li>
+        <li>No cookies or identifiers are written to your device. If you use the theme switch, your light or dark choice is kept in your browser's local storage, so the next page opens in it, and it is never sent anywhere.</li>
         <li>Visits are grouped by an anonymous hash of the IP address and browser, salted with a value that changes every month, so you cannot be followed from month to month or across other sites.</li>
         <li>No advertising, no data sales, no cross-site tracking.</li>
         <li>If your browser sends Do Not Track, nothing is recorded at all.</li>
