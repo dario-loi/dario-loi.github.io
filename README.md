@@ -32,6 +32,14 @@ Any entry with `draft: true` renders under `npm run dev` with a Draft label and 
 the production build, the sitemap, and the RSS feed. Without a `cover` image, a card draws a
 Vietoris-Rips complex seeded from the file name, so every entry gets its own figure.
 
+## Search engines and language models
+
+Every page carries schema.org records built from the collections (`src/lib/schema.ts`): the
+person, the site, each paper, project, and post, and each list page. They point at one another
+by `@id`, so a paper's author is the person on the home page. `/llms.txt` and `/llms-full.txt`
+(`src/lib/llms.ts`) give the same content as Markdown, the full one with every abstract and
+BibTeX entry.
+
 ## Analytics
 
 [Umami Cloud](https://umami.is), cookieless: no cookies, nothing stored on the visitor's device,

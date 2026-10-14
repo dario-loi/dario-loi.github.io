@@ -7,12 +7,14 @@ import Card from "@dario-loi/polytope/astro/Card.astro";
 import Cover from "../../components/Cover.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import { cardPicture, entries, longDate, readingTime, seedOf } from "../../lib/content";
+import { postsPage } from "../../lib/schema";
 import { person } from "../../site";
 
 const posts = await entries("blog");
 const n = posts.length;
+const description = `Writing by ${person.name} on research and engineering.`;
 ---
-<Base title="Blog" description={`Writing by ${person.name} on research and engineering.`} current="Blog" noindex={n === 0} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
+<Base title="Blog" description={description} current="Blog" noindex={n === 0} schema={n > 0 ? [postsPage(posts, description)] : []} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
   <IndexMast title="Blog" lede="Notes on research and engineering." count={n > 0 ? `${n} ${n === 1 ? "post" : "posts"}` : undefined} />
   <div class="ply-container posts">
     {n === 0 ? (

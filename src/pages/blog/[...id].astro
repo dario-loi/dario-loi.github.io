@@ -8,6 +8,7 @@ import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Note from "@dario-loi/polytope/astro/Note.astro";
 import Cover from "../../components/Cover.astro";
 import { entries, isoDay, longDate, neighbors, preview, readingTime } from "../../lib/content";
+import { postNode } from "../../lib/schema";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -30,6 +31,7 @@ const og = await preview(d.cover, d.coverAlt);
   modified={d.updated}
   noindex={d.draft}
   {...og}
+  schema={[postNode(post, og.image?.src)]}
   crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }, { name: d.title, href: `/blog/${post.id}/` }]}
 >
   <Article>

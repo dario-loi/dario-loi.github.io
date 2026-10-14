@@ -10,15 +10,17 @@ import Cover from "../../components/Cover.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import { foldAuthors } from "@dario-loi/polytope/astro/authors.ts";
 import { cardPicture, entries, pubRow, seedOf } from "../../lib/content";
+import { papersPage } from "../../lib/schema";
 import { person } from "../../site";
 
 const pubs = await entries("publications");
 const years = [...new Set(pubs.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
 const n = pubs.length;
+const description = `Publications by ${person.name}, with abstracts, code, and BibTeX.`;
 // A card's links: the paper's own (as the publication lists show them), then its BibTeX.
 const cardLinks = (p: (typeof pubs)[number]) => [...(pubRow(p).links ?? []), { label: "BibTeX", href: `/publications/${p.id}/#cite` }];
 ---
-<Base title="Publications" description={`Publications by ${person.name}, with abstracts, code, and BibTeX.`} current="Publications" crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }]}>
+<Base title="Publications" description={description} current="Publications" schema={[papersPage(pubs, description)]} crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }]}>
   <IndexMast title="Publications" count={n > 0 ? `${n} ${n === 1 ? "paper" : "papers"}` : undefined} />
   <div class="ply-container">
     {n === 0 ? (

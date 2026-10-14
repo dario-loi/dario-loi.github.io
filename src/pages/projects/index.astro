@@ -6,12 +6,14 @@ import Card from "@dario-loi/polytope/astro/Card.astro";
 import Cover from "../../components/Cover.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import { cardPicture, entries, seedOf } from "../../lib/content";
+import { projectsPage } from "../../lib/schema";
 import { person } from "../../site";
 
 const projects = await entries("projects");
 const n = projects.length;
+const description = `Software and research projects by ${person.name}.`;
 ---
-<Base title="Projects" description={`Software and research projects by ${person.name}.`} current="Projects" crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
+<Base title="Projects" description={description} current="Projects" schema={[projectsPage(projects, description)]} crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
   <IndexMast title="Projects" lede="Software and course projects." count={n > 0 ? `${n} ${n === 1 ? "project" : "projects"}` : undefined} />
   <div class="ply-container projects">
     {n === 0 ? (

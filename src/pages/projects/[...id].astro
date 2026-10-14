@@ -9,6 +9,7 @@ import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import EntryHeader from "../../components/EntryHeader.astro";
 import Cover from "../../components/Cover.astro";
 import { entries, neighbors, preview, seedOf } from "../../lib/content";
+import { projectNode } from "../../lib/schema";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -29,6 +30,7 @@ const og = await preview(d.cover, d.coverAlt);
   current="Projects"
   noindex={d.draft}
   {...og}
+  schema={[projectNode(project, og.image?.src)]}
   crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }, { name: d.title, href: `/projects/${project.id}/` }]}
 >
   <Article>

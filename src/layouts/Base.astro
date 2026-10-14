@@ -9,6 +9,7 @@ import SiteBar from "../components/SiteBar.astro";
 import EmailLink from "../components/EmailLink.astro";
 import Analytics from "../components/Analytics.astro";
 import { entries } from "../lib/content";
+import { personNode, profilePageNode, websiteNode } from "../lib/schema";
 import { cv, person, siteMeta } from "../site";
 
 export type Section = "About" | "Publications" | "Projects" | "Blog" | "CV";
@@ -32,8 +33,10 @@ interface Props {
   crumbs?: { name: string; href: string }[];
   /** Search-index the page as a person's profile (home and CV). */
   profile?: boolean;
+  /** The page's own schema.org records, such as the paper or the list it shows. */
+  schema?: Record<string, unknown>[];
 }
-const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false } = Astro.props;
+const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [] } = Astro.props;
 // Search results cut titles past about 70 characters, so a long one drops the name.
 const named = title && !unnamed ? `${title} - ${person.name}` : "";
 const headTitle = !title ? `${person.name}, ${person.role}` : named && named.length <= 70 ? named : title;
@@ -48,25 +51,11 @@ const tabs = [
   { label: "CV", href: cv.page, current: current === "CV", track: "cv-view" },
 ];
 
-// The person and the site as schema.org records, written out here rather than through Seo's
-// `person` so they can carry the lab, the alma mater, and an id the site record points at.
-const home = new URL("/", Astro.site).href;
-const me = {
-  "@type": "Person",
-  "@id": `${home}#person`,
-  name: person.name,
-  url: home,
-  image: new URL(person.photo, home).href,
-  jobTitle: person.role,
-  affiliation: { "@type": "Organization", name: person.affiliation, url: "https://www.northeastern.edu/" },
-  memberOf: { "@type": "Organization", name: person.lab.name, url: person.lab.href, parentOrganization: { "@type": "Organization", name: person.affiliation } },
-  alumniOf: { "@type": "CollegeOrUniversity", name: person.alumniOf },
-  knowsAbout: person.topics,
-  sameAs: Object.values(person.profiles),
-};
-const website = { "@type": "WebSite", "@id": `${home}#website`, name: person.name, url: home, author: { "@id": me["@id"] } };
+// The person and the site as schema.org records (src/lib/schema.ts), written out here rather
+// than through Seo's `person` so they can carry the lab, the alma mater, and the ids the other
+// records point at. A page adds its own records through `schema`.
 const isHome = Astro.url.pathname === "/";
-const records = [...(profile ? [me] : []), ...(isHome ? [website] : [])];
+const records = [...(profile ? [personNode()] : []), ...(isHome ? [websiteNode(), profilePageNode()] : []), ...schema];
 const year = new Date().getFullYear();
 ---
 <!doctype html>
