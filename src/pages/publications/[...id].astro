@@ -11,7 +11,7 @@ import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import Tex from "../../components/Tex.astro";
 import Cover from "../../components/Cover.astro";
-import { entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture } from "../../lib/content";
+import { column, entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture, widthsFor } from "../../lib/content";
 import { paperNode } from "../../lib/schema";
 import { person } from "../../site";
 
@@ -59,14 +59,14 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
       {d.figure ? (
         <figure class:list={["ply-figure paper__figure", d.figureSize === "column" && "paper__figure--column"]}>
           {d.figureSize === "column"
-            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[512, 1024]} sizes="(min-width: 36rem) 32rem, 100vw" loading="eager" fetchpriority="high" />
-            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={[640, 1040, d.figure.width]} sizes="(min-width: 64rem) 52rem, 100vw" loading="eager" fetchpriority="high" />}
+            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 512)} sizes={`(min-width: 36rem) 32rem, ${column}`} loading="eager" fetchpriority="high" />
+            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 832)} sizes={`(min-width: 64rem) 52rem, ${column}`} loading="eager" fetchpriority="high" />}
           {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
         </figure>
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt="" widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" loading="eager" fetchpriority="high" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt="" widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
           ) : (
             <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the paper's name`} />
           )}

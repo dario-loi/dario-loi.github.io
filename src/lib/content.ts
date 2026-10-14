@@ -16,11 +16,25 @@ export async function entries<N extends Name>(name: N): Promise<CollectionEntry<
 /** Formats for every <Picture> on the site: AVIF where the browser takes it, else WebP. */
 export const pictureFormats: { formats: ImageOutputFormat[]; fallbackFormat: ImageOutputFormat } = { formats: ["avif", "webp"], fallbackFormat: "webp" };
 
+/** The page column's width on a phone, for `sizes`: the viewport less the container's gutters
+ *  (Polytope's --ply-layout-gutter, about 1.25rem a side at phone widths). "100vw" overstates it
+ *  by a tenth, which is enough for a phone to fetch the next size up. */
+export const column = "calc(100vw - 2.5rem)";
+
+const STEPS = [360, 480, 640, 720, 840, 1024, 1280, 1600, 2048];
+/** Widths to offer for a picture shown at most `maxCss` CSS pixels wide: close steps, so the one
+ *  a screen picks is never much larger than it shows, up to three device pixels a CSS pixel and
+ *  never past the source. */
+export function widthsFor(src: ImageMetadata, maxCss: number) {
+  const top = Math.min(src.width, maxCss * 3);
+  return [...STEPS.filter((w) => w < top), top];
+}
+
 /** Settings for a <Cover> in a Polytope Card's "figure" slot. A lead card's panel takes about
  *  half the row, and it is the first thing on its list page, so its cover loads first. */
 export const cardPicture = (lead = false) => ({
-  widths: [480, 800, 1200],
-  sizes: lead ? "(min-width: 64rem) 50vw, 100vw" : "(min-width: 64rem) 30vw, 100vw",
+  widths: [360, 480, 640, 720, 840, 1024, 1200],
+  sizes: lead ? `(min-width: 64rem) 50vw, ${column}` : `(min-width: 64rem) 30vw, ${column}`,
   ...(lead ? { loading: "eager" as const, fetchpriority: "high" as const } : {}),
 });
 

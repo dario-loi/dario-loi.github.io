@@ -8,7 +8,7 @@ import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import EntryHeader from "../../components/EntryHeader.astro";
 import Cover from "../../components/Cover.astro";
-import { entries, neighbors, preview, seedOf } from "../../lib/content";
+import { column, entries, neighbors, preview, seedOf, widthsFor } from "../../lib/content";
 import { projectNode } from "../../lib/schema";
 import { person } from "../../site";
 
@@ -46,7 +46,7 @@ const og = await preview(d.cover, d.coverAlt);
       </EntryHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={[480, 960]} sizes="(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, 100vw" loading="eager" fetchpriority="high" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
         ) : (
           <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the project's name`} />
         )}
