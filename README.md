@@ -15,6 +15,10 @@ npm run design:check   # fails if DESIGN.md is older than the installed Polytope
 
 Node 22.12 or newer.
 
+A production build loads no drafts at all and rewrites `.astro/` to match, so a dev server left
+running through `npm run build` fails on draft pages until a draft is saved or the server is
+restarted.
+
 ## Add content
 
 Everything a visitor reads is a file. Adding one needs no layout changes.

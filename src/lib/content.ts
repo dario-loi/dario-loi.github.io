@@ -8,9 +8,19 @@ type Name = "blog" | "publications" | "projects";
 
 export const visible = (entry: { data: { draft?: boolean } }) => import.meta.env.DEV || !entry.data.draft;
 
-export async function entries<N extends Name>(name: N): Promise<CollectionEntry<N>[]> {
+async function load<N extends Name>(name: N): Promise<CollectionEntry<N>[]> {
   const all = (await getCollection(name, visible)) as CollectionEntry<N>[];
   return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+// A production build reads each collection once, for every page, so a collection that is empty
+// there (a blog whose posts are all drafts) warns once rather than on every page. The dev server
+// reads afresh, so an edited entry shows on the next load.
+const cache = new Map<Name, Promise<unknown>>();
+export function entries<N extends Name>(name: N): Promise<CollectionEntry<N>[]> {
+  if (!import.meta.env.PROD) return load(name);
+  if (!cache.has(name)) cache.set(name, load(name));
+  return cache.get(name) as Promise<CollectionEntry<N>[]>;
 }
 
 /** Formats for every <Picture> on the site: AVIF where the browser takes it, else WebP. */

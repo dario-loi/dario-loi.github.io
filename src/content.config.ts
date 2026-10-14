@@ -3,6 +3,20 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { readdirSync, readFileSync } from "node:fs";
+
+// The entries a collection loads. A production build leaves drafts out here, not only from the
+// lists, so nothing built from one reaches the site: not its page, its code or styles, its
+// pictures, or a file named after it. `astro dev` loads them all.
+const isDraft = (file: string) => /^draft:\s*true\s*$/m.test(readFileSync(file, "utf8").split("---")[1] ?? "");
+const entriesIn = (base: string) =>
+  glob({
+    pattern: [
+      "**/[^_]*.{md,mdx}",
+      ...(import.meta.env.PROD ? readdirSync(base).filter((f) => /\.mdx?$/.test(f) && isDraft(`${base}/${f}`)).map((f) => `!${f}`) : []),
+    ],
+    base,
+  });
 
 const icon = z.enum(["paper", "code", "data", "quote", "external", "download"]);
 const link = z.object({ label: z.string(), href: z.string(), icon: icon.optional() });
@@ -17,7 +31,7 @@ const author = z
   .transform((a) => (typeof a === "string" ? { name: a, affiliations: [] as number[], starred: false } : a));
 
 const blog = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/blog" }),
+  loader: entriesIn("./src/content/blog"),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -36,7 +50,7 @@ const blog = defineCollection({
 });
 
 const publications = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/publications" }),
+  loader: entriesIn("./src/content/publications"),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -96,7 +110,7 @@ const publications = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/projects" }),
+  loader: entriesIn("./src/content/projects"),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
