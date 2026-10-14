@@ -32,6 +32,14 @@ export async function preview(src?: ImageMetadata, alt?: string) {
   return { image: { src: img.src, width: Number(img.attributes.width), height: Number(img.attributes.height) }, imageAlt: alt };
 }
 
+/** The file behind an imported picture, for a page that draws its own version of it (the square
+ *  paper pictures); undefined when there is none to read. */
+export const squareSource = (src?: ImageMetadata) => (src as (ImageMetadata & { fsPath?: string }) | undefined)?.fsPath;
+
+/** A paper's square picture (src/pages/publications/[id]/square.jpg.ts), when it has a picture. */
+export const squarePicture = (p: CollectionEntry<"publications">) =>
+  squareSource(p.data.cover ?? p.data.figure) ? `/publications/${p.id}/square.jpg` : undefined;
+
 /** Previous (newer) and next (older) neighbors of an entry in its list, for the pager. */
 export function neighbors<T extends { id: string }>(list: T[], id: string) {
   const i = list.findIndex((e) => e.id === id);

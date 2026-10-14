@@ -44,7 +44,8 @@ export const websiteNode = (): Node => ({
   author: { "@id": personId },
 });
 
-/** The home page is the person's profile. */
+/** The home page is the person's profile. Its picture is the square card, which search results
+ *  show whole beside the page; og.png, the wide card for social previews, they crop to a square. */
 export const profilePageNode = (): Node => ({
   "@type": "ProfilePage",
   "@id": `${home}#profile`,
@@ -52,6 +53,7 @@ export const profilePageNode = (): Node => ({
   name: `${person.name}, ${person.role}`,
   mainEntity: { "@id": personId },
   isPartOf: { "@id": websiteId },
+  primaryImageOfPage: { "@type": "ImageObject", url: abs("/og-square.png"), width: 1200, height: 1200 },
 });
 
 const paperUrl = (p: CollectionEntry<"publications">) => abs(`/publications/${p.id}/`);
@@ -63,8 +65,9 @@ const postId = (p: CollectionEntry<"blog">) => `${postUrl(p)}#post`;
 const codeLink = (links: { href: string; icon?: string }[]) => links.find((l) => l.icon === "code" && external(l.href));
 
 /** A paper, with its abstract, venue, PDF, and the records of the same paper elsewhere.
- *  `image` is the page's preview picture. */
-export function paperNode(p: CollectionEntry<"publications">, image?: string): Node {
+ *  `images` are its pictures, the square one first: search results show that one whole. */
+export function paperNode(p: CollectionEntry<"publications">, images: (string | undefined)[] = []): Node {
+  const pictures = images.filter((i): i is string => Boolean(i)).map(abs);
   const d = p.data;
   const url = paperUrl(p);
   const sameAs = [
@@ -89,7 +92,7 @@ export function paperNode(p: CollectionEntry<"publications">, image?: string): N
     isPartOf: d.kind === "preprint" ? undefined : { "@type": d.kind === "journal" ? "Periodical" : "CreativeWork", name: d.venueFull ?? d.venue },
     creativeWorkStatus: d.kind === "preprint" ? "Preprint" : undefined,
     award: d.award,
-    image: image && abs(image),
+    image: pictures.length ? pictures : undefined,
     encoding: d.pdf && { "@type": "MediaObject", contentUrl: abs(d.pdf), encodingFormat: "application/pdf" },
     isAccessibleForFree: true,
     sameAs: sameAs.length ? sameAs : undefined,
