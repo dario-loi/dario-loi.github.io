@@ -19,9 +19,9 @@ tldr: "Implicit Sheaf Operators compute sheaf diffusion as local operator-vector
 abstract: 'While Sheaf Neural Networks (SNNs) enrich $n$-node $m$-edge diffusion of $f$-dimensional node features with $d$-dimensional node and edge stalks, they require computing a sparse $nd \times nd$ sheaf Laplacian, whose computation is prohibitive on edge devices. This paper addresses this issue with Implicit Sheaf Operators (ISOs), a type of sheaf topological operators that leverage the topological structure of cellular sheaves to decompose the global diffusion process into local operator-vector products. We mathematically prove that ISO eliminates the $O(md^2 \log(md^2))$ sparse-coalescing term and reduces the space complexity by $O(\min(d, f))$ with respect to traditional Neural Sheaf Diffusion (NSD). Our experiments indicate that ISO-based operators achieve latency reduction of up to 4.87× and save up to 3.92× peak GPU memory. On real graph classification data, ISO uses up to 1.24× less energy and 3.08× less on-device memory as measured on a Jetson Orin Nano. Finally, to bring ISO to practice, we introduce Sheaf Convolutional Networks (SCNs), an ISO-based SNN attaining up to 3.93% higher accuracy compared to NSD-based SNNs on node classification benchmarks.'
 keywords: ["Sheaf neural networks", "Cellular sheaves", "Graph neural networks", "Edge computing"]
 links:
-  - { label: "PDF", href: "https://mentis.info/wp-content/uploads/2026/08/SheafOperators.pdf", icon: download }
+  - { label: "PDF", href: "/publications/implicit-sheaf-operators/implicit-sheaf-operators.pdf", icon: download }
   - { label: "Google Scholar", href: "https://scholar.google.com/citations?view_op=view_citation&user=r0Ty-c8AAAAJ&citation_for_view=r0Ty-c8AAAAJ:zYLM7Y9cAGgC", icon: external }
-pdf: "https://mentis.info/wp-content/uploads/2026/08/SheafOperators.pdf"
+pdf: "/publications/implicit-sheaf-operators/implicit-sheaf-operators.pdf"
 selected: true
 cover: ./implicit-sheaf-operators-card.webp
 coverAlt: "Figure 2 of the paper: the sheaf Laplacian built as a block matrix, beside the same computation done locally at one node of a three-node sheaf."

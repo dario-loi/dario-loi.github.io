@@ -125,7 +125,7 @@ const year = new Date().getFullYear();
         </ul>
       </div>
       <div class="ply-container">
-        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href={siteMeta.polytope}>Polytope</a>. <a href={siteMeta.repo}>Source</a>.</p>
+        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href="/projects/polytope/">Polytope</a>. <a href={siteMeta.repo}>Source</a>.</p>
       </div>
     </footer>
   </body>
@@ -134,6 +134,9 @@ const year = new Date().getFullYear();
   import "@dario-loi/polytope/js/copy.js";
   import "@dario-loi/polytope/js/scroll.js";
   import "../scripts/track.ts";
+  // Links prefetch on hover, and a PDF on this site would be fetched whole; paper PDFs run to
+  // several megabytes.
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href$=".pdf"]')) a.dataset.astroPrefetch = "false";
   // The browser's bar takes the page's ground: the system theme's by default (the theme-color
   // metas), and the theme switch's once a theme is chosen.
   const ground = { light: "#FFFFFF", dark: "#161615" };

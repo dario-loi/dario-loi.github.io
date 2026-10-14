@@ -39,7 +39,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
   citation={{
     title: d.title,
     authors: d.authors.map((a) => a.name),
-    date: String(d.date.getUTCFullYear()),
+    date: d.date,
     ...(d.kind === "journal" ? { journal: d.venueFull ?? d.venue } : d.kind === "preprint" ? {} : { conference: d.venueFull ?? d.venue }),
     pdf: d.pdf,
     doi: d.doi,
