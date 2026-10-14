@@ -12,7 +12,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "design:check": "polytope-design --check"
+    "design:check": "polytope-design --check",
+    "papers:check": "node scripts/papers.mjs check",
+    "papers:sync": "node scripts/papers.mjs sync"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.3",

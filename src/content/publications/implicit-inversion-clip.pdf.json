@@ -1,0 +1,8 @@
+{
+  "file": "public/publications/implicit-inversion-clip/implicit-inversion-clip.pdf",
+  "source": "https://openreview.net/pdf?id=hvukI2ws5O",
+  "check": "manual",
+  "sha256": "03c8bd1f50a617601517040487707bd56b62d1a7d71de63bc5ab3922411f038e",
+  "fetched": "2026-10-14",
+  "notes": "OpenReview blocks scripted downloads, and the ICLR camera-ready is final: download it by hand and sync with --from. Pages 25 and 26 hold two lossless palette images, which the palette step re-encodes (34 MB -> 12 MB)."
+}

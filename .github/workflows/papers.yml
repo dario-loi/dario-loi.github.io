@@ -1,0 +1,45 @@
+# Once a week, compare every hosted paper PDF with its source (scripts/papers.mjs). When a source
+# has a newer version, open an issue listing the papers, or update the one already open, so the
+# new version is looked at before it replaces the copy: run `npm run papers:sync -- <id>` and
+# commit. Nothing is downloaded into the site or committed from here. A source that cannot be read
+# fails the run, which GitHub reports by email.
+name: Paper sources
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # The script has no dependencies, so there is nothing to install.
+      - name: Compare with sources
+        id: check
+        run: |
+          set +e
+          node scripts/papers.mjs check --markdown > report.md
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat report.md
+      - name: Open or update the issue
+        if: steps.check.outputs.status == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Hosted paper PDFs are out of date"
+          n=$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number')
+          if [ -n "$n" ]; then gh issue edit "$n" --body-file report.md; else gh issue create --title "$title" --body-file report.md; fi
+      - name: Fail on unreadable sources
+        if: steps.check.outputs.status == '2'
+        run: exit 1

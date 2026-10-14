@@ -32,6 +32,25 @@ Any entry with `draft: true` renders under `npm run dev` with a Draft label and 
 the production build, the sitemap, and the RSS feed. Without a `cover` image, a card draws a
 Vietoris-Rips complex seeded from the file name, so every entry gets its own figure.
 
+## Paper PDFs
+
+The site hosts a copy of each paper's PDF at `public/publications/<slug>/<slug>.pdf`, since
+Google Scholar lists a page as a version of a paper only when the PDF is on the same site. Each
+copy has a record, `src/content/publications/<slug>.pdf.json`, naming its source and which version
+of it was copied.
+
+```sh
+npm run papers:check                        # which sources have a newer version
+npm run papers:sync -- <slug>               # copy the newer version in, compressed
+npm run papers:sync -- <slug> --from <file> # the same from a PDF downloaded by hand
+npm run papers:sync -- <slug> --source <url>  # a new paper's first copy
+```
+
+A sync compresses with Ghostscript at full resolution and the highest JPEG quality, then
+re-encodes large palette images with `scripts/pdf-palette.py`, which needs `pikepdf` and `Pillow`
+(`python3 -m venv .venv && .venv/bin/pip install pikepdf pillow`). The **Paper sources** workflow
+runs the check every Monday and opens an issue when a source changes; it never commits.
+
 ## Search engines and language models
 
 Every page carries schema.org records built from the collections (`src/lib/schema.ts`): the

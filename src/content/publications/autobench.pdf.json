@@ -1,0 +1,8 @@
+{
+  "file": "public/publications/autobench/autobench.pdf",
+  "source": "https://arxiv.org/pdf/2510.22593",
+  "check": "arxiv",
+  "arxiv": "2510.22593v1",
+  "sha256": "a4dee835035ad59eb47073695eced5a965540751b4fb5ee1dc9518a059856d7a",
+  "fetched": "2026-10-13"
+}

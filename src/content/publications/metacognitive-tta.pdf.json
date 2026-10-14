@@ -1,0 +1,8 @@
+{
+  "file": "public/publications/metacognitive-tta/metacognitive-tta.pdf",
+  "source": "https://mentis.info/wp-content/uploads/2026/09/Concept_TTA_AAAI26-Metacog.pdf",
+  "check": "hash",
+  "sha256": "1f6c065d3db702a044ba27b802364dbd533848582f15b6041be3a6a6549d6d34",
+  "fetched": "2026-10-13",
+  "notes": "AAAI copyright: authors may post the paper on their own web page with the AAAI copyright notice and source, which the PDF carries. The symposium is on 2026-11-05; replace this copy with the camera-ready version once AAAI publishes it."
+}
