@@ -46,8 +46,8 @@ const headTitle = !title ? `${person.name}, ${person.role}` : named && named.len
 
 // The Blog tab, and the RSS links, appear once there is a post to read.
 const hasPosts = (await entries("blog")).length > 0;
-// Each list has an RSS feed, offered once the list has an entry: papers and projects now, the
-// blog with its first post.
+// Each list gets an RSS feed once it has an entry; the blog's appears with its first published
+// post.
 const feeds = [
   ...((await entries("publications")).length > 0 ? [{ name: "Publications", title: "publications", href: "/publications/rss.xml" }] : []),
   ...((await entries("projects")).length > 0 ? [{ name: "Projects", title: "projects", href: "/projects/rss.xml" }] : []),

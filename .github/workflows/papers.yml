@@ -1,8 +1,8 @@
 # Once a week, compare every hosted paper PDF with its source (scripts/papers.mjs). When a source
-# has a newer version, open an issue listing the papers, or update the one already open, so the
-# new version is looked at before it replaces the copy: run `npm run papers:sync -- <id>` and
-# commit. Nothing is downloaded into the site or committed from here. A source that cannot be read
-# fails the run, which GitHub reports by email.
+# has a newer version, open an issue that lists the papers, or update the issue already open.
+# Review the new version, then copy it in with `npm run papers:sync -- <id>` and commit; this
+# workflow downloads nothing into the site and commits nothing. A source that cannot be read
+# fails the run, and GitHub reports the failure by email.
 name: Paper sources
 
 on:

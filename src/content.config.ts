@@ -5,9 +5,9 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { readdirSync, readFileSync } from "node:fs";
 
-// The entries a collection loads. A production build leaves drafts out here, not only from the
-// lists, so nothing built from one reaches the site: not its page, its code or styles, its
-// pictures, or a file named after it. `astro dev` loads them all.
+// The entries a collection loads. A production build leaves drafts out of the collection itself,
+// so nothing built from a draft (its page, styles, pictures, or a file named after it) reaches
+// the site. `astro dev` loads them all.
 const isDraft = (file: string) => /^draft:\s*true\s*$/m.test(readFileSync(file, "utf8").split("---")[1] ?? "");
 const entriesIn = (base: string) =>
   glob({

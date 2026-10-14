@@ -1,10 +1,9 @@
 // schema.org records for search engines, scrapers, and language models, built from the same
-// collections the pages are. Seo (Polytope) writes each one in its own JSON-LD script and adds
-// the @context; a record that shares an @id with one Seo writes itself (a paper's #article, the
-// home page's #website) merges into it, these fields winning. Records point at one another by
-// @id, so the person, the site, and every paper,
-// project, and post are one graph: a paper's author is the person on the home page, not a name
-// that happens to match.
+// collections as the pages. Seo (Polytope) writes each record in its own JSON-LD script and adds
+// the @context. A record with the same @id as one Seo writes (a paper's #article, the home page's
+// #website) is merged into it, and the fields given here win. Records refer to one another by
+// @id, so the person, the site, and every paper, project, and post form one graph, and a paper's
+// author resolves to the Person record on the home page.
 import type { CollectionEntry } from "astro:content";
 import { isoDay } from "./content";
 import { person, siteMeta } from "../site";

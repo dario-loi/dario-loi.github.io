@@ -15,9 +15,9 @@ npm run design:check   # fails if DESIGN.md is older than the installed Polytope
 
 Node 22.12 or newer.
 
-A production build loads no drafts at all and rewrites `.astro/` to match, so a dev server left
-running through `npm run build` fails on draft pages until a draft is saved or the server is
-restarted.
+A production build leaves drafts out and rewrites `.astro/` without them. A dev server left
+running during `npm run build` then fails on draft pages until you save a draft or restart the
+server.
 
 ## Add content
 
@@ -52,16 +52,17 @@ npm run papers:sync -- <slug> --source <url>  # a new paper's first copy
 
 A sync compresses with Ghostscript at full resolution and the highest JPEG quality, then
 re-encodes large palette images with `scripts/pdf-palette.py`, which needs `pikepdf` and `Pillow`
-(`python3 -m venv .venv && .venv/bin/pip install pikepdf pillow`). The **Paper sources** workflow
-runs the check every Monday and opens an issue when a source changes; it never commits.
+(`python3 -m venv .venv && .venv/bin/pip install pikepdf pillow`). The Paper sources workflow
+(`.github/workflows/papers.yml`) runs the check every Monday and opens an issue when a source
+changes. It does not commit anything.
 
 ## Search engines and language models
 
 Every page carries schema.org records built from the collections (`src/lib/schema.ts`): the
 person, the site, each paper, project, and post, and each list page. They point at one another
 by `@id`, so a paper's author is the person on the home page. `/llms.txt` and `/llms-full.txt`
-(`src/lib/llms.ts`) give the same content as Markdown, the full one with every abstract and
-BibTeX entry.
+(`src/lib/llms.ts`) give the same content as Markdown, and the full version adds every abstract
+and BibTeX entry.
 
 Each list has an RSS feed once it has an entry: `/publications/rss.xml` (with abstracts, and
 the hosted PDF as each item's enclosure), `/projects/rss.xml`, and `/rss.xml` for the blog. Pages
