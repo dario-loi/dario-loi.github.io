@@ -80,6 +80,10 @@ const year = new Date().getFullYear();
       sitemap="/sitemap-index.xml"
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Rasters of favicon.svg, for search results and home screens that take no SVG, and
+         favicon.ico at the address crawlers ask for first. -->
+    <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {hasPosts && <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
