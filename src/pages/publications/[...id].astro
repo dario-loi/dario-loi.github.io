@@ -13,6 +13,7 @@ import Tex from "../../components/Tex.astro";
 import Cover from "../../components/Cover.astro";
 import { column, entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture, widthsFor } from "../../lib/content";
 import { paperNode } from "../../lib/schema";
+import { hasMath } from "../../lib/tex";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -38,6 +39,7 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
   noindex={d.draft}
   {...og}
   schema={[paperNode(pub, [squarePicture(pub), og.image?.src])]}
+  math={hasMath(d.tldr, d.abstract, d.figureCaption)}
   citation={{
     title: d.title,
     authors: d.authors.map((a) => (a.name === person.name ? { name: a.name, href: "/" } : a.name)),

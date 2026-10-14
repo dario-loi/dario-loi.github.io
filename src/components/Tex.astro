@@ -2,8 +2,10 @@
 // Prose from front matter with inline math: each $...$ renders through KaTeX at build time, as
 // Polytope's <M> does, and the rest is written out as is. `html` passes trusted inline HTML
 // (figure captions) through; otherwise the text is escaped. Write a literal dollar sign as \$.
+// The KaTeX stylesheet is not imported here, which would load it on every page that might show
+// math: a page whose text has some passes `math` to Base (hasMath in src/lib/tex.ts).
 import katex from "katex";
-import "katex/dist/katex.min.css";
+import { MATH } from "../lib/tex";
 interface Props { text: string; html?: boolean }
 const { text, html = false } = Astro.props;
 
@@ -11,7 +13,7 @@ const escape = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").rep
 const prose = (s: string) => (html ? s : escape(s)).replace(/\\\$/g, "$");
 let out = "";
 let last = 0;
-for (const m of text.matchAll(/(?<!\\)\$(.+?)(?<!\\)\$/g)) {
+for (const m of text.matchAll(MATH)) {
   const tex = m[1];
   // A double-quoted YAML string turns \t, \b, \n... into control characters (\times becomes a
   // tab and "imes"). Catch that here instead of rendering wrong math.

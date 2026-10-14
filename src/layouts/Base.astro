@@ -8,6 +8,7 @@ import franklin from "@dario-loi/polytope/fonts/libre-franklin-latin-wght.woff2?
 import SiteBar from "../components/SiteBar.astro";
 import EmailLink from "../components/EmailLink.astro";
 import Analytics from "../components/Analytics.astro";
+import katexCss from "katex/dist/katex.min.css?url";
 import { entries } from "../lib/content";
 import { personNode, profilePageNode, websiteNode } from "../lib/schema";
 import { cv, person, siteMeta } from "../site";
@@ -35,8 +36,10 @@ interface Props {
   profile?: boolean;
   /** The page's own schema.org records, such as the paper or the list it shows. */
   schema?: Record<string, unknown>[];
+  /** The page shows inline math (hasMath in src/lib/tex.ts), so it loads the KaTeX stylesheet. */
+  math?: boolean;
 }
-const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [] } = Astro.props;
+const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [], math = false } = Astro.props;
 // Search results cut titles past about 70 characters, so a long one drops the name.
 const named = title && !unnamed ? `${title} - ${person.name}` : "";
 const headTitle = !title ? `${person.name}, ${person.role}` : named && named.length <= 70 ? named : title;
@@ -46,7 +49,7 @@ const hasPosts = (await entries("blog")).length > 0;
 // Each list has an RSS feed, offered once the list has an entry: papers and projects now, the
 // blog with its first post.
 const feeds = [
-  ...((await entries("publications")).length > 0 ? [{ name: "Papers", title: "publications", href: "/publications/rss.xml" }] : []),
+  ...((await entries("publications")).length > 0 ? [{ name: "Publications", title: "publications", href: "/publications/rss.xml" }] : []),
   ...((await entries("projects")).length > 0 ? [{ name: "Projects", title: "projects", href: "/projects/rss.xml" }] : []),
   ...(hasPosts ? [{ name: "Blog", title: "blog", href: "/rss.xml" }] : []),
 ];
@@ -91,6 +94,7 @@ const year = new Date().getFullYear();
          favicon.ico at the address crawlers ask for first. -->
     <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {math && <link rel="stylesheet" href={katexCss} />}
     {feeds.map((f) => <link rel="alternate" type="application/rss+xml" title={`${person.name}: ${f.title}`} href={f.href} />)}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />

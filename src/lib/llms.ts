@@ -103,7 +103,7 @@ export async function llms(full: boolean) {
   push("");
 
   push("## Optional", "");
-  if (pubs.length > 0) push(`- ${link("Papers RSS feed", "/publications/rss.xml")}: New papers, with their abstracts and PDFs.`);
+  if (pubs.length > 0) push(`- ${link("Publications RSS feed", "/publications/rss.xml")}: New papers, with their abstracts and PDFs.`);
   if (projects.length > 0) push(`- ${link("Projects RSS feed", "/projects/rss.xml")}: New projects.`);
   if (posts.length > 0) push(`- ${link("Blog RSS feed", "/rss.xml")}: New posts.`);
   push(

@@ -87,5 +87,14 @@ export default defineConfig({
   },
   vite: {
     ssr: { noExternal: ["@dario-loi/polytope"] },
+    plugins: [
+      // KaTeX's faces use font-display: block, which hides math until its fonts arrive. swap shows
+      // it at once in a fallback face and switches when the fonts load.
+      {
+        name: "katex-font-display",
+        enforce: "pre",
+        transform: (code, id) => (/katex(\.min)?\.css/.test(id) ? code.replaceAll("font-display:block", "font-display:swap") : undefined),
+      },
+    ],
   },
 });
