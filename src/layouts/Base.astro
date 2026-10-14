@@ -43,6 +43,13 @@ const headTitle = !title ? `${person.name}, ${person.role}` : named && named.len
 
 // The Blog tab, and the RSS links, appear once there is a post to read.
 const hasPosts = (await entries("blog")).length > 0;
+// Each list has an RSS feed, offered once the list has an entry: papers and projects now, the
+// blog with its first post.
+const feeds = [
+  ...((await entries("publications")).length > 0 ? [{ name: "Papers", title: "publications", href: "/publications/rss.xml" }] : []),
+  ...((await entries("projects")).length > 0 ? [{ name: "Projects", title: "projects", href: "/projects/rss.xml" }] : []),
+  ...(hasPosts ? [{ name: "Blog", title: "blog", href: "/rss.xml" }] : []),
+];
 const tabs = [
   { label: "About", href: "/", current: current === "About" },
   { label: "Publications", href: "/publications/", current: current === "Publications" },
@@ -84,7 +91,7 @@ const year = new Date().getFullYear();
          favicon.ico at the address crawlers ask for first. -->
     <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    {hasPosts && <link rel="alternate" type="application/rss+xml" title={`${person.name}: blog`} href="/rss.xml" />}
+    {feeds.map((f) => <link rel="alternate" type="application/rss+xml" title={`${person.name}: ${f.title}`} href={f.href} />)}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
@@ -113,7 +120,7 @@ const year = new Date().getFullYear();
           <li><a class="ply-target" href={person.profiles.github} data-track="profile-link" data-track-placement="footer" data-track-label="github">GitHub</a></li>
           <li><a class="ply-target" href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
           <li><a class="ply-target" href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
-          {hasPosts && <li><a class="ply-target" href="/rss.xml">RSS</a></li>}
+          {feeds.map((f) => <li><a class="ply-target" href={f.href}>{f.name} RSS</a></li>)}
           <li><a class="ply-target" href="/privacy/">Privacy</a></li>
         </ul>
       </div>

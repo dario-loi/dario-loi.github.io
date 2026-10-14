@@ -59,6 +59,10 @@ by `@id`, so a paper's author is the person on the home page. `/llms.txt` and `/
 (`src/lib/llms.ts`) give the same content as Markdown, the full one with every abstract and
 BibTeX entry.
 
+Each list has an RSS feed once it has an entry: `/publications/rss.xml` (with abstracts, and
+the hosted PDF as each item's enclosure), `/projects/rss.xml`, and `/rss.xml` for the blog. Pages
+advertise them in the head and the footer.
+
 ## Analytics
 
 [Umami Cloud](https://umami.is), cookieless: no cookies, nothing stored on the visitor's device,

@@ -103,7 +103,9 @@ export async function llms(full: boolean) {
   push("");
 
   push("## Optional", "");
-  if (posts.length > 0) push(`- ${link("RSS feed", "/rss.xml")}: New posts.`);
+  if (pubs.length > 0) push(`- ${link("Papers RSS feed", "/publications/rss.xml")}: New papers, with their abstracts and PDFs.`);
+  if (projects.length > 0) push(`- ${link("Projects RSS feed", "/projects/rss.xml")}: New projects.`);
+  if (posts.length > 0) push(`- ${link("Blog RSS feed", "/rss.xml")}: New posts.`);
   push(
     `- ${link("Sitemap", "/sitemap-index.xml")}: Every page, with the date it last changed.`,
     `- [Polytope](${siteMeta.polytope}): The design system this site is built with, and its documentation.`,
