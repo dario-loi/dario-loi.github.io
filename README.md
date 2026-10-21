@@ -64,6 +64,11 @@ by `@id`, so a paper's author is the person on the home page. `/llms.txt` and `/
 (`src/lib/llms.ts`) give the same content as Markdown, and the full version adds every abstract
 and BibTeX entry.
 
+After each deploy, the workflow sends the pages that were added, changed, or dropped to
+[IndexNow](https://www.indexnow.org), which passes them to Bing, Yandex, Seznam, Naver, and Yep
+(`scripts/indexnow.mjs`; the key is `public/<key>.txt`). A manual run of the deploy workflow with
+"all" checked sends every page. Google does not use IndexNow; Search Console covers it.
+
 Each list has an RSS feed once it has an entry: `/publications/rss.xml` (with abstracts, and
 the hosted PDF as each item's enclosure), `/projects/rss.xml`, and `/rss.xml` for the blog. Pages
 advertise them in the head and the footer.
