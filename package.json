@@ -23,7 +23,7 @@
     "@astrojs/sitemap": "^3.7.4",
     "@dario-loi/polytope": "^0.7.2",
     "astro": "^7.3.8",
-    "katex": "^0.19.0"
+    "katex": "^0.19.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
