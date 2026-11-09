@@ -1,16 +1,17 @@
 ---
 // Prose from front matter with inline math: each $...$ renders through KaTeX at build time, as
-// Polytope's <M> does, and the rest is written out as is. `html` passes trusted inline HTML
+// Polytope's <M> does, *italic*, **bold**, and ***both*** become <em> and <strong> as in Markdown
+// (a marker may not span a formula), and the rest is written out as is. `html` passes trusted inline HTML
 // (figure captions) through; otherwise the text is escaped. Write a literal dollar sign as \$.
 // The KaTeX stylesheet is not imported here, which would load it on every page that might show
 // math: a page whose text has some passes `math` to Base (hasMath in src/lib/tex.ts).
 import katex from "katex";
-import { MATH } from "../lib/tex";
+import { MATH, emphasis } from "../lib/tex";
 interface Props { text: string; html?: boolean }
 const { text, html = false } = Astro.props;
 
 const escape = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const prose = (s: string) => (html ? s : escape(s)).replace(/\\\$/g, "$");
+const prose = (s: string) => emphasis((html ? s : escape(s)).replace(/\\\$/g, "$"));
 let out = "";
 let last = 0;
 for (const m of text.matchAll(MATH)) {

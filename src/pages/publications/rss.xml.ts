@@ -5,6 +5,7 @@ import type { APIRoute } from "astro";
 import { statSync } from "node:fs";
 import { join } from "node:path";
 import { entries, pubVenue } from "../../lib/content";
+import { emphasis, plain } from "../../lib/tex";
 import { person } from "../../site";
 
 const html = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -21,8 +22,8 @@ export const GET: APIRoute = async ({ site }) => {
       const file = local(d.pdf);
       return {
         title: d.title,
-        description: d.tldr ?? d.description ?? d.abstract,
-        content: `<p>${html(pubVenue(d, true))}. ${html(d.authors.map((a) => a.name).join(", "))}.</p><p>${html(d.abstract)}</p>`,
+        description: plain(d.tldr ?? d.description ?? d.abstract),
+        content: `<p>${html(pubVenue(d, true))}. ${html(d.authors.map((a) => a.name).join(", "))}.</p><p>${emphasis(html(d.abstract))}</p>`,
         pubDate: d.date,
         link: `/publications/${p.id}/`,
         categories: d.keywords,
