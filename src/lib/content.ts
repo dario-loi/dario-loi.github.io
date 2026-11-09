@@ -1,4 +1,6 @@
-// Reading the collections: drafts are dropped in production, and every list is newest first.
+// Reading the collections: drafts are dropped in production, and every list is newest first. On the
+// same date, a selected paper or featured project comes first, so a co-authored paper presented
+// alongside one of the owner's own papers lists after it.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
 import type { ImageMetadata, ImageOutputFormat } from "astro";
@@ -10,7 +12,11 @@ export const visible = (entry: { data: { draft?: boolean } }) => import.meta.env
 
 async function load<N extends Name>(name: N): Promise<CollectionEntry<N>[]> {
   const all = (await getCollection(name, visible)) as CollectionEntry<N>[];
-  return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const lead = (e: CollectionEntry<N>) => {
+    const d = e.data as { selected?: boolean; featured?: boolean };
+    return d.selected || d.featured ? 1 : 0;
+  };
+  return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf() || lead(b) - lead(a));
 }
 
 // A production build reads each collection once, for every page, so a collection that is empty

@@ -1,0 +1,50 @@
+---
+title: "A Metacognitive Perspective on Anomaly Detection with Vision Foundation Models"
+shortTitle: "A Metacognitive Perspective on Anomaly Detection"
+description: "A metacognitive perspective on anomaly detection: ranking defects and deciding where they are can fail independently, so they should be evaluated apart."
+authors:
+  - { name: "Matteo Galiazzo", affiliations: [1] }
+  - { name: "Gabriele Onorato", affiliations: [1], starred: true }
+  - { name: "Dario Loi", affiliations: [1] }
+  - { name: "Nathaniel D. Bastian", affiliations: [2] }
+  - { name: "Francesco Restuccia", affiliations: [1] }
+affiliations:
+  - "Northeastern University"
+  - "Pathfinder Applied Research, LLC"
+starNote: "Corresponding author"
+venue: "METACOG-26"
+venueFull: "AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)"
+kind: workshop
+date: 2026-11-05
+tldr: "A metacognitive perspective on anomaly detection: a simpler scorer ranks defects better but decides worse until its threshold is recalibrated, so ranking and decisions should be evaluated separately."
+abstract: 'Anomaly Detection (AD) in images identifies defective regions by scoring against a model of normality learned from defect-free data. Current state of the art methods encode images via a frozen Vision Foundation Model (VFM) backbone and score them by their Nearest-Neighbor (NN) distance to a memory bank of normal samples. Recently, due to the parallel evolution of VFM encoders and scoring mechanism, the need to disentangle their individual contributions has emerged, in order to guarantee the deployment of the best performing model in specific industrial production environments. In our work, we analyze AD within a metacognitive perspective, we freeze the backbone and swap the scorer, replacing NN distance with a Mahalanobis score over a Gaussian distribution. By doing that, we can evaluate two different metacognitive functions of the scoring mechanisms: monitoring how far an observation is from the learned model of normality via a threshold-free metric, and deciding when the difference justifies an action according to a threshold. We show that these two metacognitive functions can dissociate. We further notice that replacing a NN memory bank with a simpler Mahalanobis model improves pixel-level monitoring (+8.00 AU-PRO$_{0.05}$ on MVTec AD 2) while degrading the segmentation performance after the thresholding step $(-13.46\ F_1)$. Lastly, we show that a threshold derived by Extreme Value Theory (EVT) recovers that loss without using anomalous data: the $F_1$ difference between the two scorers narrows from 13.46 to 0.61 points on MVTec AD 2, with consistent gains on MVTec AD and VisA.'
+keywords: ["Anomaly detection", "Metacognition", "Vision foundation models", "Extreme value theory"]
+links:
+  - { label: "PDF", href: "/publications/metacognitive-ad/metacognitive-ad.pdf", icon: download }
+  - { label: "Code", href: "https://github.com/Restuccia-Group/metacog-ad", icon: code }
+sameAs: ["https://mentis.info/publications/a-metacognitive-perspective-on-anomaly-detection-with-vision-foundation-models/"]
+pdf: "/publications/metacognitive-ad/metacognitive-ad.pdf"
+figure: ./metacognitive-ad-figure1.webp
+figureNum: 1
+figureSize: column
+figureAlt: "A pipeline from left to right. A frozen DINOv3 encoder, labeled object level, feeds patch features along an arrow labeled monitoring into a gray box labeled meta level, which holds two scorers, nearest neighbor and Mahalanobis, and the anomaly map they produce. An arrow labeled control, under an EVT threshold curve, leads to a binary defect mask labeled decision."
+figureCaption: "<i>The metacognitive reading:</i> Anomaly Detection is a two-level system: a frozen encoder as the object level, and a scorer as the meta level that monitors it. The threshold commits to a decision from the meta level's output."
+bibtex: |
+  @inproceedings{galiazzo2026metacognitive,
+    title     = {A Metacognitive Perspective on Anomaly Detection with Vision Foundation Models},
+    author    = {Matteo Galiazzo and Gabriele Onorato and Dario Loi and Nathaniel D. Bastian and Francesco Restuccia},
+    booktitle = {AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)},
+    year      = {2026},
+    url       = {https://dario-loi.github.io/publications/metacognitive-ad/}
+  }
+---
+
+The paper applies the two-level model of metacognition (Nelson and Narens, 1990) to structural anomaly detection. A frozen Vision Foundation Model is the object level: it produces patch features, but is not able to score them. The scorer is the meta level, holding a model of what normal features look like, and the threshold that turns its anomaly map into a defect mask is control. In the metacognition literature, monitoring and control can fail independently (Fleming and Lau, 2014): a scorer can rank defective pixels correctly, i.e., have high metacognitive sensitivity, and still place its threshold at the wrong level. Threshold-free metrics such as AU-PRO measure the former, while segmentation F1 depends on both, and therefore cannot show which of the two is responsible when performance changes.
+
+To isolate the meta level, we keep the encoder of SuperADD (Roming et al., 2026), the winner of the VAND 4.0 challenge on MVTec AD 2, and replace its nearest-neighbor memory bank with a single Gaussian per layer, scoring each patch token by its Mahalanobis distance. The fitted model takes 52.47 MB across the four layers regardless of the size of the training set, and scores each token about 78 times more cheaply than nearest-neighbor search.
+
+On MVTec AD 2, **the two functions dissociate**. The Mahalanobis scorer improves AU-PRO at 0.05 from 56.81 to 64.81, yet under the dataset's threshold of the mean plus three standard deviations its segmentation F1 drops to 19.88, against 33.34 for the memory bank, since that threshold is set by the center of the score distribution rather than by its tail. Fitting the tail on normal images with Extreme Value Theory raises F1 by 29.51 points for the Mahalanobis scorer and by 16.66 for the memory bank, narrowing the gap between the two from 13.46 to 0.61 points without using any anomalous data. On MVTec AD and VisA, the Mahalanobis scorer then leads by 10.78 and 8.74 points. Even at the oracle threshold, however, the memory bank keeps a 6.73-point lead on MVTec AD 2, so only part of the original deficit was due to threshold placement.
+
+Better monitoring, in this setting, translates into better decisions only once control is calibrated to it. As such, the paper recommends evaluating and reporting threshold calibration separately from ranking quality.
+
+The same two-level reading frames [our framework for test-time adaptation](/publications/metacognitive-tta/), presented at the same symposium.

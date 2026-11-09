@@ -1,0 +1,8 @@
+{
+  "file": "public/publications/metacognitive-ad/metacognitive-ad.pdf",
+  "source": "https://mentis.info/wp-content/uploads/2026/10/GaliazzoAD_AAAI26-Metacog.pdf",
+  "check": "hash",
+  "sha256": "beea23fb356bf6d1dcaf0d5858949ba2b2439017ab18bc37ecf7bd68a2e6c2fb",
+  "fetched": "2026-11-09",
+  "notes": "Camera-ready version (built 2026-10-15). AAAI copyright: authors may post the paper on their own web page with the AAAI copyright notice and source, which the PDF carries."
+}
