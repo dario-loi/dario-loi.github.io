@@ -81,6 +81,9 @@ const publications = defineCollection({
       links: z.array(link).default([]),
       arxiv: z.string().optional(),
       doi: z.string().optional(),
+      /** Other pages for this same paper, such as the lab's page for it. With the DOI, arXiv, and
+       *  Google Scholar links, they become the paper record's schema.org sameAs. */
+      sameAs: z.array(z.url()).default([]),
       pdf: z.string().optional(),
       bibtex: z.string(),
       /** Shown on the home page. */

@@ -32,6 +32,9 @@ Everything a visitor reads is a file. Adding one needs no layout changes.
 | CV PDF | `public/dario-loi-cv.pdf` | When the file exists, CV buttons download it; until then they open the CV page. |
 | Name, links, email | `src/site.ts` | |
 
+Prose in the front matter (a paper's `tldr`, `abstract`, and figure caption) takes `$math$`,
+`*italic*`, `**bold**`, and `***both***`; elsewhere a post or entry is Markdown.
+
 Any entry with `draft: true` renders under `npm run dev` with a Draft label and is left out of
 the production build, the sitemap, and the RSS feed. Without a `cover` image, a card draws a
 Vietoris-Rips complex seeded from the file name, so every entry gets its own figure.
@@ -48,11 +51,15 @@ npm run papers:check                        # which sources have a newer version
 npm run papers:sync -- <slug>               # copy the newer version in, compressed
 npm run papers:sync -- <slug> --from <file> # the same from a PDF downloaded by hand
 npm run papers:sync -- <slug> --source <url>  # a new paper's first copy
+npm run papers:meta [-- <slug>]             # write the entry's title, authors, and summary into the PDF
 ```
 
 A sync compresses with Ghostscript at full resolution and the highest JPEG quality, then
 re-encodes large palette images with `scripts/pdf-palette.py`, which needs `pikepdf` and `Pillow`
-(`python3 -m venv .venv && .venv/bin/pip install pikepdf pillow`). The Paper sources workflow
+(`python3 -m venv .venv && .venv/bin/pip install pikepdf pillow`). Last, `scripts/pdf-meta.py`
+writes the entry's title, authors, summary, and keywords into the PDF, which LaTeX leaves blank:
+Google titles a PDF result from them, and reference managers fill a record from them. Run
+`papers:meta` after changing those fields. The Paper sources workflow
 (`.github/workflows/papers.yml`) runs the check every Monday and opens an issue when a source
 changes. It does not commit anything.
 
@@ -60,7 +67,9 @@ changes. It does not commit anything.
 
 Every page carries schema.org records built from the collections (`src/lib/schema.ts`): the
 person, the site, each paper, project, and post, and each list page. They point at one another
-by `@id`, so a paper's author is the person on the home page. `/llms.txt` and `/llms-full.txt`
+by `@id`, so a paper's author is the person on the home page. A paper's `sameAs` field lists
+other pages for the same paper, such as the lab's, and joins its DOI, arXiv, and Scholar links
+in the record. A paper page also says when it last changed, from git, as the sitemap does. `/llms.txt` and `/llms-full.txt`
 (`src/lib/llms.ts`) give the same content as Markdown, and the full version adds every abstract
 and BibTeX entry.
 
@@ -68,6 +77,8 @@ After each deploy, the workflow sends the pages that were added, changed, or dro
 [IndexNow](https://www.indexnow.org), which passes them to Bing, Yandex, Seznam, Naver, and Yep
 (`scripts/indexnow.mjs`; the key is `public/<key>.txt`). A manual run of the deploy workflow with
 "all" checked sends every page. Google does not use IndexNow; Search Console covers it.
+
+The sitemap lists each page's pictures as well, for Google Images.
 
 Each list has an RSS feed once it has an entry: `/publications/rss.xml` (with abstracts, and
 the hosted PDF as each item's enclosure), `/projects/rss.xml`, and `/rss.xml` for the blog. Pages

@@ -17,6 +17,8 @@
 //   npm run papers:sync -- <id>                 copy the source again, compress it, update the record
 //   npm run papers:sync -- <id> --from <file>   the same from a PDF downloaded by hand
 //   npm run papers:sync -- <id> --source <url>  a paper's first copy, which creates its record
+//   npm run papers:meta [-- <id>]               write the entry's title, authors, summary, and
+//                                               keywords into the hosted PDF (every paper by default)
 //
 // check exits 0 when every copy is current, 1 when a source changed, and 2 when a source could
 // not be read and none changed.
@@ -25,11 +27,15 @@
 // their pixels, lossless ones become near-lossless JPEG, and text and fonts stay text. Ghostscript
 // leaves palette images as they are, so scripts/pdf-palette.py then re-encodes the large ones,
 // when a Python with pikepdf is at hand. The smaller of the result and the source is kept.
+// Last, scripts/pdf-meta.py writes the entry's title, authors, summary, and keywords into the
+// copy, which LaTeX usually leaves blank: Google titles a PDF result from them, and reference
+// managers fill a record from them.
 import { createHash } from "node:crypto";
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { parse } from "yaml";
 
 const ENTRIES = "src/content/publications";
 const UA = "dario-loi.github.io paper check (+https://github.com/dario-loi/dario-loi.github.io)";
@@ -112,6 +118,30 @@ function python() {
   return undefined;
 }
 
+// The entry's front matter, as the PDF's metadata: the title, the authors, the summary (without
+// the asterisks of its bold and italic), and the keywords.
+function metaOf(id) {
+  const file = [".mdx", ".md"].map((ext) => join(ENTRIES, id + ext)).find((f) => existsSync(f));
+  if (!file) throw new Error(`${id} has no entry in ${ENTRIES}`);
+  const d = parse(readFileSync(file, "utf8").split(/^---$/m)[1]);
+  const summary = (d.tldr ?? d.description ?? "").replace(/\*{1,3}(?=\S)(.+?)(?<=\S)\*{1,3}/g, "$1");
+  return { title: d.title, authors: d.authors.map((a) => (typeof a === "string" ? a : a.name)), subject: summary, keywords: d.keywords ?? [] };
+}
+
+function writeMeta(id, py) {
+  const r = readRecord(id);
+  execFileSync(py, ["scripts/pdf-meta.py", r.file, JSON.stringify(metaOf(id))], { stdio: "inherit" });
+}
+
+function meta(only) {
+  const py = python();
+  if (!py) throw new Error("Writing PDF metadata needs a Python with pikepdf (python3 -m venv .venv && .venv/bin/pip install pikepdf pillow).");
+  for (const id of only ? [only] : ids()) {
+    writeMeta(id, py);
+    console.log(`${id}: metadata written to ${readRecord(id).file}`);
+  }
+}
+
 function pages(file) {
   try {
     return Number(execFileSync("pdfinfo", [file], { encoding: "utf8" }).match(/^Pages:\s+(\d+)/m)?.[1]);
@@ -160,6 +190,9 @@ async function sync(id, opts) {
 
   Object.assign(r, { sha256: sha256(src), fetched: today() });
   writeRecord(id, r);
+  const py = python();
+  if (py && existsSync(join(ENTRIES, `${id}.mdx`))) writeMeta(id, py);
+  else console.warn("The PDF's metadata was not written: run npm run papers:meta once the entry exists and pikepdf is installed.");
   console.log(`${id}: ${mb(src.length)} -> ${mb(statSync(r.file).size)}${small ? "" : " (compression did not help, kept the source)"}, ${r.file}`);
   if (r.notes) console.log(`notes: ${r.notes}`);
   if (!exists) console.log(`Point the entry at it: pdf: "/${r.file.replace(/^public\//, "")}"`);
@@ -173,8 +206,9 @@ const flag = (name) => {
 try {
   if (cmd === "check") process.exitCode = await check(rest.includes("--markdown"));
   else if (cmd === "sync" && rest[0] && !rest[0].startsWith("--")) await sync(rest[0], { from: flag("--from"), source: flag("--source") });
+  else if (cmd === "meta") meta(rest[0]);
   else {
-    console.error("usage: papers.mjs check [--markdown] | sync <id> [--from <file>] [--source <url>]");
+    console.error("usage: papers.mjs check [--markdown] | sync <id> [--from <file>] [--source <url>] | meta [<id>]");
     process.exitCode = 2;
   }
 } catch (e) {

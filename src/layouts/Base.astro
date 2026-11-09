@@ -26,7 +26,8 @@ interface Props {
   type?: "website" | "article" | "profile";
   published?: Date;
   modified?: Date;
-  citation?: Citation;
+  /** A paper, for Google Scholar: Polytope's Citation, with each author's institutions. */
+  citation?: Omit<Citation, "authors"> & { authors: (string | { name: string; href?: string; institutions?: string[] })[] };
   /** The link-preview picture; the site card when left out. */
   image?: SeoImage;
   imageAlt?: string;
@@ -66,6 +67,11 @@ const tabs = [
 // records point at. A page adds its own records through `schema`.
 const isHome = Astro.url.pathname === "/";
 const records = [...(profile ? [personNode()] : []), ...(isHome ? [websiteNode(), profilePageNode()] : []), ...schema];
+// Scholar reads each citation_author with the citation_author_institution tags right after it,
+// which Seo does not write, so the author tags are written here and Seo gets the rest of the
+// citation. The paper's own record (schema) carries the authors for structured data.
+const scholarAuthors = (citation?.authors ?? []).map((a) => (typeof a === "string" ? { name: a, institutions: [] } : { name: a.name, institutions: a.institutions ?? [] }));
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -82,13 +88,23 @@ const year = new Date().getFullYear();
       noindex={noindex}
       published={published}
       modified={modified}
-      citation={citation}
+      citation={citation && { ...citation, authors: [] }}
       image={image ?? { src: "/og.png", width: 1200, height: 630 }}
       imageAlt={imageAlt ?? `${person.name}, ${person.lede}`}
       schema={records}
       breadcrumbs={crumbs}
       sitemap="/sitemap-index.xml"
     />
+    {scholarAuthors.map((a) => (
+      <>
+        <meta name="citation_author" content={a.name} />
+        {a.institutions.map((i) => <meta name="citation_author_institution" content={i} />)}
+      </>
+    ))}
+    {citation && <meta name="citation_abstract_html_url" content={pageUrl} />}
+    {citation && <meta name="citation_language" content="en" />}
+    {/* Search may show this page's pictures at full width, as in Discover. */}
+    {!noindex && <meta name="robots" content="max-image-preview:large" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <!-- Rasters of favicon.svg, for search results and home screens that take no SVG, and
          favicon.ico at the address crawlers ask for first. -->
@@ -170,15 +186,6 @@ const year = new Date().getFullYear();
   .tag-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
   .ply-prose .tag-list { padding-inline-start: 0; }
   .tag-list > li, .ply-prose .tag-list > li + li { margin: 0; }
-  .site-foot { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); margin-top: var(--ply-space-9); }
-  .site-foot__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: var(--ply-space-5) var(--ply-space-7); padding-block: var(--ply-space-6) var(--ply-space-4); }
-  .site-foot__who { display: grid; gap: var(--ply-space-2); }
-  .site-foot__name { font-size: var(--ply-size-xl); line-height: 1; }
-  .site-foot__links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
-  .site-foot__colophon { padding-block: var(--ply-space-4) var(--ply-space-7); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
-  /* A printed page ends with its own content. */
-  @media print { .site-foot { display: none; } }
-</style>
   /* Emphasis in running text is type alone: *em* the true italic, **strong** bold, ***both*** bold
      italic. Italic sits a step heavier than the body, so it reads as a change of voice. */
   .ply-prose em { font-style: italic; font-weight: var(--ply-weight-medium); }
@@ -190,3 +197,12 @@ const year = new Date().getFullYear();
   .site-chart .ply-chart__plot > svg { display: block; max-width: 100%; height: auto; min-width: 0; font-size: var(--ply-size-sm); }
   .site-chart > .ply-details > summary { font-size: var(--ply-size-sm); }
   .site-chart .ply-details { overflow-x: auto; }
+  .site-foot { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); margin-top: var(--ply-space-9); }
+  .site-foot__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: var(--ply-space-5) var(--ply-space-7); padding-block: var(--ply-space-6) var(--ply-space-4); }
+  .site-foot__who { display: grid; gap: var(--ply-space-2); }
+  .site-foot__name { font-size: var(--ply-size-xl); line-height: 1; }
+  .site-foot__links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
+  .site-foot__colophon { padding-block: var(--ply-space-4) var(--ply-space-7); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
+  /* A printed page ends with its own content. */
+  @media print { .site-foot { display: none; } }
+</style>

@@ -12,8 +12,9 @@ import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import Tex from "../../components/Tex.astro";
 import Cover from "../../components/Cover.astro";
 import { column, entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture, widthsFor } from "../../lib/content";
-import { paperNode } from "../../lib/schema";
-import { hasMath } from "../../lib/tex";
+import { paperCodeNode, paperNode } from "../../lib/schema";
+import { lastmod } from "../../lib/lastmod.mjs";
+import { hasMath, plain } from "../../lib/tex";
 import { person } from "../../site";
 
 export const getStaticPaths = (async () => {
@@ -30,25 +31,32 @@ const links = [...d.links, { label: "BibTeX", href: "#cite", icon: "quote" as co
 const seed = seedOf(pub.id);
 // Previews show the card's crop of the paper's figure, else the key figure itself.
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
+// The page changes after the paper comes out (a post under the abstract, a newer PDF); until it
+// does, the paper's date is also the page's.
+const changed = lastmod(`/publications/${pub.id}/`);
+const modified = changed && new Date(changed) > d.date ? new Date(changed) : undefined;
+const code = paperCodeNode(pub);
 ---
 <Base
   title={d.shortTitle ?? d.title}
   unnamed
-  description={d.description ?? d.tldr ?? d.abstract.slice(0, 155)}
+  description={plain(d.description ?? d.tldr ?? d.abstract.slice(0, 155))}
   current="Publications"
   noindex={d.draft}
   {...og}
-  schema={[paperNode(pub, [squarePicture(pub), og.image?.src])]}
+  published={d.date}
+  modified={modified}
+  schema={[paperNode(pub, [squarePicture(pub), og.image?.src], modified), ...(code ? [code] : [])]}
   math={hasMath(d.tldr, d.abstract, d.figureCaption)}
   citation={{
     title: d.title,
-    authors: d.authors.map((a) => (a.name === person.name ? { name: a.name, href: "/" } : a.name)),
+    authors: d.authors.map((a) => ({ name: a.name, href: a.name === person.name ? "/" : undefined, institutions: a.affiliations.map((i) => d.affiliations[i - 1]).filter(Boolean) })),
     date: d.date,
     ...(d.kind === "journal" ? { journal: d.venueFull ?? d.venue } : d.kind === "preprint" ? {} : { conference: d.venueFull ?? d.venue }),
     pdf: d.pdf,
     doi: d.doi,
     arxiv: d.arxiv,
-    abstract: d.abstract,
+    abstract: plain(d.abstract),
   }}
   crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: d.title, href: `/publications/${pub.id}/` }]}
 >
@@ -119,6 +127,9 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
   .paper-head :global(.ply-paper) { padding-bottom: var(--ply-space-6); }
   .paper__figure { max-width: 52rem; margin-top: 0; margin-bottom: var(--ply-space-7); }
   .paper__figure--column { max-width: 32rem; }
+  /* A figure in the entry's text (a Polytope Figure with class="figure--column") keeps the same
+     single-column width. */
+  :global(.ply-figure.figure--column) { max-width: 32rem; }
   /* Without a key figure, the exhibit stacks under the header, then hangs in the margin
      column beside it once the article has one. */
   .paper-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }

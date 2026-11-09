@@ -6,6 +6,7 @@
 // author resolves to the Person record on the home page.
 import type { CollectionEntry } from "astro:content";
 import { isoDay } from "./content";
+import { plain } from "./tex";
 import { person, siteMeta } from "../site";
 
 type Node = Record<string, unknown>;
@@ -65,17 +66,26 @@ const projectId = (p: CollectionEntry<"projects">) => `${projectUrl(p)}#work`;
 const postId = (p: CollectionEntry<"blog">) => `${postUrl(p)}#post`;
 const codeLink = (links: { href: string; icon?: string }[]) => links.find((l) => l.icon === "code" && external(l.href));
 
+const scholar = (href: string) => /^https:\/\/scholar\.google\.[a-z.]+\//.test(href);
+
 /** A paper, with its abstract, venue, PDF, and the records of the same paper elsewhere.
- *  `images` are its pictures, the square one first: search results show that one whole. */
-export function paperNode(p: CollectionEntry<"publications">, images: (string | undefined)[] = []): Node {
+ *  `images` are its pictures, the square one first: search results show that one whole.
+ *  `modified` is when its page last changed, when that is after the paper came out. */
+export function paperNode(p: CollectionEntry<"publications">, images: (string | undefined)[] = [], modified?: Date): Node {
   const pictures = images.filter((i): i is string => Boolean(i)).map(abs);
   const d = p.data;
   const url = paperUrl(p);
   const sameAs = [
-    d.arxiv && `https://arxiv.org/abs/${d.arxiv}`,
-    d.doi && `https://doi.org/${d.doi}`,
-    ...d.links.filter((l) => l.icon === "paper" && external(l.href)).map((l) => l.href),
+    ...new Set([
+      d.arxiv && `https://arxiv.org/abs/${d.arxiv}`,
+      d.doi && `https://doi.org/${d.doi}`,
+      ...d.links.filter((l) => external(l.href) && (l.icon === "paper" || scholar(l.href))).map((l) => l.href),
+      ...d.sameAs,
+    ]),
   ].filter(Boolean);
+  // Co-authors carry the institutions the paper gives them. The site owner is the Person record
+  // on the home page, whose affiliation is current; a paper's may be older.
+  const institutions = (indices: number[]) => indices.map((i) => d.affiliations[i - 1]).filter(Boolean).map((name) => ({ "@type": "Organization", name }));
   return {
     "@type": "ScholarlyArticle",
     "@id": paperId(p),
@@ -84,10 +94,13 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
     headline: d.title,
     name: d.title,
     alternativeHeadline: d.shortTitle,
-    description: d.description ?? d.tldr,
-    abstract: d.abstract,
-    author: d.authors.map((a) => (a.name === person.name ? me : { "@type": "Person", name: a.name })),
+    description: plain(d.description ?? d.tldr ?? "") || undefined,
+    abstract: plain(d.abstract),
+    author: d.authors.map((a) =>
+      a.name === person.name ? me : { "@type": "Person", name: a.name, affiliation: a.affiliations.length ? institutions(a.affiliations) : undefined },
+    ),
     datePublished: isoDay(d.date),
+    dateModified: modified ? modified.toISOString() : isoDay(d.date),
     inLanguage: "en",
     keywords: d.keywords.length ? d.keywords : undefined,
     isPartOf: d.kind === "preprint" ? undefined : { "@type": d.kind === "journal" ? "Periodical" : "CreativeWork", name: d.venueFull ?? d.venue },
@@ -97,6 +110,22 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
     encoding: d.pdf && { "@type": "MediaObject", contentUrl: abs(d.pdf), encodingFormat: "application/pdf" },
     isAccessibleForFree: true,
     sameAs: sameAs.length ? sameAs : undefined,
+  };
+}
+
+/** A paper's code, when the paper links a repository: source code that cites the paper, so the
+ *  repository and the paper are known to belong together. */
+export function paperCodeNode(p: CollectionEntry<"publications">): Node | undefined {
+  const code = codeLink(p.data.links);
+  if (!code) return undefined;
+  return {
+    "@type": "SoftwareSourceCode",
+    "@id": `${paperUrl(p)}#code`,
+    name: `${p.data.shortTitle ?? p.data.title}: code`,
+    url: code.href,
+    codeRepository: code.href,
+    citation: { "@id": paperId(p) },
+    isAccessibleForFree: true,
   };
 }
 
