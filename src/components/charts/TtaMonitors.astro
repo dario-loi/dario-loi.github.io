@@ -1,0 +1,56 @@
+---
+// Margin chart for the metacognitive TTA post: each monitor's two scores from Table 3 of the paper,
+// as a dumbbell per monitor. No gridlines cross the plot, so no label sits on a line; ticks on the
+// axis give the scale. The ring is correctness monitoring (does the cue track correct
+// predictions), the ball competence monitoring (does it separate ID from OOD data). Each monitor
+// keeps its color across the post's charts: the concept residual tomato, entropy teal, the class
+// prototypes cobalt.
+import Chart from "@dario-loi/polytope/astro/Chart.astro";
+
+interface Props { class?: string }
+const { class: className } = Astro.props;
+
+const rows = [
+  { name: "Entropy", slot: 2, correctness: 0.854, competence: 0.609 },
+  { name: "Class prototypes (OWTTT)", slot: 3, correctness: 0.862, competence: 0.935 },
+  { name: "Concept residual (FACE)", slot: 1, correctness: 0.822, competence: 0.908 },
+];
+const W = 270, left = 8, right = 250, rowH = 42, top = 4;
+const H = top + rows.length * rowH + 24;
+const x = (v: number) => left + ((v - 0.5) / 0.5) * (right - left);
+const ticks = [0.5, 0.75, 1];
+const fmt = (v: number) => v.toFixed(2);
+const axisY = top + rows.length * rowH + 2;
+---
+<Chart
+  title="What each monitor can tell"
+  subtitle="AUROC from 0.5 (chance) to 1. Ring: correctness. Ball: competence."
+  source="Table 3 of the paper, mean of 15 seeds."
+  class:list={["site-chart", className]}
+>
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Entropy scores 0.85 on correctness and 0.61 on competence. Class prototypes score 0.86 and 0.94. The concept residual scores 0.82 and 0.91.">
+    {rows.map((r, i) => {
+      const y0 = top + i * rowH;
+      const cy = y0 + 28;
+      const [a, b] = [x(r.correctness), x(r.competence)];
+      const ballRight = b > a;
+      return (
+        <g>
+          <text class="ply-direct-label" x={left} y={y0 + 12}>{r.name}</text>
+          <line x1={a} x2={b} y1={cy} y2={cy} stroke={`var(--ply-viz-${r.slot})`} stroke-width="2" />
+          <circle cx={a} cy={cy} r="4.5" fill="var(--ply-viz-surface, var(--ply-color-bg))" stroke={`var(--ply-viz-${r.slot})`} stroke-width="2"><title>{r.name}, correctness: {fmt(r.correctness)}</title></circle>
+          <circle cx={b} cy={cy} r="5" fill={`var(--ply-viz-${r.slot})`} stroke="var(--ply-viz-surface, var(--ply-color-bg))" stroke-width="2"><title>{r.name}, competence: {fmt(r.competence)}</title></circle>
+          <text class="ply-axis-text" x={ballRight ? a - 9 : a + 9} y={cy + 5} text-anchor={ballRight ? "end" : "start"}>{fmt(r.correctness)}</text>
+          <text class="ply-direct-label" x={ballRight ? b + 9 : b - 9} y={cy + 5} text-anchor={ballRight ? "start" : "end"}>{fmt(r.competence)}</text>
+        </g>
+      );
+    })}
+    <line class="ply-baseline" x1={left} x2={right} y1={axisY} y2={axisY} />
+    <g class="axis">{ticks.map((t) => <line class="ply-axis-line" x1={x(t)} x2={x(t)} y1={axisY} y2={axisY + 4} />)}</g>
+    <g class="axis">{ticks.map((t, i) => <text class="ply-axis-text" x={x(t)} y={axisY + 18} text-anchor={i === 0 ? "start" : i === ticks.length - 1 ? "end" : "middle"}>{t === 1 ? "1" : t.toString()}</text>)}</g>
+  </svg>
+  <table slot="table">
+    <thead><tr><th scope="col">Monitor</th><th scope="col">Correctness</th><th scope="col">Competence</th></tr></thead>
+    <tbody>{rows.map((r) => <tr><th scope="row">{r.name}</th><td>{fmt(r.correctness)}</td><td>{fmt(r.competence)}</td></tr>)}</tbody>
+  </table>
+</Chart>

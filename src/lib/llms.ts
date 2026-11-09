@@ -13,6 +13,26 @@ const line = (s: string) => s.replace(/\s+/g, " ").trim();
 const label = (s: string) => line(s).replace(/([[\]])/g, "\\$1");
 const link = (text: string, href: string) => `[${label(text)}](${abs(href)})`;
 const own = (href: string) => !href.startsWith("#");
+// An entry's text as plain Markdown: MDX imports dropped, a picture given as its alt text, a
+// sidenote set in parentheses where it is anchored, component tags removed around what they
+// hold, and headings moved two levels down to sit under the entry's own ### heading. Code blocks
+// are left as they are.
+const markdown = (body: string) =>
+  body
+    .split(/(^```[\s\S]*?^```$)/m)
+    .map((part, i) =>
+      i % 2
+        ? part
+        : part
+            .replace(/^import\s.+$/gm, "")
+            .replace(/<Picture\b[^>]*?\balt="([^"]*)"[^>]*\/>/g, "[Figure: $1]")
+            .replace(/<Sidenote\b[^>]*>([\s\S]*?)<\/Sidenote>/g, " ($1)")
+            .replace(/<\/?[A-Z][\w.]*(\s[^>]*)?>/g, "")
+            .replace(/^(#{1,4}) /gm, "##$1 "),
+    )
+    .join("")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 
 const profileNames: Record<keyof typeof person.profiles, string> = {
   scholar: "Google Scholar",
@@ -61,7 +81,7 @@ export async function llms(full: boolean) {
       if (d.tldr) push(`TL;DR: ${line(d.tldr)}`, "");
       push(`Abstract: ${line(d.abstract)}`, "");
       push("```bibtex", d.bibtex.trim(), "```", "");
-      if (p.body?.trim()) push(p.body.trim(), "");
+      if (p.body?.trim()) push(markdown(p.body), "");
     }
     if (!full) push("");
   }
@@ -82,7 +102,7 @@ export async function llms(full: boolean) {
       const links = d.links.filter((l) => own(l.href));
       if (links.length > 0) push(`- Links: ${links.map((l) => link(l.label, l.href)).join(", ")}`);
       push("", line(d.description), "");
-      if (p.body?.trim()) push(p.body.trim(), "");
+      if (p.body?.trim()) push(markdown(p.body), "");
     }
     if (!full) push("");
   }

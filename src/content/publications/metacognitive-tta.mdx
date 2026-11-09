@@ -1,7 +1,7 @@
 ---
 title: "A Metacognitive Framework for Test-Time Adaptation: Taxonomy and Research Challenges"
 shortTitle: "A Metacognitive Framework for Test-Time Adaptation"
-description: "A metacognitive framework for test-time adaptation that separates task execution from control, with a taxonomy of methods and the open challenges ahead."
+description: "A cognitive psychology perspective of Test-Time Adaptation: how adaptation should be designed and evaluated to be robust to real-world conditions."
 authors:
   - { name: "Dario Loi", affiliations: [1], starred: true }
   - { name: "Gabriele Onorato", affiliations: [1] }
@@ -11,19 +11,21 @@ authors:
   - { name: "Francesco Restuccia", affiliations: [1] }
 affiliations:
   - "Northeastern University"
-  - "Johns Hopkins University"
+  - "Pathfinder Applied Research, LLC"
 starNote: "Corresponding author"
 venue: "METACOG-26"
 venueFull: "AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)"
 kind: workshop
 award: "Top 3 paper"
 date: 2026-11-05
-tldr: "A two-level metacognitive framework for test-time adaptation that separates task execution from control, with a taxonomy of existing methods and the open challenges ahead."
-abstract: "In Test-Time Adaptation (TTA), when out-of-distribution samples interleave unpredictably with corrupted in-distribution samples, adaptation without corrective measures is prone to significant performance decrease. Existing protocols rely on unreliable factors (e.g., predictive entropy) which are unable to distinguish corrupted in-distribution data from semantically novel open-set samples. To address this issue, we formalize TTA through a two-level metacognitive framework that decouples task execution from control, facilitating a unified taxonomy that categorizes existing TTA protocols across three core axes, i.e., which knowledge is monitored, which part of the models are targeted for adaptation, and how adaptation occurs. We provide evidence that robust corrective measures in TTA require monitoring grounded in structured internal representations to reliably estimate model competence. Lastly, we frame monitoring as a resource-allocation problem, examine neuromorphic substrates for bounded self-regulation, and outline key open challenges."
+tldr: "A cognitive psychology perspective of Test-Time Adaptation: how adaptation should be designed and evaluated to be robust to real-world conditions."
+abstract: "In Test-Time Adaptation (TTA), when out-of-distribution samples interleave unpredictably with corrupted in-distribution samples, adaptation without corrective measures is prone to significant performance decrease. Existing protocols rely on unreliable cues (e.g., predictive entropy) which are unable to distinguish corrupted in-distribution data from semantically novel open-set samples. To address this issue, we formalize TTA through a two-level metacognitive framework that decouples task execution from control, facilitating a unified taxonomy that categorizes existing TTA protocols across three core axes, i.e., which knowledge is monitored, which part of the models are targeted for adaptation, and how adaptation occurs. We provide evidence that robust corrective measures in TTA require monitoring grounded in structured internal representations to reliably estimate model competence. Lastly, we frame monitoring as a resource-allocation problem, examine neuromorphic substrates for bounded self-regulation, and outline key open challenges."
 keywords: ["Test-time adaptation", "Metacognition", "Out-of-distribution data", "Neuromorphic computing"]
 links:
   - { label: "PDF", href: "/publications/metacognitive-tta/metacognitive-tta.pdf", icon: download }
+  - { label: "Code", href: "https://github.com/Restuccia-Group/Metacog-TTA", icon: code }
   - { label: "Google Scholar", href: "https://scholar.google.com/citations?view_op=view_citation&user=r0Ty-c8AAAAJ&citation_for_view=r0Ty-c8AAAAJ:Y0pCki6q_DkC", icon: external }
+sameAs: ["https://mentis.info/publications/metacognitive-tta/"]
 pdf: "/publications/metacognitive-tta/metacognitive-tta.pdf"
 selected: true
 cover: ./metacognitive-tta-card.webp
@@ -32,13 +34,104 @@ figure: ./metacognitive-tta-figure1.webp
 figureNum: 1
 figureSize: column
 figureAlt: "A stream of in-distribution car images and out-of-distribution animals under Wild TTA. Left, fluency cues from the task backbone, such as entropy and energy, produce overlapping distributions labeled unreliable. Right, cues from a concept extractor produce separated clusters labeled reliable."
-figureCaption: "Standard vs Concept Cues in WTTA."
+figureCaption: "Standard vs Concept Cues in Wild Test-Time Adaptation (WTTA)."
 bibtex: |
   @inproceedings{loi2026metacognitive,
     title     = {A Metacognitive Framework for Test-Time Adaptation: Taxonomy and Research Challenges},
     author    = {Dario Loi and Gabriele Onorato and Antonella Coviello and Shahriar Rifat and Nathaniel D. Bastian and Francesco Restuccia},
     booktitle = {AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)},
     year      = {2026},
-    url       = {https://mentis.info/wp-content/uploads/2026/09/Concept_TTA_AAAI26-Metacog.pdf}
+    url       = {https://dario-loi.github.io/publications/metacognitive-tta/}
   }
 ---
+import { Picture } from "astro:assets";
+import Figure from "@dario-loi/polytope/astro/Figure.astro";
+import Sidenote from "@dario-loi/polytope/astro/Sidenote.astro";
+import TtaMonitors from "../../components/charts/TtaMonitors.astro";
+import TtaAdmitted from "../../components/charts/TtaAdmitted.astro";
+import TtaHorizon from "../../components/charts/TtaHorizon.astro";
+import { column, pictureFormats, widthsFor } from "../../lib/content";
+import concepts from "./metacognitive-tta-concepts.webp";
+import levels from "./metacognitive-tta-figure2.webp";
+
+Consider a classifier deployed on a camera recording a street. The model was trained on images captured in summer; by December, lighting, foliage and road surfaces have all changed, yet the street contains the same objects it did in July. By the nature of machine learning models, the distribution of inputs has shifted due to these changes in the environment, and thus the model might be less accurate than it was in the summer. This is covariate shift, and the model should adapt to it by re-learning to be confident on its predictions in this new environment. Conversely, some inputs should never drive adaptation: objects that belong to none of the model's classes, a cracked lens, a tampered feed, or an adversarial patch placed in the scene are all signals that the model should ignore.
+
+Test-Time Adaptation (TTA) addresses the first case by updating the model on the unlabeled samples it observes after deployment, most commonly by minimizing the entropy of its own predictions. This works as long as the test stream only contains covariate-shifted in-distribution (ID) data. Once out-of-distribution (OOD) samples are interleaved with it,<Sidenote n={1}>Wild TTA, in the terms of Niu et al. (2023): OOD samples arrive at an unknown, changing rate.</Sidenote> unconditional adaptation trains the model on inputs it has no correct answer for, degrading performance. In our view, the key to successful TTA is a good monitoring signal, i.e., one able to tell apart the **"good"** samples, which the model should learn from, and the **"bad"** ones, which it should ignore. Unconditional adaptation is brittle, whereas a more elaborate monitor allows the model to update itself selectively. We found the framework to build such a monitor in cognitive psychology.
+
+## The model's Feeling of Rightness
+
+<Figure num={2} margin>
+  <Picture {...pictureFormats} src={levels} alt="A chip labeled object level and a brain labeled meta level. An arrow labeled monitoring runs from the object level to the meta level, and an arrow labeled control runs back." widths={widthsFor(levels, 576)} sizes={`(min-width: 90rem) 21rem, (min-width: 40rem) 36rem, ${column}`} />
+  <Fragment slot="caption">The two levels of metacognitive adaptation, from the paper.</Fragment>
+</Figure>
+
+Cognitive psychology refers to the monitoring and control of a cognitive process, rather than its execution, as metacognition (Flavell, 1979). Nelson and Narens (1990) formalize it as a two-level architecture: (i) an object level performs the task and (ii) a meta level holds a model of the object level, monitors its state, and issues control signals that modify it. TTA can already be framed through this lens. Specifically, the network is the object level, and the adaptation procedure is the meta level, deciding at each step whether and how the network should be updated. By looking at TTA through this framing, we can take inspiration from cognitive psychology to improve the meta level, and thus the overall performance of the system.
+
+Most current protocols monitor the object level through its outputs, using cues such as predictive entropy, confidence margins or free energy, where a low-entropy prediction is taken to be a correct one. These cues estimate what psychologists call the Feeling of Rightness (Thompson, 2009), the sense of correctness induced by the fluent completion of a task, and are comparable to the experience-based cues described by Koriat (1997), which take effortless processing as a proxy for accuracy. As in humans, fluency can be high even when the answer is wrong: under distribution shift, networks become overconfident (Guo et al., 2017), thus an image of something never seen during training can still receive a confident prediction. This is troublesome since most adaptation protocols rely on strengthening this confidence to adapt the model in the absence of true labels (so in any realistic deployment scenario), thus the model's overconfidence can lead to a feedback loop of self-reinforcement, where the model adapts to its own mistakes.
+
+The same literature further separates automatic monitoring, which relies on fast, experience-based cues such as fluency, from deliberate monitoring, which relies on a deeper inspection of the object level (Shea et al., 2014). Entropy, which can be thought of as the scalar measure of a predictive distribution's **"confidence"** is an automatic cue. It is therefore apparent that TTA protocols that solely rely on automatic cues are brittle, in the same way that a person who bases most of their judgment on instinct is. Thus, our position is that the next generation of TTA protocols should make a conscious effort to incorporate deliberate cues, which are more reliable and less prone to overconfidence, in support of the automatic ones. In the following sections, we describe a deliberate cue based on concept-based interpretability, and show how it can be used to improve TTA.
+
+## Correctness and competence
+
+We divide metacognitive monitoring into two subcategories: correctness monitoring, assessing whether a prediction is erroneous, and competence monitoring, determining whether an input falls within the model's operational domain. A familiar scene in fog is within the model's competence, even if the prediction turns out to be wrong; an object from a class the model never learned is outside of it, regardless of how confident the prediction is.
+
+<TtaMonitors class="ply-margin" />
+
+**Entropy is a good correctness signal, but a poor competence signal.** To measure this, we employ a ResNet-34 pretrained on ImageNet, using Imagenette, a 10-class subsample of ImageNet, as ID data, and NINCO, a dataset curated to share no classes with ImageNet, as OOD data. We degrade both with the same corruptions (Gaussian noise, defocus blur, fog and contrast), so that competence cannot be determined by detecting corruptions. Measured by AUROC, where 1.0 is perfect monitoring and 0.5 is chance, entropy scores 0.85 as a correctness monitor, and only 0.61 as a competence monitor.
+
+This was expected. The two notions are similar, and entropy remains a good baseline adaptation loss; however, competence is what OOD gating requires, and entropy must therefore be supplemented in order to work as a gate.
+
+Measuring the monitor in this way is itself one of the proposals of the paper. TTA protocols are evaluated by the accuracy of the adapted model, which conflates the quality of the monitor with that of the network and of the update rule. As such, we propose evaluating the meta level separately, through metrics derived from Signal Detection Theory as used in metacognition research (Fleming and Lau, 2014): metacognitive sensitivity, i.e., how well the monitor's confidence tracks correct predictions; semantic discrimination, i.e., how well it separates ID from OOD data; and corruption sensitivity, i.e., how strongly it responds to covariate shift.
+
+## A taxonomy of twenty methods
+
+To compare protocols, we express the metacognitive loop as a single update rule, with a variable for each decision a TTA protocol makes: which samples enter the update and with what weight, which parameters are adapted, how large the step is, when to roll the weights back toward the source model, and when to abstain. Each protocol then corresponds to one instantiation of this rule. We categorize twenty protocols<Sidenote n={2}>BN-Adapt, Tent, MEMO, CoTTA, RDumb, EATA, SAR, SoTTA, NOTE, RoTTA, DeYO, OWTTT, PeTTA, ROID, LAME, REM, MECTA, GALA, PALM, and LAW.</Sidenote> along three axes, i.e., which knowledge is monitored, what part of the model is adapted, and how adaptation is regulated.
+
+A closer look at the resulting taxonomy reveals a few patterns. Deliberate knowledge, e.g., teacher networks or consistency across augmented views, is mostly allocated to loss construction rather than to the decision of which samples to update on. That decision still relies on single-pass forward scores, or on state summaries that drift together with the model, resulting in a circular self-reinforcement of the model's biases. Adaptation loci remain largely static, and the few protocols that select them at run time do so through heuristics, e.g., gradient statistics, rather than the semantic content of the underlying representations. Lastly, abstention is rarely exercised.<Sidenote n={3}>Answering "none of the above" instead of naming a class.</Sidenote>
+
+## A deliberate cue from concepts
+
+To build a deliberate cue, we turn to concept-based interpretability. Concept extraction techniques such as CRAFT (Fel et al., 2023) and FACE (Bhusal et al., 2025) learn a compact dictionary of concepts from the model's internal activations on ID data, such that the features of a familiar image can be approximated as a nonnegative combination of those concepts. We fit the dictionary on the last-layer features of 2,000 Imagenette images. At test time, we reconstruct the features of each incoming sample through the dictionary, and use the normalized reconstruction residual, i.e., the fraction of the features left unexplained, as our cue. A corrupted ID image leaves some residual; an OOD image under the same corruption leaves more, as the concepts required to explain it are missing from the dictionary.
+
+Two properties make the residual a suitable competence cue. First, it is independent of the labels predicted by the model. Second, it is computed on the frozen source network against a dictionary fixed before deployment, so that its reference does not drift as the model adapts.
+
+On semantic discrimination, the concept residual scores 0.91 with either dictionary, against 0.61 for entropy. Conversely, it is a weaker correctness monitor than entropy (0.82 against 0.85), consistent with the distinction between the two kinds of monitoring.
+
+<Figure num={3} class="figure--column">
+  <Picture {...pictureFormats} src={concepts} alt="Two rows of photos. Top: a noisy close-up of a gas pump's meter, beside two small crops, a gas pump and a cassette player's control panel. Bottom: a noisy photo from outside the model's classes, beside two small crops, a church tower and a man with a chain saw." widths={widthsFor(concepts, 512)} sizes={`(min-width: 36rem) 32rem, ${column}`} />
+  <Fragment slot="caption">Top: an Imagenette gas pump under Gaussian noise, with the two most relevant concepts extracted by FACE. Bottom: a NINCO image under the same noise; its two most relevant concepts belong to unrelated classes. Adapted from Figures 3 and 6 of the paper.</Fragment>
+</Figure>
+
+## Deliberate cues as test-time gates
+
+We then use each cue as a gate. The network is adapted with Tent (Wang et al., 2021), which minimizes entropy over the affine normalization parameters, and only the samples whose score passes the gate's threshold enter the update. The threshold is estimated online from the scores observed in previous batches.<Sidenote n={4}>As in Li et al. (2023): the split that minimizes the variance within each group.</Sidenote> We compare no gate, an entropy gate, our concept-residual gate, and the class-prototype distance of OWTTT (Li et al., 2023), an existing open-world TTA protocol, together with a perfect filter that has access to ground-truth ID/OOD membership as an upper bound.
+
+<TtaAdmitted class="ply-margin" />
+
+With 80% of the stream made of OOD samples, the entropy gate admits between 51% and 57% of them for adaptation, depending on the corruption. The residual gate admits 23% under Gaussian noise and 35% under defocus blur, and less than 4% under fog and contrast. After 200 adaptation steps under Gaussian noise at this contamination rate, ID accuracy is 0.52 without a gate, 0.57 with entropy, 0.68 with the concept residual, 0.72 with prototypes and 0.80 with the perfect filter, against 0.39 for the unadapted model.
+
+<TtaHorizon class="ply-margin" />
+
+The gap widens over longer horizons. The following table reports ID accuracy over 2,000 steps under Gaussian noise, with 60% of the stream contaminated (mean over 10 seeds):
+
+| Gate | Step 200 | Step 1,000 | Step 2,000 |
+|---|--:|--:|--:|
+| None | 0.671 | 0.474 | 0.369 |
+| Entropy | 0.730 | 0.488 | 0.412 |
+| Concept residual (ours) | 0.755 | 0.751 | 0.739 |
+| Class prototypes (OWTTT) | 0.779 | 0.789 | 0.789 |
+| Perfect filter | 0.823 | 0.860 | 0.861 |
+
+Ungated and entropy-gated adaptation decay monotonically, and by step 2,000 have fallen back to around 0.39, the accuracy of the unadapted model. Conversely, both deliberate gates maintain consistent performance across the whole horizon.
+
+## Limitations
+
+The concept-based component of this work is preliminary. OWTTT's prototypes outperform our residual throughout the long-horizon run (0.79 against 0.74 at step 2,000), as well as in semantic discrimination (0.94 against 0.91). Moreover, both deliberate gates come at a cost when there is nothing to filter: on uncontaminated streams, they end two to five points below ungated adaptation under each of the four corruptions, as they reject part of the corrupted ID samples. Lastly, our experiments only cover one of the failure cases of the street camera example, i.e., semantically novel objects; physical damage or tampering with the camera constitutes a separate problem, which the paper does not evaluate.
+
+However, unlike a prototype distance, the concept residual is **interpretable**. Since it derives from a decomposition over concepts that can be visualized as image crops, it allows us to quantify which concepts explain a given sample and how much of it remains unexplained, and thus *why* the gate admitted or rejected it. As shown in Figure 3, and further in the appendix of the paper, OOD images tend to retrieve semantically unrelated concepts that share structural qualities, such as texture or material.
+
+This is the position the paper argues for. Gating adaptation on an interpretable signal renders each adaptation decision explainable, allowing practitioners to verify the semantic rationale behind the model's self-regulation. The property of interpretability of a monitoring signal is particularly important in safety-critical applications, and is not limited to the field of Test-Time Adaptation. For instance, the capability to communicate to a human operator the precise portion of the input signal that drove the model towards a specific decision is a key requirement for the deployment of autonomous systems such as self-driving cars. In this sense, we believe that the field should strive toward more, and better, algorithms that combine interpretability with adaptation, and that the metacognitive framing of TTA can provide a useful framework through which these algorithms can be designed and evaluated.
+
+## At METACOG-26
+
+We presented this work at METACOG-26, the AAAI 2026 Fall Symposium on Artificial Metacognition, where it received a Top 3 Paper award. At the same symposium we also presented [a metacognitive perspective on anomaly detection](/publications/metacognitive-ad/), which reads anomaly detection through the same two levels. The code for our experiments is available on [GitHub](https://github.com/Restuccia-Group/Metacog-TTA). Read the full paper at the top of this page for the full taxonomy of adaptation algorithms and the remaining results.

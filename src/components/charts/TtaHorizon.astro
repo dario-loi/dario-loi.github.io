@@ -1,0 +1,52 @@
+---
+// Margin chart for the metacognitive TTA post: ID accuracy over 2,000 adaptation steps under
+// Gaussian noise with 60% of the stream OOD (Table 5 of the paper). The three gates keep the
+// post's colors; the perfect filter and the unadapted model are references in ink, labeled on the
+// plot. The ungated run sits within a few points of the entropy gate, so it is left to the table
+// in the text.
+import Chart from "@dario-loi/polytope/astro/Chart.astro";
+
+interface Props { class?: string }
+const { class: className } = Astro.props;
+
+const steps = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
+const series = [
+  { label: "Concept residual", slot: 1, values: [0.755, 0.774, 0.765, 0.755, 0.751, 0.749, 0.745, 0.74, 0.741, 0.739] },
+  { label: "Entropy", slot: 2, values: [0.73, 0.69, 0.608, 0.53, 0.488, 0.471, 0.461, 0.439, 0.433, 0.412] },
+  { label: "Class prototypes", slot: 3, values: [0.779, 0.794, 0.795, 0.788, 0.789, 0.791, 0.79, 0.789, 0.79, 0.789] },
+];
+const perfect = [0.823, 0.851, 0.857, 0.86, 0.86, 0.86, 0.861, 0.862, 0.861, 0.861];
+const unadapted = 0.39;
+const W = 270, left = 30, right = 264, top = 14, bottom = 146;
+const H = bottom + 24;
+const x = (s: number) => left + ((s - 200) / 1800) * (right - left);
+// The scale starts at 0.25, so the unadapted label fits under its line, clear of the gridlines.
+const y = (v: number) => bottom - ((v - 0.25) / 0.65) * (bottom - top);
+const path = (vs: number[]) => vs.map((v, i) => `${i ? "L" : "M"}${x(steps[i]).toFixed(1)},${y(v).toFixed(1)}`).join("");
+const yTicks = [0.4, 0.6, 0.8];
+const xTicks = [200, 1000, 2000];
+---
+<Chart
+  title="Accuracy over a long run"
+  subtitle="ID accuracy over 2,000 steps, Gaussian noise, 60% of the stream OOD."
+  legend={series.map((s) => ({ label: s.label, slot: s.slot, shape: "line" as const }))}
+  source="Table 5 of the paper, mean of 10 seeds."
+  class:list={["site-chart", className]}
+>
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Over 2,000 steps, the entropy gate falls from 0.73 to 0.41. The concept residual holds between 0.74 and 0.77, class prototypes near 0.79, and the perfect filter near 0.86. The unadapted model scores 0.39.">
+    <g class="grid">{yTicks.map((t) => <line x1={left} x2={right} y1={y(t)} y2={y(t)} />)}</g>
+    <g class="axis">{yTicks.map((t) => <text class="ply-axis-text" x={left - 4} y={y(t) + 4} text-anchor="end">{t.toFixed(1)}</text>)}</g>
+    <line x1={left} x2={right} y1={y(unadapted)} y2={y(unadapted)} stroke="var(--ply-color-text-muted)" stroke-width="1" stroke-dasharray="1 3" />
+    <text class="ply-axis-text" x={left + 4} y={y(unadapted) + 14}>unadapted, 0.39</text>
+    <path d={path(perfect)} fill="none" stroke="var(--ply-color-text)" stroke-width="1.5" stroke-dasharray="5 3" />
+    <text class="ply-direct-label" x={right} y={y(0.861) - 9} text-anchor="end">perfect filter</text>
+    {series.map((s) => <path d={path(s.values)} fill="none" stroke={`var(--ply-viz-${s.slot})`} stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />)}
+    {series.map((s) => s.values.map((v, i) => <circle cx={x(steps[i])} cy={y(v)} r="6" fill="transparent"><title>{s.label}, step {steps[i].toLocaleString("en-US")}: {v.toFixed(3)}</title></circle>))}
+    <line class="ply-baseline" x1={left} x2={right} y1={bottom} y2={bottom} />
+    <g class="axis">{xTicks.map((t, i) => <text class="ply-axis-text" x={x(t)} y={bottom + 18} text-anchor={i === 0 ? "start" : i === xTicks.length - 1 ? "end" : "middle"}>{t.toLocaleString("en-US")}</text>)}</g>
+  </svg>
+  <table slot="table">
+    <thead><tr><th scope="col">Step</th>{series.map((s) => <th scope="col">{s.label}</th>)}<th scope="col">Perfect filter</th></tr></thead>
+    <tbody>{steps.map((st, i) => <tr><th scope="row">{st.toLocaleString("en-US")}</th>{series.map((s) => <td>{s.values[i].toFixed(3)}</td>)}<td>{perfect[i].toFixed(3)}</td></tr>)}</tbody>
+  </table>
+</Chart>

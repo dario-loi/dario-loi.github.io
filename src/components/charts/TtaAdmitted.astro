@@ -1,0 +1,63 @@
+---
+// Margin chart for the metacognitive TTA post: the share of OOD samples each gate lets into the
+// update when 80% of the stream is OOD, per corruption (Table 7 of the paper). Each row's baseline
+// spans only its bars and no gridline crosses the plot, so the labels stay clear of lines. Entropy teal, the
+// concept residual tomato, as in the post's other charts.
+import Chart from "@dario-loi/polytope/astro/Chart.astro";
+
+interface Props { class?: string }
+const { class: className } = Astro.props;
+
+const rows = [
+  { name: "Gaussian noise", entropy: 0.513, residual: 0.228 },
+  { name: "Defocus blur", entropy: 0.55, residual: 0.347 },
+  { name: "Fog", entropy: 0.537, residual: 0.036 },
+  { name: "Contrast", entropy: 0.57, residual: 0.027 },
+];
+const series = [
+  { key: "entropy", label: "Entropy gate", slot: 2 },
+  { key: "residual", label: "Concept residual gate", slot: 1 },
+] as const;
+const W = 270, left = 0, right = 226, top = 2, rowH = 46, bar = 10, gap = 2;
+const H = top + rows.length * rowH + 24;
+const x = (v: number) => left + (v / 0.6) * (right - left);
+const ticks = [0, 0.2, 0.4, 0.6];
+const pct = (v: number) => `${Math.round(v * 100)}%`;
+const axisY = top + rows.length * rowH;
+---
+<Chart
+  title="OOD samples let into the update"
+  subtitle="Share admitted by each gate when 80% of the stream is OOD."
+  legend={series.map((s) => ({ label: s.label, slot: s.slot, shape: "bar" as const }))}
+  source="Table 7 of the paper, mean of 15 seeds."
+  class:list={["site-chart", className]}
+>
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="With 80% of the stream OOD, the entropy gate admits 51% to 57% of OOD samples under every corruption. The concept residual gate admits 23% under Gaussian noise, 35% under defocus blur, 4% under fog, and 3% under contrast.">
+    {rows.map((r, i) => {
+      const y0 = top + i * rowH;
+      return (
+        <g>
+          <text class="ply-direct-label" x={left} y={y0 + 12}>{r.name}</text>
+          {series.map((s, j) => {
+            const v = r[s.key];
+            const y = y0 + 19 + j * (bar + gap);
+            return (
+              <g>
+                <rect x={left} y={y} width={Math.max(x(v) - left, 1)} height={bar} fill={`var(--ply-viz-${s.slot})`}><title>{r.name}, {s.label.toLowerCase()}: {pct(v)}</title></rect>
+                {s.key === "residual" && <text class="ply-direct-label" x={x(v) + 5} y={y + bar}>{pct(v)}</text>}
+              </g>
+            );
+          })}
+        </g>
+      );
+    })}
+    {rows.map((_, i) => <line class="ply-baseline" x1={left} x2={left} y1={top + i * rowH + 18} y2={top + i * rowH + 19 + 2 * bar + gap + 1} />)}
+    <line class="ply-axis-line" x1={left} x2={right} y1={axisY} y2={axisY} />
+    <g class="axis">{ticks.map((t) => <line class="ply-axis-line" x1={x(t)} x2={x(t)} y1={axisY} y2={axisY + 4} />)}</g>
+    <g class="axis">{ticks.map((t, i) => <text class="ply-axis-text" x={x(t)} y={axisY + 18} text-anchor={i === 0 ? "start" : "middle"}>{pct(t)}</text>)}</g>
+  </svg>
+  <table slot="table">
+    <thead><tr><th scope="col">Corruption</th><th scope="col">Entropy</th><th scope="col">Residual</th></tr></thead>
+    <tbody>{rows.map((r) => <tr><th scope="row">{r.name}</th><td>{pct(r.entropy)}</td><td>{pct(r.residual)}</td></tr>)}</tbody>
+  </table>
+</Chart>

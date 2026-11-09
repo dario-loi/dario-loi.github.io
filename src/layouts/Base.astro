@@ -179,3 +179,14 @@ const year = new Date().getFullYear();
   /* A printed page ends with its own content. */
   @media print { .site-foot { display: none; } }
 </style>
+  /* Emphasis in running text is type alone: *em* the true italic, **strong** bold, ***both*** bold
+     italic. Italic sits a step heavier than the body, so it reads as a change of voice. */
+  .ply-prose em { font-style: italic; font-weight: var(--ply-weight-medium); }
+  .ply-prose :is(strong em, em strong) { font-weight: var(--ply-weight-bold); }
+  /* A small chart drawn for the margin (src/components/charts) shows at its own size, so its text
+     matches the sidenotes, and shrinks only in a narrower column. Back in the text on a narrow
+     screen it keeps that size instead of scrolling sideways. */
+  .site-chart { max-width: 21rem; }
+  .site-chart .ply-chart__plot > svg { display: block; max-width: 100%; height: auto; min-width: 0; font-size: var(--ply-size-sm); }
+  .site-chart > .ply-details > summary { font-size: var(--ply-size-sm); }
+  .site-chart .ply-details { overflow-x: auto; }
