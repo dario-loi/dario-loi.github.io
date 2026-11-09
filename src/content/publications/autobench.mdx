@@ -1,7 +1,7 @@
 ---
 title: "AutoBench: Automating LLM Evaluation through Reciprocal Peer Assessment"
 shortTitle: "AutoBench: Automating LLM Evaluation"
-description: "Language models write, answer, and judge each other's tasks, and judges count for more as they prove reliable. The rankings correlate with MMLU-Pro and GPQA."
+description: "Language models write, answer, and judge each other's tasks, with reliable judges weighted more, giving rankings that agree with established benchmarks."
 authors:
   - { name: "Dario Loi", affiliations: [1] }
   - { name: "Elena Maria Muià", affiliations: [2] }
@@ -17,7 +17,7 @@ affiliations:
 venue: "Preprint"
 kind: preprint
 date: 2025-10-26
-tldr: "Language models take turns writing tasks, answering them, and judging each other's answers. Weighting each judge by its reliability gives rankings that correlate with MMLU-Pro (78%) and GPQA (63%)."
+tldr: "Language models take turns writing tasks, answering them, and judging each other's answers; weighting each judge by how reliable it proves yields rankings that agree with established benchmarks."
 abstract: "We present AutoBench, a fully automated and self-sustaining framework for evaluating Large Language Models (LLMs) through reciprocal peer assessment. This paper provides a rigorous scientific validation of the AutoBench methodology, originally developed as an open-source project by eZecute S.R.L. Unlike static benchmarks that suffer from test-set contamination and limited adaptability, AutoBench dynamically generates novel evaluation tasks while models alternately serve as question generators, contestants, and judges across diverse domains. An iterative weighting mechanism amplifies the influence of consistently reliable evaluators, aggregating peer judgments into consensus-based rankings that reflect collective model agreement. Our experiments demonstrate strong correlations with established benchmarks including MMLU-Pro and GPQA (respectively 78% and 63%), validating this peer-driven evaluation paradigm. The multi-judge design significantly outperforms single-judge baselines, confirming that distributed evaluation produces more robust and human-consistent assessments. AutoBench offers a scalable, contamination-resistant alternative to static benchmarks for the continuous evaluation of evolving language models."
 keywords: ["LLM evaluation", "LLM-as-a-judge", "Peer assessment", "Benchmarks"]
 links:
