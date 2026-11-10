@@ -17,6 +17,7 @@ export interface CvEntry {
 }
 
 const BOSTON = { place: "Boston, United States", lat: 42.34, lon: -71.09 };
+const ARLINGTON = { place: "Arlington, United States", lat: 38.88, lon: -77.1 };
 const ROME = { place: "Rome, Italy", lat: 41.9, lon: 12.51 };
 const PISA = { place: "Pisa, Italy", lat: 43.72, lon: 10.4 };
 const XIAN = { place: "Xi'an, China", lat: 34.25, lon: 108.98 };
@@ -26,6 +27,14 @@ const OXFORD = { place: "Oxford, United Kingdom", lat: 51.75, lon: -1.26 };
 const ROCCELLA = { place: "Roccella Ionica, Italy", lat: 38.32, lon: 16.4 };
 
 const all: CvEntry[] = [
+  {
+    title: "METACOG-26",
+    org: "AAAI Fall Symposium on Artificial Metacognition",
+    kind: "Conference",
+    ...ARLINGTON,
+    from: "2026-11",
+    text: "Top 3 Paper award: A Metacognitive Framework for Test-Time Adaptation.",
+  },
   {
     title: "Ph.D. in Computer Engineering",
     org: "Northeastern University",
