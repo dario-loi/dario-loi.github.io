@@ -1,0 +1,157 @@
+---
+// Lifting a molecular graph: every chordless cycle of the graph with at most N atoms is filled
+// as a 2-cell. The cycles are found from the edge list by the same function on the server (here)
+// and in the script below, so no count is hard-coded.
+import Model from "./Model.astro";
+import Slider from "@dario-loi/polytope/astro/Slider.astro";
+interface Props { draft?: boolean }
+const { draft = false } = Astro.props;
+
+// Chordless cycles with at most maxLen atoms, each as its atoms in order around the ring.
+function chordlessCycles(n: number, edges: [number, number][], maxLen: number): number[][] {
+  const adj = Array.from({ length: n }, () => new Set<number>());
+  for (const [a, b] of edges) { adj[a].add(b); adj[b].add(a); }
+  const out: number[][] = [];
+  for (let s = 0; s < n; s++) {
+    const path = [s];
+    const walk = () => {
+      const last = path[path.length - 1];
+      for (const w of adj[last]) {
+        if (w === s && path.length >= 3 && path[1] < last && path.slice(2, -1).every((p) => !adj[s].has(p))) out.push(path.slice());
+        else if (w > s && !path.includes(w) && path.length < maxLen) {
+          if (path.slice(1, -1).some((p) => adj[w].has(p))) continue;
+          path.push(w); walk(); path.pop();
+        }
+      }
+    };
+    walk();
+  }
+  return out.sort((a, b) => a.length - b.length);
+}
+
+// A six-ring fused with a five-ring along one bond, a one-atom chain to a three-ring, and a two-atom tail.
+const ox = 8, R = 11, rad = (d: number) => (d * Math.PI) / 180;
+const at = (x: number, y: number): [number, number] => [+x.toFixed(2), +y.toFixed(2)];
+const hx = 24 + ox, hy = 28;
+const pts: [number, number][] = [];
+for (let k = 0; k < 6; k++) pts.push(at(hx + R * Math.cos(rad(30 + 60 * k)), hy - R * Math.sin(rad(30 + 60 * k))));
+const pr = R / (2 * Math.sin(rad(36))), pa = R / (2 * Math.tan(rad(36)));
+const pcx = pts[0][0] + pa;
+for (const a of [72, 0, -72]) pts.push(at(pcx + pr * Math.cos(rad(a)), hy - pr * Math.sin(rad(a))));
+const apex = pts[7];
+pts.push(at(apex[0] + 8.5, hy));                       // 9: chain atom
+const ax = pts[9][0] + 8.5;
+pts.push(at(ax, hy), at(ax + 7.8, hy - 4.5), at(ax + 7.8, hy + 4.5)); // 10-12: three-ring
+pts.push(at(pts[3][0] - 4.5, pts[3][1] + 7.8));        // 13: tail
+pts.push(at(pts[13][0] + 4.5, pts[13][1] + 7.8));      // 14: tail
+const edges: [number, number][] = [
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0],      // six-ring
+  [0, 6], [6, 7], [7, 8], [8, 5],                      // five-ring, sharing the bond 0-5
+  [7, 9], [9, 10],                                     // chain
+  [10, 11], [11, 12], [12, 10],                        // three-ring
+  [3, 13], [13, 14],                                   // tail
+];
+const MAXR = 6;
+const cycles = chordlessCycles(pts.length, edges, MAXR);
+const count = (m: number) => cycles.filter((c) => c.length <= m).length;
+const start = 6;
+const label = `A molecular-style graph of ${pts.length} atoms and ${edges.length} bonds, with ${count(start)} rings filled as cells.`;
+---
+<Model name="tdl-lifting" title="Lifting a molecular graph" draft={draft} firstRun>
+  <svg viewBox="0 0 100 56" role="img" aria-label={label} data-n={pts.length} data-edges={JSON.stringify(edges)}>
+    <g>{cycles.map((c) => <polygon class="m-note tdl-cell" data-size={c.length} data-on="true" points={c.map((i) => pts[i].join(",")).join(" ")} />)}</g>
+    <g>{edges.map(([a, b]) => <line class="m-chalk" stroke-width="0.45" stroke-opacity="0.8" x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} />)}</g>
+    <g>{pts.map(([x, y]) => <circle class="m-chalk-fill" cx={x} cy={y} r="1.15" />)}</g>
+  </svg>
+  <Fragment slot="controls">
+    <Slider label="Largest ring lifted" name="tdl-ring" min={2} max={MAXR} step={1} value={start} id="tdl-ring" />
+    <p class="ply-complex-counts tdl-counts">
+      <span><b data-count="atoms">{pts.length}</b> atoms</span>
+      <span><b data-count="bonds">{edges.length}</b> bonds</span>
+      <span><b data-count="rings">{count(start)}</b> <span data-ring-word>{count(start) === 1 ? "ring" : "rings"}</span> as cells</span>
+    </p>
+  </Fragment>
+  <Fragment slot="caption">A graph of atoms and bonds records pairs only. Lifting it to a cell complex adds each ring, up to the chosen size, as a cell of its own.</Fragment>
+</Model>
+<style>
+  p.tdl-counts { flex-direction: column; gap: var(--ply-space-1); }
+  .tdl-cell { transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+  .tdl-cell[data-on="false"] { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .tdl-cell { transition: none; } }
+</style>
+<script>
+  import { firstRun, stages } from "./firstRun";
+  function chordlessCycles(n: number, edges: [number, number][], maxLen: number): number[][] {
+    const adj = Array.from({ length: n }, () => new Set<number>());
+    for (const [a, b] of edges) { adj[a].add(b); adj[b].add(a); }
+    const out: number[][] = [];
+    for (let s = 0; s < n; s++) {
+      const path = [s];
+      const walk = () => {
+        const last = path[path.length - 1];
+        for (const w of adj[last]) {
+          if (w === s && path.length >= 3 && path[1] < last && path.slice(2, -1).every((p) => !adj[s].has(p))) out.push(path.slice());
+          else if (w > s && !path.includes(w) && path.length < maxLen) {
+            if (path.slice(1, -1).some((p) => adj[w].has(p))) continue;
+            path.push(w); walk(); path.pop();
+          }
+        }
+      };
+      walk();
+    }
+    return out.sort((a, b) => a.length - b.length);
+  }
+  document.querySelectorAll<HTMLElement>('[data-model="tdl-lifting"]').forEach((fig) => {
+    const svg = fig.querySelector<SVGSVGElement>("svg");
+    const input = fig.querySelector<HTMLInputElement>("#tdl-ring");
+    if (!svg || !input) return;
+    const n = Number(svg.dataset.n);
+    const edges = JSON.parse(svg.dataset.edges!) as [number, number][];
+    const cycles = chordlessCycles(n, edges, 6);
+    const cells = [...svg.querySelectorAll<SVGElement>(".tdl-cell")];
+    const set = (el: Element | null, v: string) => { if (el && el.textContent !== v) el.textContent = v; };
+    const out = fig.querySelector("[data-ply-slider] output");
+    // Show rings up to m atoms. Words for assistive tech are set only when `say` is true.
+    const update = (m = Number(input.value), say = true) => {
+      const rings = cycles.filter((c) => c.length <= m).length;
+      for (const c of cells) {
+        const on = String(Number(c.dataset.size) <= m);
+        if (c.dataset.on !== on) c.dataset.on = on;
+      }
+      set(fig.querySelector('[data-count="atoms"]'), String(n));
+      set(fig.querySelector('[data-count="bonds"]'), String(edges.length));
+      set(fig.querySelector('[data-count="rings"]'), String(rings));
+      set(fig.querySelector("[data-ring-word]"), rings === 1 ? "ring" : "rings");
+      if (!say) return;
+      // after controls.js has set the plain value
+      requestAnimationFrame(() => {
+        const text = `Rings up to ${m} atoms: ${n} atoms, ${edges.length} bonds, ${rings} ${rings === 1 ? "ring" : "rings"} as cells`;
+        if (input.getAttribute("aria-valuetext") !== text) input.setAttribute("aria-valuetext", text);
+      });
+    };
+    input.addEventListener("input", () => update());
+    update();
+
+    // First view: the largest ring lifted steps from 2 up to its default, one size at a time at an
+    // even cadence (under 2 a second), each size's rings filling in as cells.
+    const rest = Number(input.value), from = Number(input.min), STEPS = rest - from;
+    let shown = NaN;
+    const show = (m: number) => {
+      if (m === shown) return;
+      shown = m;
+      input.value = String(m);
+      if (out && out.textContent !== String(m)) out.textContent = String(m);
+      update(m, false);
+    };
+    firstRun(fig, {
+      duration: 2.4,
+      start() { input.removeAttribute("aria-valuetext"); show(from); },
+      // Stage k holds size from + k; a short lead-in at the start state, then one size per stage.
+      frame(p) { show(from + stages(p, STEPS + 1).k); },
+      end(cancelled) {
+        if (!cancelled) show(rest);
+        update(Number(input.value), true);
+      },
+    });
+  });
+</script>

@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import Empty from "@dario-loi/polytope/astro/Empty.astro";
 import IndexMast from "../../components/IndexMast.astro";
 import Card from "@dario-loi/polytope/astro/Card.astro";
+import ProjectLinks from "../../components/ProjectLinks.astro";
 import Cover from "../../components/Cover.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import { cardPicture, entries, seedOf } from "../../lib/content";
@@ -11,15 +12,15 @@ import { person } from "../../site";
 
 const projects = await entries("projects");
 const n = projects.length;
-const description = `Software and research projects by ${person.name}.`;
+const description = `Software and research projects by ${person.name}: the Polytope design system, computer vision and graphics code, and machine learning tools, with source.`;
 ---
 <Base title="Projects" description={description} current="Projects" schema={[projectsPage(projects, description)]} crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
-  <IndexMast title="Projects" lede="Software and course projects." count={n > 0 ? `${n} ${n === 1 ? "project" : "projects"}` : undefined} />
+  <IndexMast title="Projects" lede="Software and course projects." />
   <div class="ply-container projects">
     {n === 0 ? (
       <Empty title="No projects listed yet" />
     ) : (
-      <CardGrid>
+      <CardGrid class="card-rows">
         {projects.map((p, i) => (
           <Card
             href={`/projects/${p.id}/`}
@@ -33,7 +34,8 @@ const description = `Software and research projects by ${person.name}.`;
             seed={seedOf(p.id)}
             link={{ "data-track": "open-project", "data-track-placement": "projects", "data-track-label": p.id }}
           >
-            {p.data.cover && <Cover slot="figure" {...cardPicture(i === 0)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+            <Cover slot="figure" {...cardPicture(i === 0)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
+            <ProjectLinks project={p} placement="projects-card" />
           </Card>
         ))}
       </CardGrid>
@@ -41,5 +43,5 @@ const description = `Software and research projects by ${person.name}.`;
   </div>
 </Base>
 <style>
-  .projects { padding-top: var(--ply-space-7); }
+  .projects { padding-top: var(--ply-space-5); }
 </style>

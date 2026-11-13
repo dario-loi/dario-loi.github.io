@@ -1,18 +1,41 @@
 ---
+// The page for an address that is not here: the headline, one plain sentence, the ways out that
+// matter most (the papers first), and a complex that does not connect to anything, as the exhibit.
 import Base from "../layouts/Base.astro";
-import Empty from "@dario-loi/polytope/astro/Empty.astro";
-import Button from "@dario-loi/polytope/astro/Button.astro";
+import IndexMast from "../components/IndexMast.astro";
+import Complex from "@dario-loi/polytope/astro/Complex.astro";
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import { seedOf } from "../lib/content";
+const ways = [
+  { href: "/publications/", label: "Publications", note: "Every paper, with abstracts, code, and BibTeX." },
+  { href: "/publications/topics/", label: "Topics", note: "The same papers, grouped by subject." },
+  { href: "/cv/", label: "CV", note: "Education, experience, and the PDF." },
+  { href: "/", label: "Home", note: "Who I am and what I work on." },
+];
 ---
-<Base title="Page not found" noindex>
+<Base title="Page not found" description="This page does not exist. Go back to the publications, projects, or CV of Dario Loi." noindex>
+  <IndexMast title="Page not found" lede="This page does not exist, though these ones do." />
   <div class="ply-container lost">
-    <Empty level={1} title="This page is not here" body="The address may be from the previous version of this site, or mistyped.">
-      <div class="ply-cluster" style="justify-content: center">
-        <Button href="/">Home</Button>
-        <Button href="/publications/" variant="secondary">Publications</Button>
-      </div>
-    </Empty>
+    <ul class="lost__ways">
+      {ways.map((w) => (
+        <li><a class="lost__way ply-target" href={w.href}><span class="lost__label">{w.label}<Icon name="arrow-right" /></span><span class="lost__note">{w.note}</span></a></li>
+      ))}
+    </ul>
+    <div class="ply-panel ply-panel--flush lost__exhibit" data-surface="panel">
+      <Complex seed={seedOf("404")} points={28} radius={0.12} controls={false} label="A complex with no path to this address" id="cx-404" />
+    </div>
   </div>
 </Base>
 <style>
-  .lost { padding-block: var(--ply-space-8); }
+  .lost { padding-block: var(--ply-space-5) var(--ply-space-8); display: grid; gap: var(--ply-space-6); align-items: start; }
+  .lost__ways { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); }
+  .lost__ways li { border-bottom: var(--ply-border-hair) solid var(--ply-color-rule); }
+  .lost__way { display: grid; gap: var(--ply-space-1); padding-block: var(--ply-space-4); text-decoration: none; color: inherit; }
+  .lost__label { font-family: var(--ply-font-display); font-size: var(--ply-size-xl); display: inline-flex; align-items: center; gap: var(--ply-space-2); overflow-wrap: anywhere; }
+  .lost__note { color: var(--ply-color-text-muted); }
+  .lost__way:hover .lost__label, .lost__way:focus-visible .lost__label { color: var(--ply-color-accent-text, var(--ply-color-accent)); }
+  @media (min-width: 64rem) {
+    .lost { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--ply-space-7, var(--ply-space-6)); }
+    .lost__exhibit { order: 2; }
+  }
 </style>

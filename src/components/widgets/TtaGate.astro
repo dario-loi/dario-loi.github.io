@@ -1,0 +1,169 @@
+---
+// A gate on the monitor's score: two equal-variance unit Gaussians (ID at 0, OOD at d') whose
+// separation is set by the AUROC the paper reports for semantic discrimination (Table 3):
+// entropy 0.609, concept residual 0.908 (FACE) / 0.912 (CRAFT), shown as 0.61 and 0.91.
+// AUROC = Phi(d' / sqrt 2), so d' = sqrt 2 * Phi^-1(AUROC). An illustration, not the paper's data.
+import Model from "./Model.astro";
+import Slider from "@dario-loi/polytope/astro/Slider.astro";
+interface Props { draft?: boolean }
+const { draft = false } = Astro.props;
+
+const SQ2 = Math.SQRT2;
+const phi = (x: number) => {
+  const z = Math.abs(x) / SQ2, t = 1 / (1 + 0.3275911 * z);
+  const e = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z);
+  return 0.5 * (1 + (x < 0 ? -e : e));
+};
+// Acklam's rational approximation, central region (0.02425 <= p <= 0.97575) is all we need here.
+const phiInv = (p: number) => {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const q = p - 0.5, r = q * q;
+  return ((((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q) / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+};
+const pdf = (x: number) => Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+
+// The score axis runs -3 to 5, the slider's own range, from 5 to 95 of the panel; its ticks at -2,
+// 0, 2, 4 leave one unit of overhang on both sides.
+const X0 = -3, X1 = 5, AXL = 5, AXR = 95, BASE = 44, H = 85;
+const X = (s: number) => AXL + ((s - X0) / (X1 - X0)) * (AXR - AXL);
+const Y = (d: number) => BASE - d * H;
+const f = (n: number) => n.toFixed(2);
+const xs: number[] = [];
+for (let s = X0; s <= X1 + 1e-9; s += 0.1) xs.push(s);
+const curve = (mu: number) => "M" + xs.map((s) => `${f(X(s))} ${f(Y(pdf(s - mu)))}`).join("L");
+const area = (mu: number, t: number) => {
+  const pts = xs.filter((s) => s <= t).map((s) => `${f(X(s))} ${f(Y(pdf(s - mu)))}`);
+  return pts.length ? `M${f(X(X0))} ${BASE}L` + pts.join("L") + `L${f(X(t))} ${f(Y(pdf(t - mu)))}L${f(X(t))} ${BASE}Z` : "";
+};
+
+const cues = [
+  { id: "residual", label: "Concept residual", auroc: 0.91 },
+  { id: "entropy", label: "Entropy", auroc: 0.61 },
+].map((c) => ({ ...c, d: SQ2 * phiInv(c.auroc) }));
+const cue = cues[0];
+const t0 = Math.round((cue.d / 2) / 0.05) * 0.05;
+const pct = (p: number) => `${Math.round(p * 100)}%`;
+const idAdm = pct(phi(t0)), oodAdm = pct(phi(t0 - cue.d));
+const label = `Two bell curves on a score axis, in-distribution centered at 0 and out-of-distribution at ${cue.d.toFixed(1)}, with a gate at ${t0.toFixed(2)} admitting ${idAdm} of in-distribution and ${oodAdm} of out-of-distribution samples.`;
+---
+<Model name="tta-gate" title="A gate on the monitor's score" draft={draft} firstRun>
+  <svg viewBox="0 0 100 56" role="img" aria-label={label} data-lo={X0} data-hi={X1}>
+    <path class="m-note" data-ood-area d={area(cue.d, t0)}></path>
+    <path class="m-chalk-fill" fill-opacity="0.18" data-id-area d={area(0, t0)}></path>
+    <line class="m-rule" x1={X(X0)} y1={BASE} x2={X(X1)} y2={BASE} stroke-width="0.4"></line>
+    {[-2, 0, 2, 4].map((s) => <text class="m-text-quiet m-num" x={X(s)} y="50" font-size="3.6" text-anchor="middle">{s}</text>)}
+    <text class="m-text-quiet" x="95" y="54.5" font-size="3.4" text-anchor="end">score</text>
+    <path class="m-chalk" data-ood-line d={curve(cue.d)} stroke-width="0.7"></path>
+    <path class="m-chalk" data-id-line d={curve(0)} stroke-width="0.7"></path>
+    <text class="m-text" x={X(-1.1)} y="22" font-size="4" text-anchor="end">ID</text>
+    <text class="m-text" data-ood-label x={X(cue.d + 1.1)} y="22" font-size="4">OOD</text>
+    <line class="m-move-line" data-gate-line x1={X(t0)} y1="5" x2={X(t0)} y2={BASE} stroke-width="0.7"></line>
+    <circle class="m-move" data-gate-ball cx={X(t0)} cy={BASE} r="1.9"></circle>
+  </svg>
+  <Fragment slot="controls">
+    <div class="model__axis" style={`--x0:${AXL / 100};--x1:${AXR / 100}`}><Slider label="Gate threshold (score)" name="tta-threshold" id="tta-threshold" min={-3} max={5} step={0.05} value={t0} format="fixed2" /></div>
+    <div class="ply-segmented" role="group" aria-label="Monitor cue" data-cues>
+      {cues.map((c) => <button type="button" value={c.id} data-d={c.d} aria-pressed={c.id === cue.id ? "true" : "false"}>{c.label}</button>)}
+    </div>
+    <dl class="ply-readout" aria-label="Samples admitted by the gate">
+      <dt>ID admitted</dt><dd data-id-out>{idAdm}</dd>
+      <dt>OOD admitted</dt><dd data-ood-out>{oodAdm}</dd>
+    </dl>
+  </Fragment>
+  <Fragment slot="caption">Two Gaussians whose separation matches the AUROC the paper measures for each cue: 0.61 for entropy, 0.91 for the concept residual (FACE). Samples scoring below the threshold are admitted.</Fragment>
+</Model>
+<style is:global>
+  /* In the margin column the choice stacks: two labels do not fit side by side at 224 px. */
+  .model [data-cues] { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .model [data-cues] button { justify-content: flex-start; text-align: start; }
+</style>
+<script>
+  import { firstRun, easeOut, type Player } from "./firstRun";
+  const SQ2 = Math.SQRT2;
+  const phi = (x: number) => {
+    const z = Math.abs(x) / SQ2, t = 1 / (1 + 0.3275911 * z);
+    const e = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z);
+    return 0.5 * (1 + (x < 0 ? -e : e));
+  };
+  const pdf = (x: number) => Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+  const X0 = -3, X1 = 5, AXL = 5, AXR = 95, BASE = 44, H = 85;
+  const X = (s: number) => AXL + ((s - X0) / (X1 - X0)) * (AXR - AXL);
+  const Y = (d: number) => BASE - d * H;
+  const f = (n: number) => n.toFixed(2);
+  const xs: number[] = [];
+  for (let s = X0; s <= X1 + 1e-9; s += 0.1) xs.push(s);
+  const curve = (mu: number) => "M" + xs.map((s) => `${f(X(s))} ${f(Y(pdf(s - mu)))}`).join("L");
+  const area = (mu: number, t: number) => {
+    const pts = xs.filter((s) => s <= t).map((s) => `${f(X(s))} ${f(Y(pdf(s - mu)))}`);
+    return pts.length ? `M${f(X(X0))} ${BASE}L` + pts.join("L") + `L${f(X(t))} ${f(Y(pdf(t - mu)))}L${f(X(t))} ${BASE}Z` : "";
+  };
+  const pct = (p: number) => `${Math.round(p * 100)}%`;
+  const set = (el: Element | null, name: string, v: string) => { if (el && el.getAttribute(name) !== v) el.setAttribute(name, v); };
+  const text = (el: Element | null, v: string) => { if (el && el.textContent !== v) el.textContent = v; };
+
+  const fig = document.querySelector<HTMLElement>('[data-model="tta-gate"]');
+  if (fig) {
+    const q = (s: string) => fig.querySelector(s);
+    const slider = q("#tta-threshold") as HTMLInputElement;
+    const sliderOut = fig.querySelector("[data-ply-slider] output");
+    const active = () => q('[data-cues] [aria-pressed="true"]') as HTMLElement;
+    let lastD = NaN, lastT = NaN;
+    // Draw the gate at threshold t. Words for assistive tech are set only when `say` is true.
+    const render = (t = Number(slider.value), say = true) => {
+      const d = Number(active().dataset.d);
+      if (d !== lastD) {
+        set(q("[data-ood-line]"), "d", curve(d));
+        set(q("[data-ood-label]"), "x", f(X(d + 1.1)));
+      }
+      if (d !== lastD || t !== lastT) {
+        set(q("[data-ood-area]"), "d", area(d, t));
+        set(q("[data-id-area]"), "d", area(0, t));
+        set(q("[data-gate-line]"), "x1", f(X(t)));
+        set(q("[data-gate-line]"), "x2", f(X(t)));
+        set(q("[data-gate-ball]"), "cx", f(X(t)));
+        const a = pct(phi(t)), b = pct(phi(t - d));
+        text(q("[data-id-out]"), a);
+        text(q("[data-ood-out]"), b);
+        if (say) {
+          const words = `threshold ${t.toFixed(2)}, ${a} of in-distribution and ${b} of out-of-distribution samples admitted`;
+          setTimeout(() => slider.setAttribute("aria-valuetext", words), 0);
+          set(q("svg"), "aria-label", `Two bell curves on a score axis, in-distribution centered at 0 and out-of-distribution at ${d.toFixed(1)}, with a gate at ${t.toFixed(2)} admitting ${a} of in-distribution and ${b} of out-of-distribution samples.`);
+        }
+      }
+      lastD = d; lastT = t;
+    };
+    slider.addEventListener("input", () => render());
+    render();
+
+    // First view: the gate sweeps from the left of the axis to its default, the admitted regions
+    // and the readout following it.
+    // Choosing a cue replays the sweep for it, to that cue's own equal-error threshold.
+    const dflt = (d: number) => Math.round(d / 2 / 0.05) * 0.05;
+    let rest = Number(slider.value);
+    const step = slider.step, from = Number(slider.min);
+    const player: Player = firstRun(fig, {
+      duration: 2.2,
+      start() {
+        slider.step = "any";
+        slider.removeAttribute("aria-valuetext");
+        slider.value = String(from);
+        text(sliderOut, from.toFixed(2));
+        render(from, false);
+      },
+      frame(p) {
+        const t = from + (rest - from) * easeOut(p);
+        slider.value = String(t);
+        text(sliderOut, t.toFixed(2));
+        render(t, false);
+      },
+      end() {
+        slider.step = step;
+        text(sliderOut, Number(slider.value).toFixed(2));
+        lastT = NaN;
+        render();
+      },
+    });
+    q("[data-cues]")?.addEventListener("ply-change", () => { rest = dflt(Number(active().dataset.d)); player.replay(); });
+  }
+</script>

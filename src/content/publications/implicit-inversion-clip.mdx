@@ -18,7 +18,8 @@ format: "Poster"
 date: 2026-04-23
 tldr: "We turn the discriminative CLIP model into a generator capable of addressing multiple tasks, such as text-to-image synthesis, style transfer, and image editing, without fine-tuning."
 abstract: "CLIP is a discriminative model trained to align images and text in a shared embedding space. Due to its multimodal structure, it serves as the backbone of many generative pipelines, where a decoder is trained to map from the shared space back to images. We show that image synthesis is nevertheless possible using CLIP alone—without a pre-trained generative decoder or CLIP tuning. Our approach optimizes a frequency-aware implicit neural representation that encourages coarse-to-fine generation by stratifying frequencies across network layers. To stabilize this inverse mapping, we introduce adversarially robust initialization, a lightweight Orthogonal Procrustes projection to align local text and image embeddings, and a blending loss that anchors outputs to natural image statistics. With CLIP frozen, this framework unlocks capabilities such as text-to-image generation, style transfer, and image reconstruction. Our findings suggest that discriminative models may hold untapped generative potential, hidden in plain sight."
-keywords: ["Model inversion", "Text to image", "CLIP", "Implicit neural representations"]
+keywords: ["Generative models", "Text-to-image generation", "Vision foundation models", "Implicit neural representations", "CLIP inversion", "Model inversion", "Training-free text-to-image", "Image generation without a decoder", "Frozen CLIP", "FINER", "Adversarial weight perturbation", "Direct Ascent Synthesis", "Style transfer", "Image editing"]
+topics: ["Computer vision"]
 links:
   - { label: "OpenReview", href: "https://openreview.net/forum?id=hvukI2ws5O", icon: paper }
   - { label: "PDF", href: "/publications/implicit-inversion-clip/implicit-inversion-clip.pdf", icon: download }
@@ -32,6 +33,7 @@ coverAlt: "Eight images generated from text prompts with a frozen CLIP model and
 figure: ./implicit-inversion-figure1.webp
 figureAlt: "Twelve images generated from text prompts, each above its prompt: six scenes such as Prague castle and Grand Canyon at sunset, and six MS-COCO captions such as a pastry store with cupcakes on display."
 figureCaption: '<b>Decoder-free text-to-image synthesis.</b> $\text{CLIP}^{-1}$ inverts CLIP''s image encoder using implicit neural representations, enabling text-to-image synthesis <em>without any fine-tuning or dedicated generative decoder</em>. All samples are generated with CLIP ViT-B/32, with <em>top</em> rows showing generic scene prompts and <em>bottom</em> rows illustrating complex captions from MS-COCO.'
+widget: clip-frequency
 bibtex: |
   @inproceedings{dorazio2026implicit,
     title     = {Implicit Inversion turns {CLIP} into a Decoder},
@@ -41,3 +43,49 @@ bibtex: |
     url       = {https://openreview.net/forum?id=hvukI2ws5O}
   }
 ---
+
+import Tex from "../../components/Tex.astro";
+import LabPlot from "../../components/LabPlot.astro";
+import plot from "./implicit-inversion-clip-plot.svg?raw";
+
+When a text-to-image system turns a prompt into a picture, two networks share the work. A decoder, usually a diffusion model, paints the pixels, and a separate model decides what the prompt means in visual terms. In many pipelines the second model is CLIP (Radford et al., 2021), which was trained to judge whether an image and a caption belong together and never to draw anything. We asked what happens if the judge is made to do the drawing itself, by running it backward until an image scores well against the prompt.
+
+A frozen CLIP, with no decoder and no further training, can produce recognizable images from text this way. In our view, they are a measurement of how much visual structure a discriminative model already carries, and a probe into what it does with inputs it was never meant to see.
+
+## Image generation without a decoder
+
+CLIP inversion is a case of model inversion, i.e., treating a trained network as a fixed function and searching for the input that makes it respond in a chosen way. For CLIP, searching directly over pixels gives images with visible artifacts (Kazemi et al., 2024), and other decoder-free attempts avoid this only by training further or tuning CLIP itself. We leave CLIP alone and change what is being optimized.
+
+Because the model stays frozen, every image is a readout of one specific checkpoint. That keeps the whole system small. With 40 optimization steps, an image takes 7.8 seconds and 3.2 GB of peak memory on an 8 GB RTX 4060, a card on which the latent diffusion baseline in that comparison (LDM-KL-8) ran out of memory. That makes training-free text-to-image synthesis look practical on commodity hardware, although we measured only the models in that comparison.
+
+## Why implicit neural representations help
+
+An implicit neural representation (INR) stores an image as a function of coordinates, so the optimizer works on network weights instead of a grid of pixel values. This changes the problem in two ways. First, optimizing weights avoids the structural artifacts that pixel-space inversion produces. Second, a frequency-stratified network such as FINER exposes layers that correspond to coarse and fine detail, thus the optimizer can settle layout before texture. The paper describes the resulting generation order as akin to diffusion models, although nothing here is a diffusion process.
+
+The remaining pieces address stability. Seeding the search from a blurred, weight-perturbed INR gives the first updates a robust place to start, which connects the work to adversarial robustness, where Mirza et al. (2024) suggest that robust models carry stronger generative priors. The Procrustes step handles the modality gap, i.e., the offset between where CLIP places captions and where it places images (Liang et al., 2022). Aligning that offset locally per prompt is a lightweight step that leaves the model untouched.
+
+## What the benchmark results tell you
+
+On 10,000 MS-COCO captions, our FID of 72.5 against 161.8 for Direct Ascent Synthesis puts decoder-free inversion in a different quality range from pixel-space methods, and the same holds for Inception Score (9.5 against 5.7). Diffusion models remain well ahead, with FIDs of 12.2 and 23.3, and they get there by training up to 6,000 million parameters. The comparison that matters for us is therefore among methods that keep CLIP frozen.
+
+The CLIPSIM column carries a lesson of its own. CLIPInvert scores highest (61.4) while its FID is 140.1, i.e., it matches the embedding the optimizer was chasing without producing convincing images. The same pattern appears in our ablations, where dropping the Procrustes step or the blending loss raises CLIPSIM and produces cluttered scenes. When a model is optimized against its own score, that score stops being a trustworthy judge of the result.
+
+<LabPlot svg={plot} alt="Bar chart of FID, lower is better, on 1,000 MS-COCO captions: full model 107.1; without frequency optimization 185.1; without AWP 121.0; without frequency optimization and Procrustes 111.3; without frequency optimization and blending loss 119.7.">
+  <Fragment slot="caption">FID for the full model and for each ablated variant on 1,000 MS-COCO captions.</Fragment>
+</LabPlot>
+
+Of the components we ablated, the frequency schedule costs the most when removed.
+
+## Interpreting vision-language models by drawing them
+
+A decoder-free generator doubles as an interpretability tool. If CLIP is the only model in the loop, the picture that comes out reflects what CLIP's embedding encodes about the prompt. We used this on negations such as "this is not a photo of a dog" and on out-of-distribution prompts such as "an abstract and unrecognizable object", to see which visual cues CLIP treats as discriminative and which become unstable once it leaves its training distribution.
+
+Stress-testing multimodal systems is a natural use. CLIP sits upstream of many pipelines, and its errors and biases travel with it. Rendering an embedding makes a failure visible before it is buried inside a larger system. The same property carries a caution: our generator inherits CLIP's societal biases and potential for misuse, and in preliminary experiments with Safe-CLIP (Poppi et al., 2024) harmful content was blocked.
+
+## Editing, reconstruction and style transfer
+
+The same pipeline runs without task-specific training on three further jobs. Reconstruction recovers an image from its CLIP embedding and gives a controlled test, because the ground truth is known. Prompt-driven editing starts from an INR fitted to a photo, so "snow" or "storm" adds weather while the geometry of a road or a city stays put, with no masks. For style transfer, the reference painting is passed only through the frozen CLIP encoder, and a content loss keeps the result tied to the photo. We read this as evidence that CLIP separates style from content. Readers searching for neural style transfer with CLIP will find a version that needs no trained stylization network.
+
+## Where it goes next
+
+Since all the regularization comes from the representation and the CLIP losses, a natural-image prior of modest size, or a projection onto the image manifold, is the direct route to sharper fine detail. The recipe also asks to be tried on other discriminative encoders, and inversion could become a routine audit for biased or brittle concepts in vision-language models before they reach larger pipelines.

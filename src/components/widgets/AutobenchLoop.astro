@@ -1,0 +1,167 @@
+---
+// Judge weights over iterations, after Eqs. 1 to 3 and Algorithm 1 of the AutoBench paper:
+// w(1) = 1/n; r(t) = J(t)^T w(t), so a model also counts as a judge of itself; the running score
+// c(t) = ((t-1) c(t-1) + r(t)) / t; and w(t+1) = c(t) / sum_k c_k(t). The ratings are made up
+// from a seeded generator; the same math runs here and in the script, so the page is complete
+// without JavaScript.
+import Model from "./Model.astro";
+import Slider from "@dario-loi/polytope/astro/Slider.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+interface Props { draft?: boolean }
+const { draft = false } = Astro.props;
+
+const T = 12, N = 4, SEED = 7;
+const QUALITY = [4.2, 3.6, 3.0, 2.4], NOISE = 1.2, NAMES = ["A", "B", "C", "D"];
+const X0 = 10, SPAN = 62, WMAX = 0.5;
+
+function run(seed: number) {
+  let s = seed >>> 0;
+  const rand = () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  let w = Array(N).fill(1 / N), c = Array(N).fill(0);
+  const ws = [w.slice()], cs = [c.slice()];
+  for (let t = 1; t <= T; t++) {
+    const J = Array.from({ length: N }, () => QUALITY.map((q) => Math.min(5, Math.max(1, Math.round(q + (rand() * 2 - 1) * NOISE)))));
+    const r = QUALITY.map((_, j) => J.reduce((a, row, i) => a + w[i] * row[j], 0));
+    c = c.map((v, j) => ((t - 1) * v + r[j]) / t);
+    const tot = c.reduce((a, b) => a + b, 0);
+    w = c.map((v) => v / tot);
+    ws.push(w.slice()); cs.push(c.slice());
+  }
+  return { ws, cs };
+}
+const { ws, cs } = run(SEED);
+const state = (t: number) => {
+  const w = ws[t], c = cs[t];
+  const rank = t === 0 ? "No scores yet" : [...c.keys()].sort((a, b) => c[b] - c[a] || a - b).map((i) => NAMES[i]).join(", ");
+  return { w, rank, max: Math.max(...w) };
+};
+const st = state(T);
+const ROW = [5, 15, 25, 35];
+---
+<Model name="autobench-loop" title="Judge weights over iterations" draft={draft} firstRun>
+  <svg viewBox="0 0 100 56" role="img" aria-label={`Four bars, one per toy model A to D, showing each model's weight as a judge after ${T} iterations. Ranking ${st.rank}; largest weight ${st.max.toFixed(2)}. A dotted tick marks the equal weight 0.25.`}>
+    {NAMES.map((n, i) => (
+      <g>
+        <text class="m-text" x="3.5" y={ROW[i] + 4.6} font-size="4.4" text-anchor="middle">{n}</text>
+        <rect class="m-rule" x={X0} y={ROW[i]} width={SPAN} height="6" stroke-width="0.3" />
+        <rect class="m-chalk m-chalk-fill" data-bar={i} x={X0} y={ROW[i]} width={(st.w[i] / WMAX) * SPAN} height="6" stroke-width="0.4" />
+        <text class="m-text m-num" data-num={i} x={X0 + SPAN + 3} y={ROW[i] + 4.6} font-size="4">{st.w[i].toFixed(2)}</text>
+      </g>
+    ))}
+    <line class="m-quiet" x1={X0 + (0.25 / WMAX) * SPAN} x2={X0 + (0.25 / WMAX) * SPAN} y1="3" y2="43" stroke-width="0.3" stroke-dasharray="1 1" />
+    <line class="m-rule" x1={X0} x2={X0 + SPAN} y1="51" y2="51" stroke-width="0.4" />
+    {Array.from({ length: T + 1 }, (_, k) => <line class="m-rule" x1={X0 + (k / T) * SPAN} x2={X0 + (k / T) * SPAN} y1="49.8" y2="52.2" stroke-width="0.3" />)}
+    <circle class="m-move" data-ball cx={X0 + SPAN} cy="51" r="2.4" />
+    <text class="m-text m-num" data-t x={X0 + SPAN + 5.5} y="52.4" font-size="4">{T} of {T}</text>
+  </svg>
+  <Fragment slot="controls">
+    <div class="model__axis" style={`--x0:${X0 / 100};--x1:${(X0 + SPAN) / 100}`}><Slider label="Iteration" name="iteration" min={0} max={T} step={1} value={T} /></div>
+    <dl class="ply-readout" aria-label="Result at this iteration">
+      <dt>Ranking</dt><dd data-rank>{st.rank}</dd>
+      <dt>Largest weight</dt><dd data-max>{st.max.toFixed(2)}</dd>
+    </dl>
+    <Button variant="secondary" size="sm" class="abl__new" data-new>New ratings</Button>
+  </Fragment>
+  <Fragment slot="caption">Four toy models rate one another. Their weights as judges start equal, then follow each model's running score as a contestant.</Fragment>
+</Model>
+<style is:global>
+  .abl__new { min-height: 2.75rem; justify-self: start; }
+</style>
+<script>
+  import { firstRun, easeOut, stages, type Player } from "./firstRun";
+  const T = 12, N = 4, QUALITY = [4.2, 3.6, 3.0, 2.4], NOISE = 1.2, NAMES = ["A", "B", "C", "D"];
+  const X0 = 10, SPAN = 62, WMAX = 0.5;
+  function run(seed: number) {
+    let s = seed >>> 0;
+    const rand = () => {
+      s = (s + 0x6d2b79f5) >>> 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    let w: number[] = Array(N).fill(1 / N), c: number[] = Array(N).fill(0);
+    const ws = [w.slice()], cs = [c.slice()];
+    for (let t = 1; t <= T; t++) {
+      const J = Array.from({ length: N }, () => QUALITY.map((q) => Math.min(5, Math.max(1, Math.round(q + (rand() * 2 - 1) * NOISE)))));
+      const r = QUALITY.map((_, j) => J.reduce((a, row, i) => a + w[i] * row[j], 0));
+      c = c.map((v, j) => ((t - 1) * v + r[j]) / t);
+      const tot = c.reduce((a, b) => a + b, 0);
+      w = c.map((v) => v / tot);
+      ws.push(w.slice()); cs.push(c.slice());
+    }
+    return { ws, cs };
+  }
+  const root = document.querySelector<HTMLElement>('[data-model="autobench-loop"]');
+  if (root) {
+    const input = root.querySelector<HTMLInputElement>('input[name="iteration"]')!;
+    const $ = (q: string) => root.querySelector(q)!;
+    const bars = [...root.querySelectorAll("[data-bar]")], nums = [...root.querySelectorAll("[data-num]")];
+    const ball = $("[data-ball]"), tLabel = $("[data-t]"), rankEl = $("[data-rank]"), maxEl = $("[data-max]"), svg = $("svg");
+    let seed = 7, model = run(seed);
+    const set = (el: Element, name: string, v: string) => { if (el.getAttribute(name) !== v) el.setAttribute(name, v); };
+    const text = (el: Element, v: string) => { if (el.textContent !== v) el.textContent = v; };
+    const rankOf = (c: number[], t: number) => t === 0 ? "No scores yet" : [...c.keys()].sort((a, b) => c[b] - c[a] || a - b).map((i) => NAMES[i]).join(", ");
+    // Draw the bars at weights w and the ball at iteration position x; the labels name iteration t.
+    function paint(w: number[], x: number, t: number) {
+      const c = model.cs[t], rank = rankOf(c, t), max = Math.max(...model.ws[t]).toFixed(2);
+      w.forEach((v, i) => { set(bars[i], "width", String((v / WMAX) * SPAN)); text(nums[i], v.toFixed(2)); });
+      set(ball, "cx", String(X0 + (x / T) * SPAN));
+      text(tLabel, `${t} of ${T}`);
+      text(rankEl, rank); text(maxEl, max);
+      return { rank, max };
+    }
+    function draw() {
+      const t = Number(input.value);
+      const { rank, max } = paint(model.ws[t], t, t);
+      set(svg, "aria-label", `Four bars, one per toy model A to D, showing each model's weight as a judge after ${t} of ${T} iterations. Ranking ${rank}; largest weight ${max}. A dotted tick marks the equal weight 0.25.`);
+    }
+    // The shared slider script sets aria-valuetext at document level; this runs after it.
+    const say = () => input.setAttribute("aria-valuetext", `Iteration ${input.value} of ${T}. Ranking ${rankEl.textContent}. Largest weight ${maxEl.textContent}.`);
+    window.addEventListener("input", (e) => {
+      if (e.target !== input) return;
+      draw();
+      say();
+    });
+    let player: Player | undefined;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // New ratings replay the run on them (0 to 12), unless motion is reduced: then they just redraw.
+    $("[data-new]").addEventListener("click", () => {
+      seed = (seed * 31 + 17) >>> 0; model = run(seed);
+      if (player && !still.matches) player.replay(); else { draw(); say(); }
+    });
+    say();
+
+    // First view: the iteration runs 0 to 12 and the judge weights spread from equal. Iterations
+    // advance two at a time, six steps at an even cadence (under 3 a second), the bars and the
+    // ball gliding to each one; the slider and labels name the iteration being reached.
+    const out = root.querySelector("[data-ply-slider] output");
+    const STEPS = 6, JUMP = T / STEPS, rest = Number(input.value);
+    let shown = -1;
+    player = firstRun(root, {
+      duration: 2.4,
+      start() {
+        shown = -1;
+        input.removeAttribute("aria-valuetext");
+        input.value = "0";
+        text(out!, "0");
+        paint(model.ws[0], 0, 0);
+      },
+      frame(p) {
+        const { k, f } = stages(p, STEPS), a = k * JUMP, b = a + JUMP, e = easeOut(f);
+        if (k !== shown) { shown = k; input.value = String(b); text(out!, String(b)); }
+        paint(model.ws[a].map((v, i) => v + (model.ws[b][i] - v) * e), a + JUMP * e, b);
+      },
+      end(cancelled) {
+        if (!cancelled) input.value = String(rest);
+        text(out!, input.value);
+        draw();
+        say();
+      },
+    });
+  }
+</script>

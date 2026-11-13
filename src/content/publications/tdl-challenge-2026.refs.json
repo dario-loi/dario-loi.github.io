@@ -1,0 +1,169 @@
+[
+  {
+    "key": "fiorini2026sheaves",
+    "cite": [
+      "Fiorini et al., ICLR 2026"
+    ],
+    "title": "Sheaves Reloaded: A Direction Awakening",
+    "authors": [
+      "Stefano Fiorini",
+      "Hakan Emre Aktas",
+      "Iulia Duta",
+      "Pietro Morerio",
+      "Alessio Del Bue",
+      "Pietro Liò",
+      "Stefano Coniglio"
+    ],
+    "venue": "International Conference on Learning Representations (ICLR 2026)",
+    "year": 2026,
+    "arxiv": "2506.02842",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/0954a37c03775409e295fb4b99b664c7-Abstract-Conference.html",
+    "bibtex": "@inproceedings{ICLR2026_0954a37c, author = {Fiorini, Stefano and Aktas, Hakan Emre and Duta, Iulia and Morerio, Pietro and Del Bue, Alessio and Lio, Pietro and Coniglio, Stefano}, booktitle = {International Conference on Learning Representations}, editor = {C. Vondrick and B. Hariharan and C. Raffel and L. Pinto and D. Yang and A. Faust}, pages = {5144--5168}, title = {Sheaves Reloaded: A Direction Awakening}, url = {https://proceedings.iclr.cc/paper_files/paper/2026/file/0954a37c03775409e295fb4b99b664c7-Paper-Conference.pdf}, volume = {2026}, year = {2026} }",
+    "source": "https://proceedings.iclr.cc/paper_files/paper/2026/file/0954a37c03775409e295fb4b99b664c7-Bibtex.bib"
+  },
+  {
+    "key": "barbero2022sheafb",
+    "cite": [],
+    "title": "Sheaf Attention Networks",
+    "authors": [
+      "Federico Barbero",
+      "Cristian Bodnar",
+      "Haitz Sáez de Ocáriz Borde",
+      "Pietro Liò"
+    ],
+    "venue": "NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations",
+    "year": 2022,
+    "url": "https://openreview.net/forum?id=LIDvgVjpkZr",
+    "bibtex": "@inproceedings{barbero2022sheaf, title={Sheaf Attention Networks}, author={Federico Barbero and Cristian Bodnar and Haitz S{\\'a}ez de Oc{\\'a}riz Borde and Pietro Li{\\`o}}, booktitle={NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations}, year={2022}, url={https://openreview.net/forum?id=LIDvgVjpkZr}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=LIDvgVjpkZr (authors, venue, id as given in the bibliography of the TDL Challenge 2026 report; OpenReview blocks automated access)"
+  },
+  {
+    "key": "suk2022surfing",
+    "cite": [],
+    "title": "Surfing on the Neural Sheaf",
+    "authors": [
+      "Julian Suk",
+      "Lorenzo Giusti",
+      "Tamir Hemo",
+      "Miguel Lopez",
+      "Konstantinos Barmpas",
+      "Cristian Bodnar"
+    ],
+    "venue": "NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations",
+    "year": 2022,
+    "url": "https://openreview.net/forum?id=xOXFkyRzTlu",
+    "bibtex": "@inproceedings{suk2022surfing, title={Surfing on the Neural Sheaf}, author={Julian Suk and Lorenzo Giusti and Tamir Hemo and Miguel Lopez and Konstantinos Barmpas and Cristian Bodnar}, booktitle={NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations}, year={2022}, url={https://openreview.net/forum?id=xOXFkyRzTlu}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=xOXFkyRzTlu (authors, venue, id as given in the bibliography of the TDL Challenge 2026 report; OpenReview blocks automated access)"
+  },
+  {
+    "key": "hajij2025copresheaf",
+    "cite": [],
+    "title": "Copresheaf Topological Neural Networks: A Generalized Deep Learning Framework",
+    "authors": [
+      "Mustafa Hajij",
+      "Lennart Bastian",
+      "Sarah Osentoski",
+      "Hardik Kabaria",
+      "John Davenport",
+      "Sheik Dawood",
+      "Balaji Cherukuri",
+      "Joseph Kocheemoolayil",
+      "Nastaran Shahmansouri",
+      "Adrian Lew",
+      "Theodore Papamarkou",
+      "Tolga Birdal"
+    ],
+    "venue": "Advances in Neural Information Processing Systems 38 (NeurIPS 2025)",
+    "year": 2025,
+    "doi": "10.52202/085713-5009",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/dc62cd4ec77f3bbec8e6245d0bd91d08-Abstract-Conference.html",
+    "bibtex": "@inproceedings{NEURIPS2025_dc62cd4e, author = {Hajij, Mustafa and Bastian, Lennart and Osentoski, Sarah and Kabaria, Hardik and Davenport, John and Dawood and Cherukuri, Balaji and Kocheemoolayil, Joseph and Shahmansouri, Nastaran and Lew, Adrian and Papamarkou, Theodore and Birdal, Tolga}, booktitle = {Advances in Neural Information Processing Systems}, doi = {10.52202/085713-5009}, editor = {D. Belgrave and C. Zhang and H. Lin and R. Pascanu and P. Koniusz and M. Ghassemi and N. Chen}, pages = {149759--149803}, publisher = {Curran Associates, Inc.}, title = {Copresheaf Topological Neural Networks: A Generalized Deep Learning Framework}, url = {https://proceedings.neurips.cc/paper_files/paper/2025/file/dc62cd4ec77f3bbec8e6245d0bd91d08-Paper-Conference.pdf}, volume = {38, Main Conference}, year = {2025} }",
+    "source": "https://proceedings.neurips.cc/paper_files/paper/2025/file/dc62cd4ec77f3bbec8e6245d0bd91d08-Bibtex.bib"
+  },
+  {
+    "key": "mule2026directional",
+    "cite": [],
+    "title": "Directional Sheaf Hypergraph Networks: Unifying Learning on Directed and Undirected Hypergraphs",
+    "authors": [
+      "Emanuele Mule",
+      "Stefano Fiorini",
+      "Antonio Purificato",
+      "Federico Siciliano",
+      "Stefano Coniglio",
+      "Fabrizio Silvestri"
+    ],
+    "venue": "International Conference on Learning Representations (ICLR 2026)",
+    "year": 2026,
+    "arxiv": "2510.04727",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/83ccb398f3ce9c4d137011f36a03c7d4-Abstract-Conference.html",
+    "bibtex": "@inproceedings{ICLR2026_83ccb398, author = {Mule, Emanuele and Fiorini, Stefano and Purificato, Antonio and Siciliano, Federico and Coniglio, Stefano and Silvestri, Fabrizio}, booktitle = {International Conference on Learning Representations}, editor = {C. Vondrick and B. Hariharan and C. Raffel and L. Pinto and D. Yang and A. Faust}, pages = {81483--81512}, title = {Directional Sheaf Hypergraph Networks: Unifying Learning on Directed and Undirected Hypergraphs}, url = {https://proceedings.iclr.cc/paper_files/paper/2026/file/83ccb398f3ce9c4d137011f36a03c7d4-Paper-Conference.pdf}, volume = {2026}, year = {2026} }",
+    "source": "https://proceedings.iclr.cc/paper_files/paper/2026/file/83ccb398f3ce9c4d137011f36a03c7d4-Bibtex.bib"
+  },
+  {
+    "key": "vanlangendonck2026graphuniverse",
+    "cite": [],
+    "title": "GraphUniverse: Synthetic Graph Generation for Evaluating Inductive Generalization",
+    "authors": [
+      "Louis Emiel T Van Langendonck",
+      "Guillermo Bernardez",
+      "Nina Miolane",
+      "Pere Barlet-Ros"
+    ],
+    "venue": "International Conference on Learning Representations (ICLR 2026)",
+    "year": 2026,
+    "arxiv": "2509.21097",
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/dfefecd26c892fc24ea79cd7ea399e2b-Abstract-Conference.html",
+    "bibtex": "@inproceedings{ICLR2026_dfefecd2, author = {Van Langendonck, Louis Emiel T and Bernardez, Guillermo and Miolane, Nina and Barlet-Ros, Pere}, booktitle = {International Conference on Learning Representations}, editor = {C. Vondrick and B. Hariharan and C. Raffel and L. Pinto and D. Yang and A. Faust}, pages = {138611--138642}, title = {GraphUniverse: Synthetic Graph Generation for Evaluating Inductive Generalization}, url = {https://proceedings.iclr.cc/paper_files/paper/2026/file/dfefecd26c892fc24ea79cd7ea399e2b-Paper-Conference.pdf}, volume = {2026}, year = {2026} }",
+    "source": "https://proceedings.iclr.cc/paper_files/paper/2026/file/dfefecd26c892fc24ea79cd7ea399e2b-Bibtex.bib"
+  },
+  {
+    "key": "telyatnikov2025topobench",
+    "cite": [],
+    "title": "TopoBench: A Framework for Benchmarking Topological Deep Learning",
+    "authors": [
+      "Lev Telyatnikov",
+      "Guillermo Bernardez",
+      "Marco Montagna",
+      "Mustafa Hajij",
+      "Martin Carrasco",
+      "Pavlo Vasylenko",
+      "Mathilde Papillon",
+      "Ghada Zamzmi",
+      "Michael T. Schaub",
+      "Jonas Verhellen",
+      "Pavel Snopov",
+      "Bertran Miquel-Oliver",
+      "Manel Gil-Sorribes",
+      "Alexis Molina",
+      "Victor Guallar",
+      "Theodore Long",
+      "Julian Suk",
+      "Patryk Rygiel",
+      "Alexander V. Nikitin",
+      "Giordan Escalona",
+      "Michael Banf",
+      "Dominik Filipiak",
+      "Liliya Imasheva",
+      "Max Schattauer",
+      "Alvaro L. Martinez",
+      "Halley Fritze",
+      "Marissa Masden",
+      "Valentina Sánchez",
+      "Manuel Lecha",
+      "Andrea Cavallo",
+      "Claudio Battiloro",
+      "Matthew Piekenbrock",
+      "Mauricio Tec",
+      "George Dasoulas",
+      "Nina Miolane",
+      "Simone Scardapane",
+      "Theodore Papamarkou"
+    ],
+    "venue": "Journal of Data-centric Machine Learning Research",
+    "year": 2025,
+    "arxiv": "2406.06642",
+    "url": "https://openreview.net/forum?id=07sTzyEVtY",
+    "bibtex": "@article{telyatnikov2025topobench, title={TopoBench: A Framework for Benchmarking Topological Deep Learning}, author={Lev Telyatnikov and Guillermo Bernardez and Marco Montagna and Mustafa Hajij and Martin Carrasco and Pavlo Vasylenko and Mathilde Papillon and Ghada Zamzmi and Michael T. Schaub and Jonas Verhellen and Pavel Snopov and Bertran Miquel-Oliver and Manel Gil-Sorribes and Alexis Molina and Victor Guallar and Theodore Long and Julian Suk and Patryk Rygiel and Alexander V. Nikitin and Giordan Escalona and Michael Banf and Dominik Filipiak and Liliya Imasheva and Max Schattauer and Alvaro L. Martinez and Halley Fritze and Marissa Masden and Valentina S{\\'a}nchez and Manuel Lecha and Andrea Cavallo and Claudio Battiloro and Matthew Piekenbrock and Mauricio Tec and George Dasoulas and Nina Miolane and Simone Scardapane and Theodore Papamarkou}, journal={Journal of Data-centric Machine Learning Research}, year={2025}, url={https://openreview.net/forum?id=07sTzyEVtY}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=07sTzyEVtY (venue, year, id as given in the TDL Challenge reports; author names from the report bibliographies, cross-checked with https://export.arxiv.org/api/query, arXiv 2406.06642, whose journal_ref reads 'Journal of Data-centric Machine Learning Research, 2025')"
+  }
+]

@@ -1,0 +1,49 @@
+---
+import type { GetStaticPaths } from "astro";
+import Base from "../../../layouts/Base.astro";
+import IndexMast from "../../../components/IndexMast.astro";
+import PubCards from "../../../components/PubCards.astro";
+import TopicTags from "../../../components/TopicTags.astro";
+import { entries } from "../../../lib/content";
+import { topicPage } from "../../../lib/schema";
+import { hasMath } from "../../../lib/tex";
+import { topicPath, topics, type Topic } from "../../../data/topics";
+import { person } from "../../../site";
+
+export const getStaticPaths = (async () => {
+  const pubs = await entries("publications");
+  // A topic has a page once a paper lists it.
+  return topics
+    .map((topic) => ({ topic, pubs: pubs.filter((p) => p.data.topics.includes(topic.name)) }))
+    .filter((t) => t.pubs.length > 0)
+    .map((t, _, all) => ({ params: { topic: t.topic.slug }, props: { ...t, others: all.map((o) => o.topic.name) } }));
+}) satisfies GetStaticPaths;
+
+interface Props { topic: Topic; pubs: Awaited<ReturnType<typeof entries<"publications">>>; others: string[] }
+const { topic, pubs, others } = Astro.props;
+const n = pubs.length;
+const path = topicPath(topic);
+const description = `${n === 1 ? "A paper" : "Papers"} by ${person.name} on ${topic.name.toLowerCase().replace("llm", "LLM")}: ${topic.description.charAt(0).toLowerCase()}${topic.description.slice(1)}`;
+---
+<Base
+  title={`${topic.name}: publications`}
+  description={description.length > 160 ? `${description.slice(0, 157)}...` : description}
+  current="Publications"
+  schema={[topicPage(path, `${topic.name}: publications by ${person.name}`, description, pubs)]}
+  math={hasMath(...pubs.map((p) => p.data.tldr))}
+  crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: "Topics", href: "/publications/topics/" }, { name: topic.name, href: path }]}
+>
+  <IndexMast title={topic.name} lede={topic.description} />
+  <div class="ply-container topic">
+    <PubCards pubs={pubs} lead={pubs[0].id} placement="topic" year />
+    <nav class="topic__more" aria-labelledby="topic-more">
+      <h2 class="topic__more-label" id="topic-more">All topics</h2>
+      <TopicTags names={others} current={topic.name} label="All topics" placement="topic-page" />
+    </nav>
+  </div>
+</Base>
+<style>
+  .topic { padding-top: var(--ply-space-5); display: grid; gap: var(--ply-space-6); }
+  .topic__more { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); padding-top: var(--ply-space-5); display: grid; gap: var(--ply-space-4); }
+  .topic__more-label { font-size: var(--ply-size-xl); line-height: 1.1; }
+</style>

@@ -44,6 +44,14 @@ const all: CvEntry[] = [
     to: "now",
   },
   {
+    title: "TDL Challenge 2026",
+    org: "Topological Deep Learning Challenge at TAG-DS 2026",
+    kind: "Conference",
+    ...BOSTON,
+    from: "2026-08",
+    text: "First place, Track 1 (GNNs), and the Excellent portfolio honorable mention, with Gabriele Onorato.",
+  },
+  {
     title: "FUSION 2026",
     org: "International Conference on Information Fusion",
     kind: "Conference",
@@ -142,5 +150,9 @@ const all: CvEntry[] = [
     text: "Graduated with full honors.",
   },
 ];
+
+/** A stable anchor for an entry on the CV page: the slug of its title and its start date. */
+export const cvAnchor = (e: Pick<CvEntry, "title" | "from">) =>
+  `${e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${e.from}`;
 
 export const cvEntries = all.filter((e) => import.meta.env.DEV || !e.draft);

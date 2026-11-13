@@ -1,0 +1,188 @@
+[
+  {
+    "key": "bodnar2022neural",
+    "cite": [
+      "Bodnar et al., 2022"
+    ],
+    "title": "Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs",
+    "authors": [
+      "Cristian Bodnar",
+      "Francesco Di Giovanni",
+      "Benjamin Chamberlain",
+      "Pietro Liò",
+      "Michael Bronstein"
+    ],
+    "venue": "Advances in Neural Information Processing Systems 35 (NeurIPS 2022)",
+    "year": 2022,
+    "doi": "10.52202/068431-1346",
+    "arxiv": "2202.04579",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/75c45fca2aa416ada062b26cc4fb7641-Abstract-Conference.html",
+    "bibtex": "@inproceedings{NEURIPS2022_75c45fca, author = {Bodnar, Cristian and Di Giovanni, Francesco and Chamberlain, Benjamin and Li\\'{o}, Pietro and Bronstein, Michael}, booktitle = {Advances in Neural Information Processing Systems}, doi = {10.52202/068431-1346}, editor = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh}, pages = {18527--18541}, publisher = {Curran Associates, Inc.}, title = {Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs}, url = {https://proceedings.neurips.cc/paper_files/paper/2022/file/75c45fca2aa416ada062b26cc4fb7641-Paper-Conference.pdf}, volume = {35}, year = {2022} }",
+    "source": "https://proceedings.neurips.cc/paper_files/paper/2022/file/75c45fca2aa416ada062b26cc4fb7641-Bibtex.bib"
+  },
+  {
+    "key": "hanks2025distributed",
+    "cite": [
+      "Hanks et al., 2025"
+    ],
+    "title": "Distributed Multi-Agent Coordination over Cellular Sheaves",
+    "authors": [
+      "Tyler Hanks",
+      "Hans Riess",
+      "Samuel Cohen",
+      "Trevor Gross",
+      "Matthew Hale",
+      "James Fairbanks"
+    ],
+    "venue": "2025 IEEE 64th Conference on Decision and Control (CDC)",
+    "year": 2025,
+    "doi": "10.1109/cdc57313.2025.11312066",
+    "url": "https://doi.org/10.1109/cdc57313.2025.11312066",
+    "bibtex": "@inproceedings{Hanks_2025, title={Distributed Multi-Agent Coordination over Cellular Sheaves}, url={http://dx.doi.org/10.1109/cdc57313.2025.11312066}, DOI={10.1109/cdc57313.2025.11312066}, booktitle={2025 IEEE 64th Conference on Decision and Control (CDC)}, publisher={IEEE}, author={Hanks, Tyler and Riess, Hans and Cohen, Samuel and Gross, Trevor and Hale, Matthew and Fairbanks, James}, year={2025}, month=Dec, pages={3057–3064} }",
+    "source": "https://doi.org/10.1109/cdc57313.2025.11312066 (Crossref BibTeX)"
+  },
+  {
+    "key": "barbero2022sheafa",
+    "cite": [
+      "Barbero et al., 2022a"
+    ],
+    "title": "Sheaf Neural Networks with Connection Laplacians",
+    "authors": [
+      "Federico Barbero",
+      "Cristian Bodnar",
+      "Haitz Sáez de Ocáriz Borde",
+      "Michael Bronstein",
+      "Petar Veličković",
+      "Pietro Liò"
+    ],
+    "venue": "Proceedings of Topological, Algebraic, and Geometric Learning Workshops 2022, PMLR 196",
+    "year": 2022,
+    "arxiv": "2206.08702",
+    "url": "https://proceedings.mlr.press/v196/barbero22a.html",
+    "bibtex": "@InProceedings{pmlr-v196-barbero22a, title = {Sheaf Neural Networks with Connection Laplacians}, author = {Barbero, Federico and Bodnar, Cristian and S\\'aez de Oc\\'ariz Borde, Haitz and Bronstein, Michael and Veli\\v{c}kovi\\'c, Petar and Li\\`o, Pietro}, booktitle = {Proceedings of Topological, Algebraic, and Geometric Learning Workshops 2022}, pages = {28--36}, year = {2022}, editor = {Cloninger, Alexander and Doster, Timothy and Emerson, Tegan and Kaul, Manohar and Ktena, Ira and Kvinge, Henry and Miolane, Nina and Rieck, Bastian and Tymochko, Sarah and Wolf, Guy}, volume = {196}, series = {Proceedings of Machine Learning Research}, month = {25 Feb--22 Jul}, publisher = {PMLR}, pdf = {https://proceedings.mlr.press/v196/barbero22a/barbero22a.pdf}, url = {https://proceedings.mlr.press/v196/barbero22a.html} }",
+    "source": "https://proceedings.mlr.press/v196/barbero22a.html"
+  },
+  {
+    "key": "suk2022surfing",
+    "cite": [
+      "Suk et al., 2022"
+    ],
+    "title": "Surfing on the Neural Sheaf",
+    "authors": [
+      "Julian Suk",
+      "Lorenzo Giusti",
+      "Tamir Hemo",
+      "Miguel Lopez",
+      "Konstantinos Barmpas",
+      "Cristian Bodnar"
+    ],
+    "venue": "NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations",
+    "year": 2022,
+    "url": "https://openreview.net/forum?id=xOXFkyRzTlu",
+    "bibtex": "@inproceedings{suk2022surfing, title={Surfing on the Neural Sheaf}, author={Julian Suk and Lorenzo Giusti and Tamir Hemo and Miguel Lopez and Konstantinos Barmpas and Cristian Bodnar}, booktitle={NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations}, year={2022}, url={https://openreview.net/forum?id=xOXFkyRzTlu}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=xOXFkyRzTlu (authors, venue, id as given in the bibliography of the TDL Challenge 2026 report; OpenReview blocks automated access)"
+  },
+  {
+    "key": "barbero2022sheafb",
+    "cite": [
+      "Barbero et al., 2022b"
+    ],
+    "title": "Sheaf Attention Networks",
+    "authors": [
+      "Federico Barbero",
+      "Cristian Bodnar",
+      "Haitz Sáez de Ocáriz Borde",
+      "Pietro Liò"
+    ],
+    "venue": "NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations",
+    "year": 2022,
+    "url": "https://openreview.net/forum?id=LIDvgVjpkZr",
+    "bibtex": "@inproceedings{barbero2022sheaf, title={Sheaf Attention Networks}, author={Federico Barbero and Cristian Bodnar and Haitz S{\\'a}ez de Oc{\\'a}riz Borde and Pietro Li{\\`o}}, booktitle={NeurIPS 2022 Workshop on Symmetry and Geometry in Neural Representations}, year={2022}, url={https://openreview.net/forum?id=LIDvgVjpkZr}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=LIDvgVjpkZr (authors, venue, id as given in the bibliography of the TDL Challenge 2026 report; OpenReview blocks automated access)"
+  },
+  {
+    "key": "zaghen2024sheaf",
+    "cite": [
+      "Zaghen et al., 2024"
+    ],
+    "title": "Sheaf Diffusion Goes Nonlinear: Enhancing GNNs with Adaptive Sheaf Laplacians",
+    "authors": [
+      "Olga Zaghen",
+      "Antonio Longa",
+      "Steve Azzolin",
+      "Lev Telyatnikov",
+      "Andrea Passerini",
+      "Pietro Liò"
+    ],
+    "venue": "Proceedings of the Geometry-grounded Representation Learning and Generative Modeling Workshop (GRaM), PMLR 251",
+    "year": 2024,
+    "url": "https://proceedings.mlr.press/v251/zaghen24a.html",
+    "bibtex": "@InProceedings{pmlr-v251-zaghen24a, title = {Sheaf Diffusion Goes Nonlinear: Enhancing GNNs with Adaptive Sheaf Laplacians}, author = {Zaghen, Olga and Longa, Antonio and Azzolin, Steve and Telyatnikov, Lev and Passerini, Andrea and Li\\`o, Pietro}, booktitle = {Proceedings of the Geometry-grounded Representation Learning and Generative Modeling Workshop (GRaM)}, pages = {264--276}, year = {2024}, editor = {Vadgama, Sharvaree and Bekkers, Erik and Pouplin, Alison and Kaba, Sekou-Oumar and Walters, Robin and Lawrence, Hannah and Emerson, Tegan and Kvinge, Henry and Tomczak, Jakub and Jegelka, Stephanie}, volume = {251}, series = {Proceedings of Machine Learning Research}, month = {29 Jul}, publisher = {PMLR}, pdf = {https://raw.githubusercontent.com/mlresearch/v251/main/assets/zaghen24a/zaghen24a.pdf}, url = {https://proceedings.mlr.press/v251/zaghen24a.html} }",
+    "source": "https://proceedings.mlr.press/v251/zaghen24a.html"
+  },
+  {
+    "key": "bourgerie2026deep",
+    "cite": [
+      "Bourgerie et al., 2026"
+    ],
+    "title": "Deep Neural Sheaf Diffusion",
+    "authors": [
+      "Rémi Bourgerie",
+      "Šarūnas Girdzijauskas",
+      "Viktoria Fodor"
+    ],
+    "venue": "arXiv preprint arXiv:2605.19021. Presented at the ICML 2026 Workshop on Graph Foundation Models (GFM@ICML 2026)",
+    "year": 2026,
+    "arxiv": "2605.19021",
+    "url": "https://arxiv.org/abs/2605.19021",
+    "bibtex": "@misc{bourgerie2026deep, title={Deep Neural Sheaf Diffusion}, author={R{\\'e}mi Bourgerie and {\\v{S}}ar{\\=u}nas Girdzijauskas and Viktoria Fodor}, year={2026}, eprint={2605.19021}, archivePrefix={arXiv}, primaryClass={cs.LG}, url={https://arxiv.org/abs/2605.19021}, note={Presented at the ICML 2026 Workshop on Graph Foundation Models (GFM@ICML 2026), non-archival}}",
+    "source": "constructed in arXiv BibTeX format from https://export.arxiv.org/api/query?id_list=2605.19021 (note added: the workshop is non-archival, per the authors' sheaf manuscript bibliography)"
+  },
+  {
+    "key": "pei2020geom",
+    "cite": [
+      "Pei et al. (2020)"
+    ],
+    "title": "Geom-GCN: Geometric Graph Convolutional Networks",
+    "authors": [
+      "Hongbin Pei",
+      "Bingzhe Wei",
+      "Kevin Chen-Chuan Chang",
+      "Yu Lei",
+      "Bo Yang"
+    ],
+    "venue": "International Conference on Learning Representations (ICLR 2020)",
+    "year": 2020,
+    "arxiv": "2002.05287",
+    "url": "https://openreview.net/forum?id=S1e2agrFvS",
+    "bibtex": "@inproceedings{pei2020geomgcn, title={Geom-{GCN}: Geometric Graph Convolutional Networks}, author={Hongbin Pei and Bingzhe Wei and Kevin Chen-Chuan Chang and Yu Lei and Bo Yang}, booktitle={International Conference on Learning Representations}, year={2020}, url={https://openreview.net/forum?id=S1e2agrFvS}}",
+    "source": "constructed in OpenReview format from https://openreview.net/forum?id=S1e2agrFvS (id confirmed via https://iclr.cc/virtual_2020/poster_S1e2agrFvS.html; authors from https://export.arxiv.org/api/query, arXiv 2002.05287)"
+  },
+  {
+    "key": "hajij2025copresheaf",
+    "cite": [
+      "Hajij et al., 2025"
+    ],
+    "title": "Copresheaf Topological Neural Networks: A Generalized Deep Learning Framework",
+    "authors": [
+      "Mustafa Hajij",
+      "Lennart Bastian",
+      "Sarah Osentoski",
+      "Hardik Kabaria",
+      "John Davenport",
+      "Sheik Dawood",
+      "Balaji Cherukuri",
+      "Joseph Kocheemoolayil",
+      "Nastaran Shahmansouri",
+      "Adrian Lew",
+      "Theodore Papamarkou",
+      "Tolga Birdal"
+    ],
+    "venue": "Advances in Neural Information Processing Systems 38 (NeurIPS 2025)",
+    "year": 2025,
+    "doi": "10.52202/085713-5009",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/dc62cd4ec77f3bbec8e6245d0bd91d08-Abstract-Conference.html",
+    "bibtex": "@inproceedings{NEURIPS2025_dc62cd4e, author = {Hajij, Mustafa and Bastian, Lennart and Osentoski, Sarah and Kabaria, Hardik and Davenport, John and Dawood and Cherukuri, Balaji and Kocheemoolayil, Joseph and Shahmansouri, Nastaran and Lew, Adrian and Papamarkou, Theodore and Birdal, Tolga}, booktitle = {Advances in Neural Information Processing Systems}, doi = {10.52202/085713-5009}, editor = {D. Belgrave and C. Zhang and H. Lin and R. Pascanu and P. Koniusz and M. Ghassemi and N. Chen}, pages = {149759--149803}, publisher = {Curran Associates, Inc.}, title = {Copresheaf Topological Neural Networks: A Generalized Deep Learning Framework}, url = {https://proceedings.neurips.cc/paper_files/paper/2025/file/dc62cd4ec77f3bbec8e6245d0bd91d08-Paper-Conference.pdf}, volume = {38, Main Conference}, year = {2025} }",
+    "source": "https://proceedings.neurips.cc/paper_files/paper/2025/file/dc62cd4ec77f3bbec8e6245d0bd91d08-Bibtex.bib"
+  }
+]

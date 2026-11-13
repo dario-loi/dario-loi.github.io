@@ -1,7 +1,7 @@
 ---
 title: "Implicit Sheaf Operators for Effective and Efficient Cellular Sheaf Learning"
 shortTitle: "Implicit Sheaf Operators for Cellular Sheaf Learning"
-description: "Sheaf neural networks without the sheaf Laplacian: Implicit Sheaf Operators compute the same diffusion locally, in less time and memory, also on edge devices."
+description: "Implicit Sheaf Operators drop the sheaf Laplacian: a fast way to compute Neural Sheaf Diffusion, and Sheaf Convolutional Networks that are often more accurate."
 authors:
   - { name: "Gabriele Onorato", affiliations: [1], starred: true }
   - { name: "Dario Loi", affiliations: [1] }
@@ -15,9 +15,10 @@ starNote: "Corresponding author"
 venue: "Preprint"
 kind: preprint
 date: 2026-08-04
-tldr: "Sheaf neural networks are costly because they build a large sheaf Laplacian; Implicit Sheaf Operators compute the same diffusion locally at each node, saving time and memory, also on edge devices."
+tldr: "Implicit Sheaf Operators make sheaf neural networks fast: they apply sheaf diffusion and sheaf convolution locally at each node, without building the sheaf Laplacian, cutting time, memory, and energy down to edge devices. Built on them, Sheaf Convolutional Networks match or beat the accuracy of Neural Sheaf Diffusion on most node classification benchmarks."
 abstract: 'While Sheaf Neural Networks (SNNs) enrich $n$-node $m$-edge diffusion of $f$-dimensional node features with $d$-dimensional node and edge stalks, they require computing a sparse $nd \times nd$ sheaf Laplacian, whose computation is prohibitive on edge devices. This paper addresses this issue with Implicit Sheaf Operators (ISOs), a type of sheaf topological operators that leverage the topological structure of cellular sheaves to decompose the global diffusion process into local operator-vector products. We mathematically prove that ISO eliminates the $O(md^2 \log(md^2))$ sparse-coalescing term and reduces the space complexity by $O(\min(d, f))$ with respect to traditional Neural Sheaf Diffusion (NSD). Our experiments indicate that ISO-based operators achieve latency reduction of up to 4.87× and save up to 3.92× peak GPU memory. On real graph classification data, ISO uses up to 1.24× less energy and 3.08× less on-device memory as measured on a Jetson Orin Nano. Finally, to bring ISO to practice, we introduce Sheaf Convolutional Networks (SCNs), an ISO-based SNN attaining up to 3.93% higher accuracy compared to NSD-based SNNs on node classification benchmarks.'
-keywords: ["Sheaf neural networks", "Cellular sheaves", "Graph neural networks", "Edge computing"]
+keywords: ["Graph neural networks", "Efficient deep learning", "Neural Sheaf Diffusion", "Fast neural sheaf diffusion", "Efficient sheaf neural networks", "Sheaf Laplacian", "Connection Laplacian", "Cellular sheaves", "Matrix-free message passing", "Heterophily", "Edge devices", "Jetson Orin Nano"]
+topics: ["Sheaf neural networks", "Topological deep learning"]
 links:
   - { label: "PDF", href: "/publications/implicit-sheaf-operators/implicit-sheaf-operators.pdf", icon: download }
   - { label: "Google Scholar", href: "https://scholar.google.com/citations?view_op=view_citation&user=r0Ty-c8AAAAJ&citation_for_view=r0Ty-c8AAAAJ:zYLM7Y9cAGgC", icon: external }
@@ -30,6 +31,7 @@ figure: ./implicit-sheaf-operators-figure2.webp
 figureNum: 2
 figureAlt: "Left, a 3 by 3 block sheaf Laplacian with d by d blocks multiplied by a stacked feature matrix X. Right, a triangle of nodes v, u, w with edges e1 and e2, where dashed arrows bring restriction-map terms from u and w, and a self term, into node v."
 figureCaption: '<b>(Left)</b> The Sheaf Laplacian (SL) $L_{\mathcal{F}} \in \mathbb{R}^{nd \times nd}$ is explicitly computed before multiplying it with the sheaf node features $\mathbf{X}$. <b>(Right)</b> The proposed ISOs reformulate the computation as a purely local process. By leveraging the topological features of cellular sheaves, ISO computes the exact action of $L_{\mathcal{F}}\mathbf{X}$ independently at each single node $v$, bypassing the global matrix completely.'
+widget: iso-operator
 bibtex: |
   @misc{onorato2026implicit,
     title  = {Implicit Sheaf Operators for Effective and Efficient Cellular Sheaf Learning},
@@ -39,3 +41,38 @@ bibtex: |
     url    = {https://mentis.info/wp-content/uploads/2026/08/SheafOperators.pdf}
   }
 ---
+
+import LabPlot from "../../components/LabPlot.astro";
+import plot from "./implicit-sheaf-operators-plot.svg?raw";
+
+Graph neural networks (GNNs) that average over neighbors run into trouble in two familiar places: heterophilous graphs, where connected nodes tend to carry different labels, and deep stacks of layers, where node representations collapse toward each other (oversmoothing). Sheaf Neural Networks (SNNs) address both by letting every edge learn how the features of its two endpoints should be translated before they are compared, and Neural Sheaf Diffusion (NSD; Bodnar et al., 2022) is the best-known recipe for doing so. What stops many teams from trying it is cost. The standard implementation builds a sparse sheaf Laplacian with *nd* rows and columns, where *n* is the number of nodes and *d* the stalk dimension, so a graph of 1,000 nodes with 8-dimensional stalks already yields an 8,000 by 8,000 operator that must be assembled from learned maps.
+
+This page is a companion to the paper. It covers where that cost comes from, what Implicit Sheaf Operators (ISOs) change in practice, and what we think the results make possible for efficient sheaf neural networks.
+
+## Why sheaf neural networks are expensive
+
+In a GCN the propagation matrix is fixed by the graph, so it is built once. In an SNN each edge carries learned *d* by *d* restriction maps, which means the operator depends on the weights and has to be re-assembled at every gradient step, and again for every new input graph in inductive settings such as classifying many small molecules or networks. Assembly ends with sorting and merging the sparse entries, and the operator then sits in memory for the backward pass. In our measurements on random graphs with 1,000 nodes, this made NSD up to 39.2 times slower and 9.27 times more memory hungry than a GCN, a gap that matters most on constrained hardware.
+
+## A faster way to compute Neural Sheaf Diffusion and sheaf convolution
+
+ISOs are a faster way to compute Neural Sheaf Diffusion, and they apply equally to the sheaf convolution we introduce below. They are matrix-free: instead of materializing the sheaf Laplacian, an ISO evaluates its action node by node from the restriction maps, using two batched matrix multiplications per edge and a scatter-add. This is ordinary gather-scatter message passing. The result equals multiplying by the explicit Laplacian, thus a model keeps the same expressiveness and only the way the operator is applied changes. The paper works one case end to end: three agents on a path, each holding a 2-dimensional measurement, reaching consensus through a local update at the middle node. Distributed coordination over cellular sheaves (Hanks et al., 2025) is a natural fit for this local formulation, although we did not test it.
+
+## Comparison with connection Laplacians and other sheaf neural networks
+
+Every sheaf variant we know of in this line pays for the same explicit block matrix. Connection Laplacians (Barbero et al., 2022a) build it once, ahead of training, which helps only when the graph never changes. Neural Sheaf Propagation (Suk et al., 2022), Sheaf Attention Networks (Barbero et al., 2022b) and nonlinear sheaf diffusion (Zaghen et al., 2024) alter what happens inside the diffusion step, yet still assemble that matrix and inherit its time, memory and power cost. Deep Neural Sheaf Diffusion (Bourgerie et al., 2026) points to the adjacency form for deeper SNNs. ISOs target the shared bottleneck itself, so in our view they complement these designs: maps are still learned end to end, and the graph can differ from one input to the next.
+
+## Speed, memory, and what the numbers mean
+
+On random graphs with 1,000 nodes, the best forward-pass speedup against an optimized explicit baseline is 4.87 times (37.78 ms down to 7.76 ms), and peak GPU memory falls up to 3.92 times (1816 MB to 463 MB). The two gains peak in different places. For general and bundle maps, time savings are largest for small stalks (the plot below), whereas memory savings grow with the stalk dimension and reach their maximum at *d* = 8. In practice, richer stalks, which give a sheaf its modeling power, become cheaper to afford. The gains matter most in inductive workloads, since a transductive model pays the assembly cost only once.
+
+<LabPlot svg={plot} alt="Line chart of forward-time speedup against stalk dimension d of 2, 4 and 8, from the Sheaf Diffusion block of Table 2. Diagonal maps: 1.38, 1.34, 1.31. Bundle maps: 2.11, 1.74, 1.73. General maps: 4.87, 2.94, 1.71.">
+  <Fragment slot="caption">Speedup in inductive forward time of Implicit Sheaf Operators over the optimized explicit implementation, Sheaf Diffusion, on Erdős-Rényi graphs.</Fragment>
+</LabPlot>
+
+## Sheaf neural networks on edge devices
+
+We also ran graph classification inference on an NVIDIA Jetson Orin Nano, an embedded GPU board, using the PTC and Proteins datasets. Energy per graph dropped by up to 1.24 times and on-device memory by up to 3.08 times. The energy gain is modest and the memory gain is substantial, so we read this as a first sign that sheaf models can fit the budgets of on-board and low-power deployments.
+
+## Sheaf Convolutional Networks for heterophily
+
+Keeping only the adjacency term of the Laplacian, as GCNs do relative to graph diffusion, yields Sheaf Convolutional Networks (SCNs), evaluated by ISOs at the same cost. On the heterophily-oriented node classification benchmark of Pei et al. (2020), SCNs beat NSD variants by up to 3.93 points; on Squirrel, a general-map SCN reaches 60.27 against 56.34 for the best NSD. Open questions remain, notably how far deeper SCNs can go (Bourgerie et al., 2026) and whether the matrix-free idea carries over to copresheaf networks (Hajij et al., 2025), which still use explicit block matrices.

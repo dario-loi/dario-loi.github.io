@@ -1,0 +1,74 @@
+---
+// The frame every working model on a paper page shares: a black exhibit panel holding the
+// model's drawing (one inline SVG), its controls and readout under the panel on the page ground,
+// and a wall-label caption that says what the model is. A model is an illustration of the paper's
+// mechanism, never a rerun of its experiments, and its caption says so.
+interface Props {
+  /** The model's name in the registry, for its script to find it. */
+  name: string;
+  /** Bold lead of the caption, a noun phrase in sentence case. */
+  title: string;
+  /** Shown under `npm run dev` only, with a label saying so. */
+  draft?: boolean;
+  /** The model runs once on first view (firstRun.ts): it waits as a blank panel until its script draws the start state. */
+  firstRun?: boolean;
+  class?: string;
+}
+const { name, title, draft = false, firstRun = false, class: className } = Astro.props;
+---
+<figure class:list={["ply-exhibit model", className]} data-model={name}>
+  {firstRun && <script is:inline>
+    // Before first paint: with motion allowed, hold the figure back until the module draws the start
+    // state; if that script stalls, show the finished drawing after 2.5 s.
+    (function (f) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      f.setAttribute("data-first", "wait");
+      setTimeout(function () { if (f.getAttribute("data-first") === "wait") f.removeAttribute("data-first"); }, 2500);
+    })(document.currentScript.parentElement);
+  </script>}
+  <div class="ply-panel ply-panel--flush model__stage" data-surface="panel"><slot /></div>
+  {Astro.slots.has("controls") && <div class="model__controls"><slot name="controls" /></div>}
+  <figcaption>{draft && <span class="ply-label model__draft">Draft</span>} <b>{title}.</b> <slot name="caption" /></figcaption>
+</figure>
+<style is:global>
+  .model { max-width: 30rem; }
+  .model__stage > svg { display: block; width: 100%; height: auto; }
+  .model__controls { display: grid; gap: var(--ply-space-3); margin-top: var(--ply-space-3); }
+  .model__controls .ply-readout { max-width: 20rem; }
+  /* A choice keeps its own width instead of stretching across the column. */
+  .model__controls .ply-segmented { justify-self: start; }
+  /* First-view run: nothing of the model shows until its start state is drawn, so the finished
+     drawing never appears and then vanishes. The panel stays, so the layout does not move. */
+  .model[data-first="wait"] :is(.model__stage > svg, .model__controls) { visibility: hidden; }
+  /* A slider that moves a mark along the drawing's horizontal axis wears .model__axis with --x0 and
+     --x1, the fractions of the panel width where the axis starts and ends. Its track then runs
+     from x0 to x1 (the thumb's own width added outside, since a thumb's center travels inset by
+     half of it), so the thumb sits exactly under the mark it moves, at every value and width. The
+     value moves up beside the label to leave the track the full axis. */
+  .model__axis { --thumb: 1.125rem; }
+  .model__axis .ply-control { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--ply-space-3); }
+  .model__axis .ply-control__label { grid-area: 1 / 1; }
+  .model__axis .ply-range { display: contents; }
+  .model__axis .ply-range output { grid-area: 1 / 2; align-self: baseline; }
+  .model__axis .ply-slider {
+    grid-area: 2 / 1 / 3 / 3;
+    margin-inline: calc(var(--x0) * 100% - var(--thumb) / 2) calc((1 - var(--x1)) * 100% - var(--thumb) / 2);
+    width: auto;
+  }
+  .model__draft { margin-inline-end: var(--ply-space-2); }
+  /* Without script a model shows its finished drawing and no controls. */
+  @media (scripting: none) { .model__controls { display: none; } }
+  /* The drawing's vocabulary, as in the complex and the Atlas: chalk lines and points on the
+     black panel, mustard at half strength for filled regions, tomato for the one moving part. */
+  .model .m-chalk { stroke: var(--ply-color-panel-text); fill: none; }
+  .model .m-chalk-fill { fill: var(--ply-color-panel-text); }
+  .model .m-quiet { stroke: var(--ply-color-panel-muted); fill: none; }
+  .model .m-quiet-fill { fill: var(--ply-color-panel-muted); }
+  .model .m-rule { stroke: var(--ply-color-panel-rule); fill: none; }
+  .model .m-note { fill: var(--ply-color-note); fill-opacity: 0.5; }
+  .model .m-move { fill: var(--ply-color-accent); }
+  .model .m-move-line { stroke: var(--ply-color-accent); fill: none; }
+  .model .m-text { fill: var(--ply-color-panel-text); font-family: var(--ply-font-text); font-weight: 600; }
+  .model .m-text-quiet { fill: var(--ply-color-panel-muted); font-family: var(--ply-font-text); }
+  .model .m-num { font-family: var(--ply-font-mono); font-variant-numeric: tabular-nums; }
+</style>

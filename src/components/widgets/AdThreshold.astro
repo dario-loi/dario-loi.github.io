@@ -1,0 +1,159 @@
+---
+// Where the threshold lands. A lognormal stand-in for the anomaly scores of normal pixels
+// (mu = 0, shape sigma set by the slider). Marker (a) is mean + 3 sd in closed form; marker (b)
+// is the score exceeded by a fixed 0.135% of normal pixels (1 - Phi(3), z = 3), standing in for a tail fit.
+import Model from "./Model.astro";
+import Slider from "@dario-loi/polytope/astro/Slider.astro";
+import Readout from "@dario-loi/polytope/astro/Readout.astro";
+
+interface Props { draft?: boolean }
+const { draft = false } = Astro.props;
+
+const X0 = 5, X1 = 95, BASE = 46, HEIGHT = 28, SMAX = 12, Z = 3;
+const X = (s: number) => X0 + (s / SMAX) * (X1 - X0);
+const erfc = (x: number) => {
+  const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+  const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+  return x >= 0 ? r : 2 - r;
+};
+const upper = (z: number) => 0.5 * erfc(z / Math.SQRT2);
+const model = (sigma: number) => {
+  const mean = Math.exp((sigma * sigma) / 2);
+  const sd = Math.sqrt((Math.exp(sigma * sigma) - 1) * Math.exp(sigma * sigma));
+  const a = mean + 3 * sd, b = Math.exp(sigma * Z);
+  const peak = Math.exp((sigma * sigma) / 2) / (sigma * Math.sqrt(2 * Math.PI));
+  const y = (s: number) => (s <= 0 ? BASE : BASE - HEIGHT * (Math.exp(-(Math.log(s) ** 2) / (2 * sigma * sigma)) / (s * sigma * Math.sqrt(2 * Math.PI)) / peak));
+  const f = (v: number) => v.toFixed(2);
+  let curve = `M${f(X(0))} ${BASE}`;
+  let fill = `M${f(X(a))} ${BASE} L${f(X(a))} ${f(y(a))}`;
+  for (let s = 0.05; s <= SMAX + 1e-9; s += 0.05) {
+    curve += ` L${f(X(s))} ${f(y(s))}`;
+    if (s > a) fill += ` L${f(X(s))} ${f(y(s))}`;
+  }
+  fill += ` L${f(X(SMAX))} ${BASE} Z`;
+  const xa = X(a), off = b > SMAX, xb = off ? X1 : X(b);
+  return { curve, fill, xa, xb, off, a, b, flagged: upper(Math.log(a) / sigma) * 100 };
+};
+const start = 0.5;
+const m = model(start);
+const lab = (xb: number) => (xb > 72 ? { x: xb - 1.2, anchor: "end" } : { x: xb + 1.2, anchor: "start" });
+const lb = lab(m.xb);
+const pct = (v: number) => v.toFixed(2) + "%";
+---
+<Model name="ad-threshold" title="Where the threshold lands" draft={draft} firstRun>
+  <svg viewBox="0 0 100 56" role="img" aria-label={`The density of anomaly scores of normal pixels, a lognormal curve with a heavy right tail. A tomato line marks mean plus three standard deviations and a dashed chalk line marks the score exceeded by 0.135 percent of normal pixels. At the default tail weight, ${pct(m.flagged)} of normal pixels lie right of the tomato line.`}>
+    <path class="m-note" data-fill d={m.fill} />
+    <path class="m-chalk" data-curve d={m.curve} stroke-width="0.5" stroke-linejoin="round" />
+    <line class="m-rule" x1={X0} y1={BASE} x2={X1} y2={BASE} stroke-width="0.4" />
+    {[0, 3, 6, 9, 12].map((s) => (
+      <>
+        <line class="m-rule" x1={X(s)} y1={BASE} x2={X(s)} y2={BASE + 1.2} stroke-width="0.4" />
+        <text class="m-text-quiet m-num" x={X(s)} y="51" font-size="3.2" text-anchor="middle">{s}</text>
+      </>
+    ))}
+    <text class="m-text-quiet" x={X1} y="55" font-size="3.2" text-anchor="end">score</text>
+    <line class="m-chalk" data-b stroke-dasharray="1.2 1" stroke-width="0.5" x1={m.xb} y1="16" x2={m.xb} y2={BASE} />
+    <line class="m-move-line" data-a stroke-width="0.6" x1={m.xa} y1="11" x2={m.xa} y2={BASE} />
+    <text class="m-text" data-la x={m.xa + 1.2} y="9.4" font-size="3.2">mean + 3 sd</text>
+    <text class="m-text" data-lb x={lb.x} y="14.6" font-size="3.2" text-anchor={lb.anchor}>{m.off ? "tail 0.135% >" : "tail 0.135%"}</text>
+  </svg>
+  <Fragment slot="controls">
+    <div class="model__axis" style={`--x0:${X0 / 100};--x1:${X1 / 100}`}><Slider label="Tail weight" name="ad-sigma" min={0.2} max={0.9} step={0.05} value={start} format="fixed2" /></div>
+    <Readout label="Share of normal pixels flagged as defects" items={[
+      { label: "Flagged at mean + 3 sd", value: pct(m.flagged) },
+      { label: "Flagged at tail quantile", value: "0.135%" },
+    ]} />
+  </Fragment>
+  <Fragment slot="caption">As the tail of the normal scores grows heavier, a threshold at the mean plus three standard deviations flags more normal pixels, whereas one fitted on the tail keeps its rate.</Fragment>
+</Model>
+<script>
+  import { firstRun, easeOut } from "./firstRun";
+  const SMAX = 12, X0 = 5, X1 = 95, BASE = 46, HEIGHT = 28, Z = 3;
+  const X = (s: number) => X0 + (s / SMAX) * (X1 - X0);
+  const erfc = (x: number) => {
+    const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+    const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+    return x >= 0 ? r : 2 - r;
+  };
+  const upper = (z: number) => 0.5 * erfc(z / Math.SQRT2);
+  const model = (sigma: number) => {
+    const mean = Math.exp((sigma * sigma) / 2);
+    const sd = Math.sqrt((Math.exp(sigma * sigma) - 1) * Math.exp(sigma * sigma));
+    const a = mean + 3 * sd, b = Math.exp(sigma * Z);
+    const peak = Math.exp((sigma * sigma) / 2) / (sigma * Math.sqrt(2 * Math.PI));
+    const y = (s: number) => (s <= 0 ? BASE : BASE - HEIGHT * (Math.exp(-(Math.log(s) ** 2) / (2 * sigma * sigma)) / (s * sigma * Math.sqrt(2 * Math.PI)) / peak));
+    const f = (v: number) => v.toFixed(2);
+    let curve = `M${f(X(0))} ${BASE}`;
+    let fill = `M${f(X(a))} ${BASE} L${f(X(a))} ${f(y(a))}`;
+    for (let s = 0.05; s <= SMAX + 1e-9; s += 0.05) {
+      curve += ` L${f(X(s))} ${f(y(s))}`;
+      if (s > a) fill += ` L${f(X(s))} ${f(y(s))}`;
+    }
+    fill += ` L${f(X(SMAX))} ${BASE} Z`;
+    const off = b > SMAX;
+    return { curve, fill, xa: X(a), xb: off ? X1 : X(b), off, a, b, flagged: upper(Math.log(a) / sigma) * 100 };
+  };
+  const setAttr = (el: Element | null, name: string, v: string) => { if (el && el.getAttribute(name) !== v) el.setAttribute(name, v); };
+  const setText = (el: Element | null, v: string) => { if (el && el.textContent !== v) el.textContent = v; };
+
+  document.querySelectorAll<HTMLElement>('[data-model="ad-threshold"]').forEach((fig) => {
+    const input = fig.querySelector<HTMLInputElement>('input[type="range"]');
+    const svg = fig.querySelector("svg");
+    const dds = fig.querySelectorAll("dd");
+    const out = fig.querySelector("[data-ply-slider] output");
+    if (!input || !svg) return;
+    const q = (s: string) => svg.querySelector(s);
+    let last = "";
+    // Draw tail weight sigma. Words for assistive tech are set only when `say` is true.
+    const update = (sigma = Number(input.value), say = true) => {
+      const key = String(sigma);
+      if (key === last && !say) return;
+      last = key;
+      const m = model(sigma);
+      setAttr(q("[data-curve]"), "d", m.curve);
+      setAttr(q("[data-fill]"), "d", m.fill);
+      const fx = (v: number) => v.toFixed(2);
+      setAttr(q("[data-a]"), "x1", fx(m.xa)); setAttr(q("[data-a]"), "x2", fx(m.xa));
+      setAttr(q("[data-b]"), "x1", fx(m.xb)); setAttr(q("[data-b]"), "x2", fx(m.xb));
+      setAttr(q("[data-la]"), "x", fx(m.xa + 1.2));
+      const end = m.xb > 72;
+      setAttr(q("[data-lb]"), "x", fx(end ? m.xb - 1.2 : m.xb + 1.2));
+      setAttr(q("[data-lb]"), "text-anchor", end ? "end" : "start");
+      setText(q("[data-lb]"), m.off ? "tail 0.135% >" : "tail 0.135%");
+      const pct = m.flagged.toFixed(2) + "%";
+      setText(dds[0], pct);
+      if (!say) return;
+      // controls.js sets a bare number as aria-valuetext on input; replace it after it runs.
+      requestAnimationFrame(() => {
+        input.setAttribute("aria-valuetext", `Tail weight ${sigma.toFixed(2)}. Mean plus 3 sd at score ${m.a.toFixed(2)} flags ${pct} of normal pixels; the tail quantile at score ${m.b.toFixed(2)} flags 0.135%.`);
+      });
+    };
+    input.addEventListener("input", () => update());
+    update();
+
+    // First view: the tail weight grows from its minimum to the default, so the mean + 3 sd line
+    // drifts right while the tail quantile line follows the tail.
+    const rest = Number(input.value), step = input.step, from = Number(input.min);
+    firstRun(fig, {
+      duration: 2.4,
+      start() {
+        input.step = "any";
+        input.removeAttribute("aria-valuetext");
+        input.value = String(from);
+        setText(out, from.toFixed(2));
+        update(from, false);
+      },
+      frame(p) {
+        const sigma = from + (rest - from) * easeOut(p);
+        input.value = String(sigma);
+        setText(out, sigma.toFixed(2));
+        update(sigma, false);
+      },
+      end() {
+        input.step = step;
+        setText(out, Number(input.value).toFixed(2));
+        update(Number(input.value), true);
+      },
+    });
+  });
+</script>

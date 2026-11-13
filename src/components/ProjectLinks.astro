@@ -1,0 +1,11 @@
+---
+// A project card's way to the code: the repository link from the project's front matter, set as
+// the small link row a publication card ends with. A project with no code link shows nothing.
+import type { CollectionEntry } from "astro:content";
+interface Props { project: CollectionEntry<"projects">; placement: string }
+const { project, placement } = Astro.props;
+const links = project.data.links.filter((l) => l.icon === "code");
+---
+{links.length > 0 && (
+  <p class="ply-pub__links">{links.map((l) => <a href={l.href} aria-label={`${l.label} for ${project.data.title}`} data-track="project-link" data-track-placement={placement} data-track-label={`${project.id}:${l.label}`}>{l.label}</a>)}</p>
+)}

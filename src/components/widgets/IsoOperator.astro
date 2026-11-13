@@ -1,0 +1,223 @@
+---
+// One diffusion step, timed. Two lanes race over the forward times the paper measured for one
+// Sheaf Diffusion layer (Table 2, general restriction maps, inductive, Erdos-Renyi graph with
+// n = 1000 nodes and m = 189,810 edges, f = 16): the explicit operator assembles and applies the
+// sheaf Laplacian (a block matrix that fills in), an Implicit Sheaf Operator computes every node's
+// update from its incident edges at once (pulses along the edges, nodes lighting). Both run at
+// the same scale, slowed down to be seen. The server draws the finished race for d = 2.
+import Model from "./Model.astro";
+import Button from "@dario-loi/polytope/astro/Button.astro";
+interface Props { draft?: boolean }
+const { draft = false } = Astro.props;
+
+// Table 2, Sheaf Diffusion block, General rows, Forward Time (ms): [explicit, ISO].
+const TIMES: Record<number, [number, number]> = { 2: [37.78, 7.76], 4: [52.75, 17.96], 8: [105.07, 61.56] };
+const D0 = 2;
+const [E0, I0] = TIMES[D0];
+const f2 = (v: number) => v.toFixed(2);
+const sentence = (d: number) => {
+  const [e, i] = TIMES[d];
+  return `At stalk dimension ${d}, ISO finishes one diffusion step in ${f2(i)} ms against ${f2(e)} ms for the explicit operator, ${f2(e / i)} times faster.`;
+};
+
+// Geometry in viewBox units. Same graph in both lanes.
+const NODES = [[9, 12], [27, 7], [40, 20], [22, 28], [8, 44], [33, 47]];
+const EDGES = [[0, 1], [1, 2], [0, 3], [2, 3], [3, 4], [3, 5], [4, 5]];
+const TOPS = [6.5, 35.8];
+const IX = 3, IW = 19, TX0 = 29, TX1 = 90;
+const blocks = [...NODES.map((_, i) => [i, i]), ...EDGES.flatMap(([u, v]) => [[u, v], [v, u]])];
+const B = IW / NODES.length;
+let grid = "";
+for (let i = 1; i < NODES.length; i++) grid += `M${IX + i * B} ${TOPS[0]}V${TOPS[0] + IW}M${IX} ${TOPS[0] + i * B}H${IX + IW}`;
+const gx = (x: number) => IX + 2.8 + (x - 8) * 0.42;
+const gy = (y: number) => TOPS[1] + 1.2 + (y - 7) * 0.42;
+const pts = NODES.map(([x, y]) => [gx(x), gy(y)]);
+const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
+---
+<Model name="iso-operator" title="One diffusion step, timed" draft={draft}>
+  <svg viewBox="0 0 100 56" role="img" aria-label={sentence(D0)} data-d={D0}>
+    <path class="m-rule" d="M3 28.5H97" stroke-width="0.3" />
+    <g class="m-text" font-size="3.8">
+      <text x={IX} y={TOPS[0] - 2.4}>Explicit</text>
+      <text x={IX} y={TOPS[1] - 2.4}>ISO</text>
+    </g>
+    <g data-matrix>
+      {blocks.map(([r, c]) => <rect class="m-note" x={IX + c * B} y={TOPS[0] + r * B} width={B} height={B} />)}
+      <path class="m-quiet" d={grid} stroke-width="0.2" />
+      <rect class="m-chalk" x={IX} y={TOPS[0]} width={IW} height={IW} stroke-width="0.4" />
+    </g>
+    <g class="m-chalk" stroke-width="0.4">
+      {EDGES.map(([u, v]) => <line x1={pts[u][0]} y1={pts[u][1]} x2={pts[v][0]} y2={pts[v][1]} />)}
+    </g>
+    <g data-nodes>
+      {pts.map(([x, y]) => <circle class="m-move" cx={x} cy={y} r="1.6" />)}
+    </g>
+    <g class="m-move" data-pulses visibility="hidden">
+      {dirs.map(() => <circle cx="0" cy="0" r="0.8" />)}
+    </g>
+    {TOPS.map((top) => (
+      <g>
+        <line class="m-quiet" stroke-width="0.3" x1={TX0} y1={top + IW / 2} x2={TX1} y2={top + IW / 2} />
+        <line class="m-chalk" stroke-width="0.4" x1={TX1} y1={top + IW / 2 - 3} x2={TX1} y2={top + IW / 2 + 3} />
+      </g>
+    ))}
+    <line class="m-chalk" stroke-width="0.6" x1={TX0} y1={TOPS[0] + IW / 2} x2={TX1} y2={TOPS[0] + IW / 2} data-trail="e" />
+    <line class="m-move-line" stroke-width="0.6" x1={TX0} y1={TOPS[1] + IW / 2} x2={TX1} y2={TOPS[1] + IW / 2} data-trail="i" />
+    <circle class="m-chalk-fill" cx={TX1} cy={TOPS[0] + IW / 2} r="1.6" data-ball="e" />
+    <circle class="m-move" cx={TX1} cy={TOPS[1] + IW / 2} r="1.6" data-ball="i" />
+    <g class="m-text m-num" font-size="3.8" text-anchor="end">
+      <text class="iso-time" x="98" y={TOPS[0] + IW / 2 - 3.6} data-time="e" data-on>{f2(E0)} ms</text>
+      <text class="iso-time" x="98" y={TOPS[1] + IW / 2 - 3.6} data-time="i" data-on>{f2(I0)} ms</text>
+    </g>
+    <g class="iso-payoff" data-payoff data-on>
+      <text class="m-chalk-fill" font-size="12" x="30.5" y={TOPS[1] + IW / 2 - 2.3} data-payoff-num>{f2(E0 / I0)}&times;</text>
+      <text class="m-text-quiet" font-size="3.6" x="68" y={TOPS[1] + IW / 2 - 2.3}>faster</text>
+    </g>
+  </svg>
+  <Fragment slot="controls">
+    <Button class="iso-run" data-run>Run</Button>
+    <div class="ply-control">
+      <span class="ply-control__label" id="iso-d-label"><span>Stalk dimension</span></span>
+      <div class="ply-segmented" role="radiogroup" aria-labelledby="iso-d-label">
+        <label><input type="radio" name="iso-d" value="2" checked />2</label>
+        <label><input type="radio" name="iso-d" value="4" />4</label>
+        <label><input type="radio" name="iso-d" value="8" />8</label>
+      </div>
+    </div>
+    <dl class="ply-readout" aria-label="Forward time of one diffusion step">
+      <dt>Explicit</dt><dd data-out="e">{f2(E0)} ms</dd>
+      <dt>ISO</dt><dd data-out="i">{f2(I0)} ms</dd>
+      <dt>Speedup</dt><dd data-out="s">{f2(E0 / I0)}&times;</dd>
+    </dl>
+    <p class="ply-visually-hidden" aria-live="polite" data-live></p>
+  </Fragment>
+  <Fragment slot="caption">One Sheaf Diffusion layer on an Erdős-Rényi graph with 1,000 nodes, at the forward times measured in the paper and slowed down to be seen. ISO computes each node's update from its incident edges, so it finishes while the explicit operator is still building and applying the sheaf Laplacian.</Fragment>
+</Model>
+<style is:global>
+  /* The stalk dimension choices are 44px squares at least, so a thumb hits one. */
+  [data-model="iso-operator"] .ply-segmented label { min-width: 2.75rem; min-height: 2.75rem; justify-content: center; }
+  [data-model="iso-operator"] .iso-run { justify-self: start; }
+  [data-model="iso-operator"] .iso-payoff { opacity: 0; transform: translateY(1.5px) scale(0.96); transform-box: fill-box; transform-origin: left bottom; transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1); }
+  [data-model="iso-operator"] .iso-payoff[data-on] { opacity: 1; transform: none; }
+  [data-model="iso-operator"] .iso-payoff [data-payoff-num] { font-family: var(--ply-font-display); }
+  [data-model="iso-operator"] .iso-time { opacity: 0; transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1); }
+  [data-model="iso-operator"] .iso-time[data-on] { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-model="iso-operator"] :is(.iso-time, .iso-payoff) { transition: none; }
+  }
+</style>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-model="iso-operator"]');
+  if (root) {
+    // Table 2, Sheaf Diffusion, General rows, Forward Time (ms): [explicit, ISO].
+    const TIMES: Record<number, number[]> = { 2: [37.78, 7.76], 4: [52.75, 17.96], 8: [105.07, 61.56] };
+    const RACE = 3.2; // seconds on screen for the explicit lane; ISO takes RACE * iso / explicit
+    const TX0 = 29, TX1 = 90, IX = 3, TOP1 = 35.8;
+    const NODES = [[9, 12], [27, 7], [40, 20], [22, 28], [8, 44], [33, 47]];
+    const EDGES = [[0, 1], [1, 2], [0, 3], [2, 3], [3, 4], [3, 5], [4, 5]];
+    const pts = NODES.map(([x, y]) => [IX + 2.8 + (x - 8) * 0.42, TOP1 + 1.2 + (y - 7) * 0.42]);
+    const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
+    const svg = root.querySelector<SVGSVGElement>("svg")!;
+    const rects = [...root.querySelectorAll<SVGRectElement>("[data-matrix] rect.m-note")];
+    const nodes = [...root.querySelectorAll<SVGCircleElement>("[data-nodes] circle")];
+    const pulseG = root.querySelector("[data-pulses]")!;
+    const pulses = [...pulseG.querySelectorAll("circle")];
+    const ball = { e: root.querySelector('[data-ball="e"]')!, i: root.querySelector('[data-ball="i"]')! };
+    const label = { e: root.querySelector('[data-time="e"]')!, i: root.querySelector('[data-time="i"]')! };
+    const out = { e: root.querySelector('[data-out="e"]')!, i: root.querySelector('[data-out="i"]')!, s: root.querySelector('[data-out="s"]')! };
+    const trail = { e: root.querySelector('[data-trail="e"]')!, i: root.querySelector('[data-trail="i"]')! };
+    const payoff = root.querySelector("[data-payoff]")!;
+    const payoffNum = root.querySelector("[data-payoff-num]")!;
+    const live = root.querySelector("[data-live]")!;
+    const radios = [...root.querySelectorAll<HTMLInputElement>('input[name="iso-d"]')];
+    const run = root.querySelector("[data-run]")!;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const f2 = (v: number) => v.toFixed(2);
+    const set = (el: Element, name: string, value: string) => { if (el.getAttribute(name) !== value) el.setAttribute(name, value); };
+    const text = (el: Element, value: string) => { if (el.textContent !== value) el.textContent = value; };
+    const toggle = (el: Element, name: string, on: boolean) => { if (el.hasAttribute(name) !== on) on ? el.setAttribute(name, "") : el.removeAttribute(name); };
+    const sentence = (d: number) => {
+      const [e, i] = TIMES[d];
+      return `At stalk dimension ${d}, ISO finishes one diffusion step in ${f2(i)} ms against ${f2(e)} ms for the explicit operator, ${f2(e / i)} times faster.`;
+    };
+    const dim = () => Number(radios.find((r) => r.checked)?.value ?? 2);
+
+    // Draw the race at progress pe (explicit lane) and pi (ISO lane), both 0 to 1.
+    const render = (d: number, pe: number, pi: number) => {
+      const [E, I] = TIMES[d];
+      set(ball.e, "cx", String(TX0 + (TX1 - TX0) * pe));
+      set(ball.i, "cx", String(TX0 + (TX1 - TX0) * pi));
+      set(trail.e, "x2", String(TX0 + (TX1 - TX0) * pe));
+      set(trail.i, "x2", String(TX0 + (TX1 - TX0) * pi));
+      const shown = Math.floor(pe * rects.length + 1e-9);
+      rects.forEach((r, k) => set(r, "visibility", k < shown ? "visible" : "hidden"));
+      const done = pi >= 1;
+      const phase = pi; // one wave: each pulse crosses its edge once over the whole ISO lane
+      set(pulseG, "visibility", pi > 0 && !done ? "visible" : "hidden");
+      if (pi > 0 && !done) {
+        dirs.forEach(([u, v], k) => {
+          set(pulses[k], "cx", f2(pts[u][0] + (pts[v][0] - pts[u][0]) * phase));
+          set(pulses[k], "cy", f2(pts[u][1] + (pts[v][1] - pts[u][1]) * phase));
+        });
+      }
+      const lit = done; // a node turns on once, when its pulses arrive, and stays on
+      nodes.forEach((n) => set(n, "class", lit ? "m-move" : "m-chalk-fill"));
+      toggle(label.e, "data-on", pe >= 1);
+      toggle(label.i, "data-on", done);
+      text(label.e, `${f2(E)} ms`);
+      text(label.i, `${f2(I)} ms`);
+      text(out.e, `${f2(pe * E)} ms`);
+      text(out.i, `${f2(pi * I)} ms`);
+      text(out.s, pe >= 1 ? `${f2(E / I)}\u00d7` : "\u00a0");
+      text(payoffNum, `${f2(E / I)}\u00d7`);
+      toggle(payoff, "data-on", pe >= 1);
+    };
+
+    let raf = 0;
+    const finish = (d: number) => {
+      set(svg, "aria-label", sentence(d));
+      text(live, sentence(d));
+    };
+    const jump = () => {
+      cancelAnimationFrame(raf);
+      const d = dim();
+      render(d, 1, 1);
+      finish(d);
+    };
+    const start = () => {
+      cancelAnimationFrame(raf);
+      if (still.matches) return jump();
+      const d = dim();
+      const [E, I] = TIMES[d];
+      text(live, "");
+      render(d, 0, 0);
+      let t0 = 0;
+      const tick = (now: number) => {
+        if (!t0) t0 = now;
+        const el = (now - t0) / 1000;
+        const pe = Math.min(1, el / RACE), pi = Math.min(1, el / (RACE * I / E));
+        render(d, pe, pi);
+        if (pe < 1) raf = requestAnimationFrame(tick); else finish(d);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+
+    let ran = false;
+    run.addEventListener("click", () => { ran = true; start(); });
+    radios.forEach((r) => r.addEventListener("change", () => { ran = true; start(); }));
+    still.addEventListener("change", () => { if (still.matches) jump(); });
+
+    // The signature motion: once, the first time the model is half in view.
+    if (!still.matches) {
+      render(dim(), 0, 0);
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) { io.disconnect(); if (!ran) { ran = true; start(); } }
+        }, { threshold: 0.5 });
+        io.observe(svg);
+      } else {
+        ran = true; start();
+      }
+    }
+  }
+</script>

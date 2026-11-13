@@ -1,0 +1,146 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="447.68pt" height="291.02pt" viewBox="0 0 447.68 291.02" xmlns="http://www.w3.org/2000/svg" version="1.1"><defs><style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style></defs><g id="autobench-figure_1"><g id="autobench-patch_1"><path d="M 0 291.02 
+L 447.68 291.02 
+L 447.68 -0 
+L 0 -0 
+L 0 291.02 
+z
+" style="fill: none"/></g><g id="autobench-axes_1"><g id="autobench-patch_2"><path d="M 53.48 242.99 
+L 241.27 242.99 
+L 241.27 54.49 
+L 53.48 54.49 
+L 53.48 242.99 
+z
+" style="fill: none"/></g><g id="autobench-matplotlib.axis_1"><g id="autobench-xtick_1"><g id="autobench-line2d_1"><defs><path id="autobench-md70782f7a4" d="M 0 0 
+L 0 4.5 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#autobench-md70782f7a4" x="97.75" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_1"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="97.75" y="262.58" transform="rotate(-0 97.75 262.58)">MMLU-Pro</text></g></g><g id="autobench-xtick_2"><g id="autobench-line2d_2"><g><use xlink:href="#autobench-md70782f7a4" x="197" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_2"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="197" y="262.58" transform="rotate(-0 197 262.58)">GPQA</text></g></g><g id="autobench-text_3"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="147.38" y="283.53" transform="rotate(-0 147.38 283.53)">Kendall's τ</text></g></g><g id="autobench-matplotlib.axis_2"><g id="autobench-ytick_1"><g id="autobench-line2d_3"><path d="M 53.48 242.99 
+L 241.27 242.99 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_4"><defs><path id="autobench-m8df638cedf" d="M 0 0 
+L -4.5 0 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_4"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="248.54" transform="rotate(-0 44.98 248.54)">0.0</text></g></g><g id="autobench-ytick_2"><g id="autobench-line2d_5"><path d="M 53.48 205.29 
+L 241.27 205.29 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_6"><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="205.29" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_5"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="210.84" transform="rotate(-0 44.98 210.84)">0.2</text></g></g><g id="autobench-ytick_3"><g id="autobench-line2d_7"><path d="M 53.48 167.59 
+L 241.27 167.59 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_8"><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="167.59" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_6"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="173.14" transform="rotate(-0 44.98 173.14)">0.4</text></g></g><g id="autobench-ytick_4"><g id="autobench-line2d_9"><path d="M 53.48 129.89 
+L 241.27 129.89 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_10"><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="129.89" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_7"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="135.44" transform="rotate(-0 44.98 135.44)">0.6</text></g></g><g id="autobench-ytick_5"><g id="autobench-line2d_11"><path d="M 53.48 92.19 
+L 241.27 92.19 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_12"><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="92.19" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_8"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="97.74" transform="rotate(-0 44.98 97.74)">0.8</text></g></g><g id="autobench-ytick_6"><g id="autobench-line2d_13"><path d="M 53.48 54.49 
+L 241.27 54.49 
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_14"><g><use xlink:href="#autobench-m8df638cedf" x="53.48" y="54.49" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_9"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="44.98" y="60.04" transform="rotate(-0 44.98 60.04)">1.0</text></g></g><g id="autobench-text_10"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="16.1" y="148.74" transform="rotate(-90 16.1 148.74)">Rank correlation</text></g></g><g id="autobench-patch_3"><path d="M 53.48 242.99 
+L 53.48 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_4"><path d="M 241.27 242.99 
+L 241.27 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_5"><path d="M 53.48 242.99 
+L 241.27 242.99 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_6"><path d="M 53.48 54.49 
+L 241.27 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_7"><path d="M 62.02 242.99 
+L 97.75 242.99 
+L 97.75 122.35 
+L 62.02 122.35 
+z
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: url(#autobench-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_8"><path d="M 161.27 242.99 
+L 197 242.99 
+L 197 144.97 
+L 161.27 144.97 
+z
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: url(#autobench-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_9"><path d="M 97.75 242.99 
+L 133.48 242.99 
+L 133.48 158.17 
+L 97.75 158.17 
+z
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: url(#autobench-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_10"><path d="M 197 242.99 
+L 232.74 242.99 
+L 232.74 158.17 
+L 197 158.17 
+z
+" clip-path="url(#autobench-pf9aab2dec6)" style="fill: url(#autobench-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g></g><g id="autobench-axes_2"><g id="autobench-patch_11"><path d="M 256.3 242.99 
+L 444.08 242.99 
+L 444.08 54.49 
+L 256.3 54.49 
+L 256.3 242.99 
+z
+" style="fill: none"/></g><g id="autobench-matplotlib.axis_3"><g id="autobench-xtick_3"><g id="autobench-line2d_15"><g><use xlink:href="#autobench-md70782f7a4" x="300.56" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_11"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="300.56" y="262.58" transform="rotate(-0 300.56 262.58)">MMLU-Pro</text></g></g><g id="autobench-xtick_4"><g id="autobench-line2d_16"><g><use xlink:href="#autobench-md70782f7a4" x="399.82" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="autobench-text_12"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="399.82" y="262.58" transform="rotate(-0 399.82 262.58)">GPQA</text></g></g><g id="autobench-text_13"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="350.19" y="283.52" transform="rotate(-0 350.19 283.52)">Spearman's ρ</text></g></g><g id="autobench-matplotlib.axis_4"><g id="autobench-ytick_7"><g id="autobench-line2d_17"><path d="M 256.3 242.99 
+L 444.08 242.99 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_18"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="242.99" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g><g id="autobench-ytick_8"><g id="autobench-line2d_19"><path d="M 256.3 205.29 
+L 444.08 205.29 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_20"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="205.29" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g><g id="autobench-ytick_9"><g id="autobench-line2d_21"><path d="M 256.3 167.59 
+L 444.08 167.59 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_22"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="167.59" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g><g id="autobench-ytick_10"><g id="autobench-line2d_23"><path d="M 256.3 129.89 
+L 444.08 129.89 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_24"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="129.89" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g><g id="autobench-ytick_11"><g id="autobench-line2d_25"><path d="M 256.3 92.19 
+L 444.08 92.19 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_26"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="92.19" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g><g id="autobench-ytick_12"><g id="autobench-line2d_27"><path d="M 256.3 54.49 
+L 444.08 54.49 
+" clip-path="url(#autobench-p96f7207662)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="autobench-line2d_28"><g><use xlink:href="#autobench-m8df638cedf" x="256.3" y="54.49" style="stroke: currentColor; stroke-width: 1.1"/></g></g></g></g><g id="autobench-patch_12"><path d="M 256.3 242.99 
+L 256.3 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_13"><path d="M 444.08 242.99 
+L 444.08 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_14"><path d="M 256.3 242.99 
+L 444.08 242.99 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_15"><path d="M 256.3 54.49 
+L 444.08 54.49 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="autobench-patch_16"><path d="M 264.83 242.99 
+L 300.56 242.99 
+L 300.56 95.96 
+L 264.83 95.96 
+z
+" clip-path="url(#autobench-p96f7207662)" style="fill: url(#autobench-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_17"><path d="M 364.08 242.99 
+L 399.82 242.99 
+L 399.82 124.24 
+L 364.08 124.24 
+z
+" clip-path="url(#autobench-p96f7207662)" style="fill: url(#autobench-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_18"><path d="M 300.56 242.99 
+L 336.29 242.99 
+L 336.29 128.01 
+L 300.56 128.01 
+z
+" clip-path="url(#autobench-p96f7207662)" style="fill: url(#autobench-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-patch_19"><path d="M 399.82 242.99 
+L 435.55 242.99 
+L 435.55 131.78 
+L 399.82 131.78 
+z
+" clip-path="url(#autobench-p96f7207662)" style="fill: url(#autobench-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g></g><g id="autobench-legend_1"><g id="autobench-patch_20"><path d="M 95.38 34.25 
+L 389.58 34.25 
+L 389.58 3.6 
+L 95.38 3.6 
+z
+" style="fill: var(--lab-paper,#fff); stroke: var(--lab-frame,#808080); stroke-width: 1.1; stroke-linejoin: miter"/></g><g id="autobench-patch_21"><path d="M 103.38 22.8 
+L 141.78 22.8 
+L 141.78 11.6 
+L 103.38 11.6 
+z
+" style="fill: url(#autobench-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-text_14"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="152.98" y="22.8" transform="rotate(-0 152.98 22.8)">Multi-judge</text></g><g id="autobench-patch_22"><path d="M 250.22 22.8 
+L 288.62 22.8 
+L 288.62 11.6 
+L 250.22 11.6 
+z
+" style="fill: url(#autobench-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="autobench-text_15"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="299.82" y="22.8" transform="rotate(-0 299.82 22.8)">Single-judge</text></g></g></g><defs><clipPath id="autobench-pf9aab2dec6"><rect x="53.48" y="54.49" width="187.79" height="188.5"/></clipPath><clipPath id="autobench-p96f7207662"><rect x="256.3" y="54.49" width="187.79" height="188.5"/></clipPath></defs><defs><pattern id="autobench-h3bcca6dd4a" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72"><rect x="0" y="0" width="73" height="73" style="fill:var(--lab-1,#f34c4c)"/><path d="M -36 36 
+L 36 -36 
+M -24 48 
+L 48 -24 
+M -12 60 
+L 60 -12 
+M 0 72 
+L 72 0 
+M 12 84 
+L 84 12 
+M 24 96 
+L 96 24 
+M 36 108 
+L 108 36 
+" style="fill: currentColor; stroke: currentColor; stroke-width: 0.8; stroke-linecap: butt; stroke-linejoin: miter"/></pattern><pattern id="autobench-hefc3152df1" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72"><rect x="0" y="0" width="73" height="73" style="fill:var(--lab-2,#719bdb)"/><path d="M -36 36 
+L 36 108 
+M -24 24 
+L 48 96 
+M -12 12 
+L 60 84 
+M 0 0 
+L 72 72 
+M 12 -12 
+L 84 60 
+M 24 -24 
+L 96 48 
+M 36 -36 
+L 108 36 
+" style="fill: currentColor; stroke: currentColor; stroke-width: 0.8; stroke-linecap: butt; stroke-linejoin: miter"/></pattern></defs></svg>

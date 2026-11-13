@@ -1,0 +1,39 @@
+---
+// A paper page's reference list, in author-year order. Each entry is #ref-<key>, the target of
+// the body's citation links; the title links to the version of record, and an arXiv copy, when
+// there is one besides, gets its own link.
+import { refAuthors, refHref, type Ref } from "../lib/references";
+
+interface Props { refs: Ref[] }
+const { refs } = Astro.props;
+---
+{refs.length > 0 && (
+  <section class="refs" aria-labelledby="references">
+    <h2 id="references">References</h2>
+    <ul class="refs__list">
+      {refs.map((r) => {
+        const href = refHref(r);
+        const arxiv = r.arxiv && !href?.includes("arxiv.org") ? `https://arxiv.org/abs/${r.arxiv}` : undefined;
+        return (
+          <li id={`ref-${r.key}`} class="refs__item">
+            {refAuthors(r.authors)} ({r.year}). {href ? <a href={href} data-track="open-reference">{r.title}</a> : r.title}.
+            {r.venue && <> <i>{r.venue}</i>.</>}
+            {arxiv && <> <a href={arxiv} class="refs__alt">arXiv</a></>}
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+)}
+
+<style>
+  .refs { margin-top: var(--ply-space-7); }
+  .refs__list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--ply-space-2); font-size: var(--ply-size-sm); line-height: var(--ply-leading-normal); }
+  /* Hanging indent: the first line starts at the margin, the rest of the entry sits under it. */
+  .refs__item { padding-left: 1.5em; text-indent: -1.5em; overflow-wrap: anywhere; text-wrap: pretty; }
+  .refs__alt { font-size: var(--ply-size-xs); }
+  /* The entry a citation link jumped to: tinted, with a tomato bar (the system's mark for "here")
+     drawn outside the text. The hanging indent puts the first line at the item's left edge, so the
+     tint reaches 12px into the gutter and the bar sits beyond it, clear of the text. */
+  .refs__item:target { background: var(--ply-color-surface-sunken); box-shadow: -12px 0 0 0 var(--ply-color-surface-sunken), -15px 0 0 0 var(--ply-color-accent); }
+</style>

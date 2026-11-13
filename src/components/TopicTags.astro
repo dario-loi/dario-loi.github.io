@@ -1,0 +1,26 @@
+---
+// A row of topic tags. Each links to the topic's list of papers; the current topic, on its own
+// page, is the filled one.
+import { topicOf, topicPath } from "../data/topics";
+interface Props { names: string[]; current?: string; label?: string; placement: string; class?: string }
+const { names, current, label = "Topics", placement, class: className } = Astro.props;
+---
+<ul class:list={["tag-list topic-tags", className]} role="list" aria-label={label}>
+  {names.map((n) => (
+    <li>
+      <a class:list={["ply-tag topic-tag", n === current && "ply-tag--solid"]} href={topicPath(topicOf(n))} rel="tag" aria-current={n === current ? "page" : undefined} data-track="open-topic" data-track-placement={placement} data-track-label={topicOf(n).slug}>{n}</a>
+    </li>
+  ))}
+</ul>
+<style is:global>
+  /* A tag that is a link keeps the tag's look and takes the link's affordances: a pointer target
+     24px tall at least, the tomato edge on hover, and the page's focus ring. */
+  /* The label is teal and underlined, as every link is (DESIGN.md), so a row of tags reads as
+     navigation and not as a filter bar; the current topic stays the filled tag, plain. */
+  a.topic-tag { color: var(--ply-color-link); text-decoration-line: underline; text-decoration-thickness: 1.5px; text-underline-offset: 0.2em; min-height: 1.75rem; padding-inline: 0.6rem; transition: background-color 120ms cubic-bezier(0.16, 1, 0.3, 1), color 120ms cubic-bezier(0.16, 1, 0.3, 1); }
+  a.topic-tag.ply-tag--solid { color: var(--ply-color-bg); text-decoration: none; }
+  a.topic-tag:hover { background: var(--ply-color-text); color: var(--ply-color-bg); border-color: var(--ply-color-text); }
+  a.topic-tag:focus-visible { outline: var(--ply-border-rule) solid var(--ply-color-focus); outline-offset: 2px; }
+  .topic-tags { gap: var(--ply-space-2); }
+  @media (pointer: coarse) { a.topic-tag { min-height: 2.75rem; padding-inline: 0.8rem; } }
+</style>

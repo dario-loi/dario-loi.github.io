@@ -1,0 +1,143 @@
+[
+  {
+    "key": "radford2021learning",
+    "cite": [
+      "Radford et al., 2021"
+    ],
+    "title": "Learning Transferable Visual Models From Natural Language Supervision",
+    "authors": [
+      "Alec Radford",
+      "Jong Wook Kim",
+      "Chris Hallacy",
+      "Aditya Ramesh",
+      "Gabriel Goh",
+      "Sandhini Agarwal",
+      "Girish Sastry",
+      "Amanda Askell",
+      "Pamela Mishkin",
+      "Jack Clark",
+      "Gretchen Krueger",
+      "Ilya Sutskever"
+    ],
+    "venue": "Proceedings of the 38th International Conference on Machine Learning (ICML 2021), PMLR 139",
+    "year": 2021,
+    "url": "https://proceedings.mlr.press/v139/radford21a.html",
+    "bibtex": "@InProceedings{pmlr-v139-radford21a, title = {Learning Transferable Visual Models From Natural Language Supervision}, author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya}, booktitle = {Proceedings of the 38th International Conference on Machine Learning}, pages = {8748--8763}, year = {2021}, editor = {Meila, Marina and Zhang, Tong}, volume = {139}, series = {Proceedings of Machine Learning Research}, month = {18--24 Jul}, publisher = {PMLR}, pdf = {http://proceedings.mlr.press/v139/radford21a/radford21a.pdf}, url = {https://proceedings.mlr.press/v139/radford21a.html}, }",
+    "source": "https://proceedings.mlr.press/v139/radford21a.html"
+  },
+  {
+    "key": "kazemi2024what",
+    "cite": [
+      "Kazemi et al., 2024"
+    ],
+    "title": "What do we learn from inverting CLIP models?",
+    "authors": [
+      "Hamid Kazemi",
+      "Atoosa Chegini",
+      "Jonas Geiping",
+      "Soheil Feizi",
+      "Tom Goldstein"
+    ],
+    "venue": "arXiv preprint (NeurIPS 2024 Safe Generative AI Workshop)",
+    "year": 2024,
+    "arxiv": "2403.02580",
+    "url": "https://arxiv.org/abs/2403.02580",
+    "bibtex": "@misc{kazemi2024learn, title={What do we learn from inverting CLIP models?}, author={Hamid Kazemi and Atoosa Chegini and Jonas Geiping and Soheil Feizi and Tom Goldstein}, year={2024}, eprint={2403.02580}, archivePrefix={arXiv}, primaryClass={cs.LG}, url={https://arxiv.org/abs/2403.02580} }",
+    "source": "https://export.arxiv.org/api/query?id_list=2403.02580 (arXiv BibTeX format constructed from API metadata)"
+  },
+  {
+    "key": "mirza2024shedding",
+    "cite": [
+      "Mirza et al. (2024)"
+    ],
+    "title": "Shedding More Light on Robust Classifiers Under the Lens of Energy-Based Models",
+    "authors": [
+      "Mujtaba Hussain Mirza",
+      "Maria Rosaria Briglia",
+      "Senad Beadini",
+      "Iacopo Masi"
+    ],
+    "venue": "Computer Vision - ECCV 2024",
+    "year": 2024,
+    "doi": "10.1007/978-3-031-72646-0_26",
+    "url": "https://doi.org/10.1007/978-3-031-72646-0_26",
+    "bibtex": "@inbook{Mirza_2024, title={Shedding More Light on Robust Classifiers Under the Lens of Energy-Based Models}, ISBN={9783031726460}, ISSN={1611-3349}, url={http://dx.doi.org/10.1007/978-3-031-72646-0_26}, DOI={10.1007/978-3-031-72646-0_26}, booktitle={Computer Vision - ECCV 2024}, publisher={Springer Nature Switzerland}, author={Mirza, Mujtaba Hussain and Briglia, Maria Rosaria and Beadini, Senad and Masi, Iacopo}, year={2024}, month=Oct, pages={451--468} }",
+    "source": "https://doi.org/10.1007/978-3-031-72646-0_26 (Crossref content negotiation)"
+  },
+  {
+    "key": "liang2022mind",
+    "cite": [
+      "Liang et al., 2022"
+    ],
+    "title": "Mind the Gap: Understanding the Modality Gap in Multi-modal Contrastive Representation Learning",
+    "authors": [
+      "Victor Weixin Liang",
+      "Yuhui Zhang",
+      "Yongchan Kwon",
+      "Serena Yeung",
+      "James Zou"
+    ],
+    "venue": "Advances in Neural Information Processing Systems 35 (NeurIPS 2022)",
+    "year": 2022,
+    "doi": "10.52202/068431-1280",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/702f4db7543a7432431df588d57bc7c9-Abstract-Conference.html",
+    "bibtex": "@inproceedings{NEURIPS2022_702f4db7, author = {Liang, Victor Weixin and Zhang, Yuhui and Kwon, Yongchan and Yeung, Serena and Zou, James}, booktitle = {Advances in Neural Information Processing Systems}, doi = {10.52202/068431-1280}, editor = {S. Koyejo and S. Mohamed and A. Agarwal and D. Belgrave and K. Cho and A. Oh}, pages = {17612--17625}, publisher = {Curran Associates, Inc.}, title = {Mind the Gap: Understanding the Modality Gap in Multi-modal Contrastive Representation Learning}, url = {https://proceedings.neurips.cc/paper_files/paper/2022/file/702f4db7543a7432431df588d57bc7c9-Paper-Conference.pdf}, volume = {35}, year = {2022} }",
+    "source": "https://proceedings.neurips.cc/paper_files/paper/2022/file/702f4db7543a7432431df588d57bc7c9-Bibtex.bib"
+  },
+  {
+    "key": "poppi2024safe",
+    "cite": [
+      "Poppi et al., 2024"
+    ],
+    "title": "Safe-CLIP: Removing NSFW Concepts from Vision-and-Language Models",
+    "authors": [
+      "Samuele Poppi",
+      "Tobia Poppi",
+      "Federico Cocchi",
+      "Marcella Cornia",
+      "Lorenzo Baraldi",
+      "Rita Cucchiara"
+    ],
+    "venue": "Computer Vision - ECCV 2024",
+    "year": 2024,
+    "doi": "10.1007/978-3-031-73668-1_20",
+    "url": "https://doi.org/10.1007/978-3-031-73668-1_20",
+    "bibtex": "@inbook{Poppi_2024, title={Safe-CLIP: Removing NSFW Concepts from Vision-and-Language Models}, ISBN={9783031736681}, ISSN={1611-3349}, url={http://dx.doi.org/10.1007/978-3-031-73668-1_20}, DOI={10.1007/978-3-031-73668-1_20}, booktitle={Computer Vision - ECCV 2024}, publisher={Springer Nature Switzerland}, author={Poppi, Samuele and Poppi, Tobia and Cocchi, Federico and Cornia, Marcella and Baraldi, Lorenzo and Cucchiara, Rita}, year={2024}, month=Dec, pages={340--356} }",
+    "source": "https://doi.org/10.1007/978-3-031-73668-1_20 (Crossref content negotiation)"
+  },
+  {
+    "key": "liu2024finer",
+    "cite": [],
+    "title": "FINER: Flexible Spectral-bias Tuning in Implicit NEural Representation by Variable-periodic Activation Functions",
+    "authors": [
+      "Zhen Liu",
+      "Hao Zhu",
+      "Qi Zhang",
+      "Jingde Fu",
+      "Weibing Deng",
+      "Zhan Ma",
+      "Yanwen Guo",
+      "Xun Cao"
+    ],
+    "venue": "Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR 2024)",
+    "year": 2024,
+    "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Liu_FINER_Flexible_Spectral-bias_Tuning_in_Implicit_NEural_Representation_by_Variable-periodic_CVPR_2024_paper.html",
+    "bibtex": "@InProceedings{Liu_2024_CVPR, author = {Liu, Zhen and Zhu, Hao and Zhang, Qi and Fu, Jingde and Deng, Weibing and Ma, Zhan and Guo, Yanwen and Cao, Xun}, title = {FINER: Flexible Spectral-bias Tuning in Implicit NEural Representation by Variable-periodic Activation Functions}, booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, month = {June}, year = {2024}, pages = {2713-2722} }",
+    "source": "https://openaccess.thecvf.com/content/CVPR2024/html/Liu_FINER_Flexible_Spectral-bias_Tuning_in_Implicit_NEural_Representation_by_Variable-periodic_CVPR_2024_paper.html"
+  },
+  {
+    "key": "fort2025direct",
+    "cite": [],
+    "title": "Direct Ascent Synthesis: Revealing Hidden Generative Capabilities in Discriminative Models",
+    "authors": [
+      "Stanislav Fort",
+      "Jonathan Whitaker"
+    ],
+    "venue": "arXiv preprint",
+    "year": 2025,
+    "arxiv": "2502.07753",
+    "url": "https://arxiv.org/abs/2502.07753",
+    "bibtex": "@misc{fort2025direct, title={Direct Ascent Synthesis: Revealing Hidden Generative Capabilities in Discriminative Models}, author={Stanislav Fort and Jonathan Whitaker}, year={2025}, eprint={2502.07753}, archivePrefix={arXiv}, primaryClass={cs.CV}, url={https://arxiv.org/abs/2502.07753} }",
+    "source": "https://export.arxiv.org/api/query?id_list=2502.07753 (arXiv BibTeX format constructed from API metadata)"
+  }
+]

@@ -46,9 +46,9 @@ const og = await preview(d.cover, d.coverAlt);
       </EntryHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover seed={seed} src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
         ) : (
-          <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the project's name`} />
+          <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
         )}
         {/* The caption describes the picture, so the picture itself carries no alt text. */}
         {d.cover && d.coverAlt && <figcaption><b>{d.title}.</b> {d.coverAlt}</figcaption>}

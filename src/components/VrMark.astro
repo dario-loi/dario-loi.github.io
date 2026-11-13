@@ -1,0 +1,37 @@
+---
+// A small, static fragment of a Vietoris-Rips complex in the vocabulary of Polytope's Complex:
+// points and edges in the text color (exhibit black, chalk in the dark theme) and mustard triangles at half strength, set straight on the page ground. It is
+// the home page's recurring mark, one per section, seeded from the section's name so each is
+// its own and none of them moves (the mast's complex is the page's one motion).
+// Same generator and layout as Polytope's Complex.astro, so the family resemblance is exact.
+interface Props { seed: number; points?: number; radius?: number; class?: string }
+const { seed, points = 15, radius = 0.23, class: className } = Astro.props;
+
+let s = seed >>> 0 || 1;
+const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+const cols = Math.ceil(Math.sqrt(points * 1.8)), rows = Math.ceil(points / cols);
+const pts = Array.from({ length: points }, (_, i) => {
+  const c = i % cols, r = Math.floor(i / cols);
+  return [6 + ((c + 0.15 + rand() * 0.7) / cols) * 88, 5 + ((r + 0.15 + rand() * 0.7) / rows) * 46];
+});
+const R = radius * 100;
+const adj = pts.map(() => new Set<number>());
+const edges: [number, number][] = [];
+for (let i = 0; i < points; i++) for (let j = i + 1; j < points; j++) {
+  if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) <= R) { edges.push([i, j]); adj[i].add(j); adj[j].add(i); }
+}
+const tris: [number, number, number][] = [];
+for (const [i, j] of edges) for (const k of adj[i]) if (k > j && adj[j].has(k)) tris.push([i, j, k]);
+---
+<svg class:list={["site-fragment", className]} viewBox="0 0 100 56" aria-hidden="true" focusable="false">
+  <g>{tris.map(([a, b, c]) => <polygon class="site-fragment__tri" points={`${pts[a]} ${pts[b]} ${pts[c]}`} />)}</g>
+  <g>{edges.map(([a, b]) => <line class="site-fragment__edge" x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} />)}</g>
+  <g>{pts.map(([x, y]) => <circle class="site-fragment__pt" cx={x} cy={y} r="2" />)}</g>
+</svg>
+<style is:global>
+  .site-fragment { display: block; flex: none; width: 5.5rem; height: auto; aspect-ratio: 100 / 56; }
+  .site-fragment__tri { fill: var(--ply-color-note); fill-opacity: 0.5; }
+  .site-fragment__edge { stroke: var(--ply-color-text); stroke-opacity: 1; stroke-width: 1.05; }
+  .site-fragment__pt { fill: var(--ply-color-text); }
+  @media print { .site-fragment { display: none; } }
+</style>

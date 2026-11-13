@@ -9,10 +9,24 @@ import { person, siteMeta } from "../site";
 export interface Tab { label: string; href: string; current?: boolean; track?: string }
 interface Props { tabs: Tab[] }
 const { tabs } = Astro.props;
+const home = Astro.url.pathname === "/";
 ---
 <header class="ply-topbar">
   <div class="ply-container ply-topbar__inner">
-    <a class="ply-wordmark" href="/">{person.name}<span class="ply-wordmark__stop" aria-hidden="true">.</span></a>
+    {home
+      ? (
+        <a class="ply-wordmark site-emblem" href="/" aria-label={`${person.name}, home`}>
+          <span class="site-emblem__ghost" aria-hidden="true">{person.name}.</span>
+          <svg class="site-emblem__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" fill="var(--ply-color-panel)" />
+            <path d="M6 23.5 12.5 8.5 20 23.5Z" fill="var(--ply-color-note)" fill-opacity=".6" />
+            <g fill="none" stroke="var(--ply-color-panel-text)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 23.5 12.5 8.5 20 23.5Z" /><path d="M20 23.5 26 10.5" /></g>
+            <g fill="var(--ply-color-panel-text)"><circle cx="6" cy="23.5" r="2.5" /><circle cx="20" cy="23.5" r="2.5" /><circle cx="26" cy="10.5" r="2.5" /></g>
+            <circle cx="12.5" cy="8.5" r="2.5" fill="var(--ply-color-accent)" />
+          </svg>
+        </a>
+      )
+      : <a class="ply-wordmark" href="/">{person.name}<span class="ply-wordmark__stop" aria-hidden="true">.</span></a>}
     <nav class="ply-topbar__links" aria-label="Sections">
       {tabs.map((t) => (
         <a class="ply-tab" href={t.href} aria-current={t.current ? "page" : undefined} data-track={t.track} data-track-placement={t.track && "topbar"}>{t.label}</a>
@@ -33,3 +47,19 @@ const { tabs } = Astro.props;
   </div>
 </header>
 <script>import "@dario-loi/polytope/js/topbar.js";</script>
+<style is:global>
+  /* Enlarged text on a narrow window: the bar's parts wrap to a second row and the tools may wrap
+     too, instead of running past the edge. Nothing changes while they fit. */
+  @media (max-width: 30rem) {
+    .ply-topbar__inner { flex-wrap: wrap; }
+    .ply-topbar .ply-wordmark { flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+    .ply-topbar__tools { flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-end; }
+  }
+  /* The home page's bar carries the emblem where inner pages carry the wordmark (their folio). The
+     link holds the wordmark's own box, set invisibly, so the tabs sit exactly where they do on every
+     other page; the emblem is the favicon's object, drawn at its left edge. */
+  .site-emblem { position: relative; display: inline-block; }
+  .site-emblem__ghost { visibility: hidden; }
+  .site-emblem__mark { position: absolute; inset-inline-start: 0; top: 50%; height: 1.5em; width: 1.5em; transform: translateY(-50%); }
+  .site-emblem:focus-visible .site-emblem__mark { outline: none; }
+</style>

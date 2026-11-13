@@ -39,6 +39,46 @@ Any entry with `draft: true` renders under `npm run dev` with a Draft label and 
 the production build, the sitemap, and the RSS feed. Without a `cover` image, a card draws a
 Vietoris-Rips complex seeded from the file name, so every entry gets its own figure.
 
+## Topics
+
+A paper lists up to three broad topics by name (`topics:` in its front matter), from the list in
+`src/data/topics.ts`. They show as tags under the abstract, and each tag links to the topic's own
+page (`/publications/topics/<slug>/`), which lists every paper on it; `/publications/topics/` lists
+them all. A topic's description is about the field, not about the papers under it. `keywords:`
+are the paper's narrower search terms: they go into its schema.org record and the PDF, and are
+not shown.
+
+## Models and plots on a paper page
+
+A paper's front matter can name a working model (`widget:`), a small interactive drawing shown in
+the margin beside the abstract. The models live in `src/components/widgets`, share one frame
+(`Model.astro`), and are listed in `index.ts`. A model illustrates the paper's mechanism with
+formulas computed in the browser, and its caption says it is not the paper's data. It is a draft
+until the entry sets `widgetLive: true`: drafts show under `npm run dev` only.
+
+Plots in the lab's style are drawn with Matplotlib from numbers printed in the paper. Each is a
+script in `scripts/plots` that holds its numbers, names the table they come from, and writes
+`src/content/publications/<slug>-plot.svg`; `scripts/plots/mentis.py` is the shared style.
+
+```sh
+.venv/bin/python scripts/plots/<slug>.py   # needs matplotlib in the venv
+```
+
+## References on a paper page
+
+A paper page lists the works its body cites or discusses under "References", from
+`src/content/publications/<id>.refs.json`: one entry per work, with its official BibTeX and the
+address it was copied from (`source`). Take entries from the version of record: Crossref
+(`curl -sLH "Accept: application/x-bibtex" https://doi.org/<doi>`), the proceedings site (NeurIPS,
+ICLR, PMLR, CVF, ACL Anthology), or arXiv for a preprint. DBLP and OpenReview block scripts, so
+an entry built in OpenReview's format says "constructed" in its `source`; check those by hand.
+
+Each string in an entry's `cite` ("Bodnar et al., 2022", "Pei et al. (2020)") is linked in the
+body to the entry, at build time (`src/lib/hast-cite-links.mjs`). The entries also become the
+paper record's schema.org `citation` and a References list in the paper's Markdown and in
+`llms-full.txt`. The dev server keeps a compiled body until its `.mdx` changes, so restart it
+(`npx astro dev stop`, then `npm run dev`) after editing a `.refs.json`.
+
 ## Paper PDFs
 
 The site hosts a copy of each paper's PDF at `public/publications/<slug>/<slug>.pdf`, since
@@ -105,6 +145,8 @@ Custom events, each with `page`, `source` (the referrer: `direct`, a host name, 
 | `bibtex-copy` | The Copy button on a paper's BibTeX (`label` is the paper) |
 | `project-link` | Links on a project page (`label`) |
 | `open-post`, `open-publication`, `open-project` | Following a card to its page (`label` is the entry) |
+| `open-topic` | A topic tag or a topic in the topics index (`label` is the topic) |
+| `open-latest` | An item in the home page's Latest column (`label` is the entry) |
 
 In Umami, open Events, pick an event, and break it down by any of these properties.
 

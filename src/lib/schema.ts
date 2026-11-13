@@ -8,6 +8,8 @@ import type { CollectionEntry } from "astro:content";
 import { isoDay } from "./content";
 import { plain } from "./tex";
 import { person, siteMeta } from "../site";
+import { topicOf, topicPath } from "../data/topics";
+import { refNode, referencesOf } from "./references";
 
 type Node = Record<string, unknown>;
 
@@ -19,6 +21,20 @@ export const websiteId = `${home}#website`;
 const me = { "@type": "Person", "@id": personId, name: person.name };
 const external = (href: string) => /^https?:\/\//.test(href);
 
+export const portraitId = `${home}#portrait`;
+/** The photo on the home page, with the metadata it carries itself (public/dario-loi.jpg). */
+const portraitNode = (): Node => ({
+  "@type": "ImageObject",
+  "@id": portraitId,
+  url: abs(person.photo),
+  contentUrl: abs(person.photo),
+  width: 600,
+  height: 600,
+  caption: person.name,
+  creator: { "@id": personId },
+  creditText: person.name,
+});
+
 const northeastern = { "@type": "CollegeOrUniversity", name: person.affiliation, url: "https://www.northeastern.edu/" };
 
 /** The site owner, with the lab, the alma mater, and the profiles that identify the same person
@@ -26,7 +42,7 @@ const northeastern = { "@type": "CollegeOrUniversity", name: person.affiliation,
 export const personNode = (): Node => ({
   ...me,
   url: home,
-  image: abs(person.photo),
+  image: portraitNode(),
   description: person.lede,
   jobTitle: person.role,
   affiliation: northeastern,
@@ -46,8 +62,7 @@ export const websiteNode = (): Node => ({
   author: { "@id": personId },
 });
 
-/** The home page is the person's profile. Its picture is the square card, which search results
- *  show whole beside the page; og.png, the wide card for social previews, they crop to a square. */
+/** The home page is the person's profile, and its picture is the portrait on the page. */
 export const profilePageNode = (): Node => ({
   "@type": "ProfilePage",
   "@id": `${home}#profile`,
@@ -55,7 +70,7 @@ export const profilePageNode = (): Node => ({
   name: `${person.name}, ${person.role}`,
   mainEntity: { "@id": personId },
   isPartOf: { "@id": websiteId },
-  primaryImageOfPage: { "@type": "ImageObject", url: abs("/og-square.png"), width: 1200, height: 1200 },
+  primaryImageOfPage: { "@id": portraitId },
 });
 
 const paperUrl = (p: CollectionEntry<"publications">) => abs(`/publications/${p.id}/`);
@@ -85,6 +100,11 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
   ].filter(Boolean);
   // Co-authors carry the institutions the paper gives them. The site owner is the Person record
   // on the home page, whose affiliation is current; a paper's may be older.
+  const topicTerm = (name: string) => ({ "@type": "DefinedTerm", name, url: abs(topicPath(topicOf(name))), inDefinedTermSet: abs("/publications/topics/") });
+  const identifier = [
+    d.doi && { "@type": "PropertyValue", propertyID: "DOI", value: d.doi, url: `https://doi.org/${d.doi}` },
+    d.arxiv && { "@type": "PropertyValue", propertyID: "arXiv", value: d.arxiv, url: `https://arxiv.org/abs/${d.arxiv}` },
+  ].filter(Boolean);
   const institutions = (indices: number[]) => indices.map((i) => d.affiliations[i - 1]).filter(Boolean).map((name) => ({ "@type": "Organization", name }));
   return {
     "@type": "ScholarlyArticle",
@@ -102,12 +122,17 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
     datePublished: isoDay(d.date),
     dateModified: modified ? modified.toISOString() : isoDay(d.date),
     inLanguage: "en",
-    keywords: d.keywords.length ? d.keywords : undefined,
+    keywords: d.topics.length + d.keywords.length ? [...new Set([...d.topics, ...d.keywords])] : undefined,
+    about: d.topics.length ? d.topics.map(topicTerm) : undefined,
+    identifier: identifier.length ? identifier : undefined,
+    thumbnailUrl: pictures[0],
     isPartOf: d.kind === "preprint" ? undefined : { "@type": d.kind === "journal" ? "Periodical" : "CreativeWork", name: d.venueFull ?? d.venue },
+    pagination: d.pages,
+    citation: referencesOf(p.id).length ? referencesOf(p.id).map(refNode) : undefined,
     creativeWorkStatus: d.kind === "preprint" ? "Preprint" : undefined,
-    award: d.award,
+    award: d.awardScope === "paper" ? d.award : undefined,
     image: pictures.length ? pictures : undefined,
-    encoding: d.pdf && { "@type": "MediaObject", contentUrl: abs(d.pdf), encodingFormat: "application/pdf" },
+    encoding: d.pdf && { "@type": "MediaObject", name: `${d.shortTitle ?? d.title} (PDF)`, contentUrl: abs(d.pdf), encodingFormat: "application/pdf" },
     isAccessibleForFree: true,
     sameAs: sameAs.length ? sameAs : undefined,
   };
@@ -125,6 +150,7 @@ export function paperCodeNode(p: CollectionEntry<"publications">): Node | undefi
     url: code.href,
     codeRepository: code.href,
     citation: { "@id": paperId(p) },
+    author: { "@id": personId },
     isAccessibleForFree: true,
   };
 }
@@ -198,6 +224,9 @@ function collectionPage(path: string, name: string, description: string, items: 
 
 export const papersPage = (pubs: CollectionEntry<"publications">[], description: string) =>
   collectionPage("/publications/", "Publications", description, pubs.map(paperItem));
+/** A topic's list of papers, or the list of topics when `items` are topic pages. */
+export const topicPage = (path: string, name: string, description: string, pubs: CollectionEntry<"publications">[]) =>
+  collectionPage(path, name, description, pubs.map(paperItem));
 export const projectsPage = (projects: CollectionEntry<"projects">[], description: string) =>
   collectionPage("/projects/", "Projects", description, projects.map(projectItem));
 export const postsPage = (posts: CollectionEntry<"blog">[], description: string) =>

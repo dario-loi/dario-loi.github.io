@@ -12,10 +12,10 @@ import { person } from "../../site";
 
 const posts = await entries("blog");
 const n = posts.length;
-const description = `Writing by ${person.name} on research and engineering.`;
+const description = `Writing by ${person.name}, a Ph.D. student at Northeastern University, on machine learning research and software engineering.`;
 ---
 <Base title="Blog" description={description} current="Blog" noindex={n === 0} schema={n > 0 ? [postsPage(posts, description)] : []} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
-  <IndexMast title="Blog" lede="Notes on research and engineering." count={n > 0 ? `${n} ${n === 1 ? "post" : "posts"}` : undefined} />
+  <IndexMast title="Blog" lede="Notes on research and engineering." />
   <div class="ply-container posts">
     {n === 0 ? (
       <Empty title="Nothing posted yet" body="Publications and projects are up in the meantime.">
@@ -25,7 +25,7 @@ const description = `Writing by ${person.name} on research and engineering.`;
         </div>
       </Empty>
     ) : (
-      <CardGrid>
+      <CardGrid class="card-rows">
         {posts.map((p, i) => (
           <Card
             href={`/blog/${p.id}/`}
@@ -39,7 +39,7 @@ const description = `Writing by ${person.name} on research and engineering.`;
             seed={seedOf(p.id)}
             link={{ "data-track": "open-post", "data-track-placement": "blog", "data-track-label": p.id }}
           >
-            {p.data.cover && <Cover slot="figure" {...cardPicture(i === 0)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+            <Cover slot="figure" {...cardPicture(i === 0)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
           </Card>
         ))}
       </CardGrid>
@@ -47,5 +47,5 @@ const description = `Writing by ${person.name} on research and engineering.`;
   </div>
 </Base>
 <style>
-  .posts { padding-top: var(--ply-space-7); }
+  .posts { padding-top: var(--ply-space-5); }
 </style>

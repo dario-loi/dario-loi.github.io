@@ -1,0 +1,27 @@
+---
+// The newest entries of the CV in brief: a dated line each, headed by a wall label.
+interface Item { when: string; kind?: string; title: string; rest: string; href: string }
+interface Props { items: Item[]; placement: string; class?: string }
+const { items, placement, class: className } = Astro.props;
+---
+<section class:list={["latest", className]} aria-label="Latest">
+  <p class="ply-label" aria-hidden="true">Latest</p>
+  <ol class="latest__list" role="list">
+    {items.map((e) => (
+      <li>
+        <span class="latest__meta"><time class="latest__when">{e.when}</time>{e.kind && <span class="latest__kind">{e.kind}</span>}</span>
+        <span class="latest__what"><a href={e.href} data-track="open-latest" data-track-placement={placement} data-track-label={e.title}>{e.title}</a>. {e.rest}</span>
+      </li>
+    ))}
+  </ol>
+</section>
+<style>
+  .latest { display: grid; gap: var(--ply-space-2); justify-items: start; }
+  .latest__list { list-style: none; padding: 0; margin: 0; width: 100%; border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); }
+  .latest__list li { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: var(--ply-space-3); padding-block: var(--ply-space-2); font-size: var(--ply-size-ui); line-height: var(--ply-leading-normal); }
+  .latest__list li + li { border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
+  .latest__meta { display: grid; align-content: start; gap: 0.15rem; }
+  .latest__kind { font-size: var(--ply-size-xs); font-weight: var(--ply-weight-semibold); color: var(--ply-color-text-muted); line-height: 1.3; }
+  .latest__when { font-family: var(--ply-font-mono); font-size: var(--ply-size-sm); font-weight: var(--ply-weight-bold); font-variant-numeric: tabular-nums; padding-top: 0.1rem; }
+  .latest__what a { font-weight: var(--ply-weight-semibold); }
+</style>

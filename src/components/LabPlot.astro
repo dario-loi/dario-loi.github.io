@@ -1,0 +1,33 @@
+---
+// A plot drawn by scripts/plots (the MENTIS lab's style), inlined so its ink and series colors
+// follow the site theme: the SVG holds currentColor and var(--lab-*, light value), and this
+// component sets the dark values. Its text stays real text, for readers and crawlers.
+import Figure from "@dario-loi/polytope/astro/Figure.astro";
+
+interface Props { svg: string; alt: string; num?: number | string }
+const { svg, alt, num } = Astro.props;
+const size = svg.match(/<svg[^>]*\swidth="([\d.]+)pt"/);
+const maxWidth = size ? `${(parseFloat(size[1]) * 4) / 3}px` : "100%";
+const labeled = svg.replace("<svg ", `<svg role="img" aria-label="${alt.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}" `);
+---
+<Figure class="figure--column" num={num}>
+  <div class="lab-plot" style={`--lab-max:${maxWidth}`} set:html={labeled} />
+  <slot name="caption" slot="caption" />
+</Figure>
+<style is:global>
+  .lab-plot { color: var(--ply-color-text); }
+  .lab-plot svg text { fill: currentColor; }
+  .lab-plot svg { display: block; width: 100%; height: auto; max-width: var(--lab-max); margin-inline: auto; }
+  /* The dark ground (#161615): each series keeps its lab hue, lifted to 3:1 or better; the
+     near-black lab-3 becomes a pale violet. Ink is chalk through currentColor. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .lab-plot {
+      --lab-2: #5E8BD6; --lab-3: #E2B0FF; --lab-4: #1FA79F; --lab-5: #A855CC;
+      --lab-paper: #1c1c1b; --lab-grid: #8a8a88; --lab-frame: #8a8a88;
+    }
+  }
+  :root[data-theme="dark"] .lab-plot {
+    --lab-2: #5E8BD6; --lab-3: #E2B0FF; --lab-4: #1FA79F; --lab-5: #A855CC;
+    --lab-paper: #1c1c1b; --lab-grid: #8a8a88; --lab-frame: #8a8a88;
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+// A grid of publication cards, as the publications page and a topic's page show them.
+import type { CollectionEntry } from "astro:content";
+import Card from "@dario-loi/polytope/astro/Card.astro";
+import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
+import { foldAuthors } from "@dario-loi/polytope/astro/authors.ts";
+import Cover from "./Cover.astro";
+import Tex from "./Tex.astro";
+import { cardPicture, pubRow, seedOf } from "../lib/content";
+import { person } from "../site";
+interface Props {
+  pubs: CollectionEntry<"publications">[];
+  /** The entry whose card leads the page, larger than the rest. */
+  lead?: string;
+  /** Where the cards sit, for analytics. */
+  placement: string;
+  /** Adds the year to each card's venue line, on a page that does not group by year. */
+  year?: boolean;
+}
+const { pubs, lead, placement, year = false } = Astro.props;
+// A card's links: the paper's own (as the publication lists show them), then its BibTeX.
+const cardLinks = (p: (typeof pubs)[number]) => [...(pubRow(p).links ?? []), { label: "BibTeX", href: `/publications/${p.id}/#cite` }];
+---
+<CardGrid class="pub-cards card-rows">
+  {pubs.map((p) => (
+    <Card
+      href={`/publications/${p.id}/`}
+      title={p.data.title}
+      meta={[[p.data.venue, p.data.format, year && !/\d{2}$/.test(p.data.venue) ? String(p.data.date.getUTCFullYear()) : undefined].filter(Boolean).join(", ")]}
+      badge={[...(p.data.draft ? ["Draft"] : []), ...(p.data.award ? [p.data.award] : [])]}
+      lead={p.id === lead}
+      seed={seedOf(p.id)}
+      link={{ "data-track": "open-publication", "data-track-placement": placement, "data-track-label": p.id }}
+    >
+      <Cover slot="figure" {...cardPicture(p.id === lead)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
+      {p.data.tldr && <Tex slot="summary" text={p.data.tldr} />}
+      <p class="pub-card__authors">{foldAuthors(p.data.authors.map((a) => a.name), person.name).map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
+      <p class="ply-pub__links">{cardLinks(p).map((l) => <a href={l.href} data-track="paper-link" data-track-placement={`${placement}-card`} data-track-label={`${p.id}:${l.label}`}>{l.label}</a>)}</p>
+    </Card>
+  ))}
+</CardGrid>
+<style is:global>
+  .pub-card__authors { font-size: var(--ply-size-sm); color: var(--ply-color-text-muted); line-height: var(--ply-leading-normal); }
+  .pub-card__authors .ply-me { color: var(--ply-color-text); font-weight: var(--ply-weight-semibold); }
+  /* From 80rem every paper card sits in one of three tracks, whatever the year or topic holds, so a
+     card is the same size on every row and the lead's panel ends where the second track ends. */
+  @media (min-width: 80rem) {
+    .pub-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pub-cards > :is(.ply-card--lead, .ply-card:only-child) { grid-template-columns: subgrid; }
+    .pub-cards > :is(.ply-card--lead, .ply-card:only-child) > .ply-card__panel { grid-column: span 2; }
+    /* The lead's text is one track wide, so its name sets a step down from the full-row size. */
+    .pub-cards > :is(.ply-card--lead, .ply-card:only-child) .ply-card__title { font-size: var(--ply-size-xl); }
+  }
+</style>

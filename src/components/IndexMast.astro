@@ -1,13 +1,16 @@
 ---
-// The mast of a list page: the title with its tomato full stop, an optional lede, and a count.
+// The mast of a list page: the title with its tomato full stop and an optional lede.
 import Mast from "@dario-loi/polytope/astro/Mast.astro";
-interface Props { title: string; lede?: string; count?: string }
-const { title, lede, count } = Astro.props;
+interface Props { title: string; lede?: string }
+const { title, lede } = Astro.props;
 ---
-<Mast title={title} lede={lede} compact>
-  {count && <p slot="after" class="index-mast__count">{count}</p>}
-</Mast>
+<Mast title={title} lede={lede} compact />
 <hr class="ply-rule" />
 <style is:global>
-  .index-mast__count { margin-top: var(--ply-space-4); font-size: var(--ply-size-sm); font-weight: var(--ply-weight-semibold); color: var(--ply-color-text-muted); font-variant-numeric: tabular-nums; }
+  /* A list page's lede runs as wide as a title line before it wraps, so a sentence a little
+     longer than the reading measure does not leave one word on a second line. */
+  .ply-mast--compact .ply-mast__lede { max-width: 52rem; text-wrap: balance; }
+  /* With enlarged text on a narrow window the title's floor size can outgrow its box; it breaks
+     inside the word then, and at 100% size it fits and nothing changes. */
+  @media (max-width: 30rem) { .ply-mast__title, .ply-mast__title .ply-nowrap { white-space: normal; overflow-wrap: anywhere; } }
 </style>

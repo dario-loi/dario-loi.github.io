@@ -10,12 +10,16 @@ import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
 import Tex from "../../components/Tex.astro";
+import References from "../../components/References.astro";
+import { referencesOf } from "../../lib/references";
 import Cover from "../../components/Cover.astro";
+import TopicTags from "../../components/TopicTags.astro";
 import { column, entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture, widthsFor } from "../../lib/content";
 import { paperCodeNode, paperNode } from "../../lib/schema";
 import { lastmod } from "../../lib/lastmod.mjs";
 import { hasMath, plain } from "../../lib/tex";
 import { person } from "../../site";
+import { widgets } from "../../components/widgets";
 
 export const getStaticPaths = (async () => {
   const pubs = await entries("publications");
@@ -36,6 +40,8 @@ const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure
 const changed = lastmod(`/publications/${pub.id}/`);
 const modified = changed && new Date(changed) > d.date ? new Date(changed) : undefined;
 const code = paperCodeNode(pub);
+// A model that is still a draft shows under `npm run dev` only.
+const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.widget] : undefined;
 ---
 <Base
   title={d.shortTitle ?? d.title}
@@ -43,6 +49,7 @@ const code = paperCodeNode(pub);
   description={plain(d.description ?? d.tldr ?? d.abstract.slice(0, 155))}
   current="Publications"
   noindex={d.draft}
+  markdown={`/publications/${pub.id}/index.md`}
   {...og}
   published={d.date}
   modified={modified}
@@ -53,14 +60,20 @@ const code = paperCodeNode(pub);
     authors: d.authors.map((a) => ({ name: a.name, href: a.name === person.name ? "/" : undefined, institutions: a.affiliations.map((i) => d.affiliations[i - 1]).filter(Boolean) })),
     date: d.date,
     ...(d.kind === "journal" ? { journal: d.venueFull ?? d.venue } : d.kind === "preprint" ? {} : { conference: d.venueFull ?? d.venue }),
+    ...(d.series ? { journal: d.series } : {}),
+    volume: d.volume,
+    issue: d.issue,
+    firstPage: d.pages?.split("-")[0],
+    lastPage: d.pages?.split("-")[1],
     pdf: d.pdf,
     doi: d.doi,
     arxiv: d.arxiv,
     abstract: plain(d.abstract),
+    keywords: [...new Set([...d.topics, ...d.keywords])],
   }}
   crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: d.title, href: `/publications/${pub.id}/` }]}
 >
-  <Article>
+  <Article class="paper__body">
     <div slot="header" class:list={["paper-head", !d.figure && "paper-head--exhibit"]}>
       <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12} />
       {/* The key figure leads the page, under the header and at its width. A paper without
@@ -69,27 +82,29 @@ const code = paperCodeNode(pub);
       {d.figure ? (
         <figure class:list={["ply-figure paper__figure", d.figureSize === "column" && "paper__figure--column"]}>
           {d.figureSize === "column"
-            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 512)} sizes={`(min-width: 36rem) 32rem, ${column}`} loading="eager" fetchpriority="high" />
-            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 832)} sizes={`(min-width: 64rem) 52rem, ${column}`} loading="eager" fetchpriority="high" />}
-          {d.figureCaption && <figcaption><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
+            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 608)} sizes={`(min-width: 38rem) 38rem, ${column}`} loading="eager" fetchpriority="high" />
+            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 976)} sizes={`(min-width: 64rem) 61rem, ${column}`} loading="eager" fetchpriority="high" />}
+          {d.figureCaption && <figcaption class:list={[d.figureSize !== "column" && d.figureCaption.length > 240 && "paper__caption--split"]}><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
         </figure>
       ) : (
         <figure class="ply-exhibit paper-head__exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover src={d.cover} dark={d.coverDark} alt="" widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover seed={seed} src={d.cover} dark={d.coverDark} alt={d.coverCaption ? (d.coverAlt ?? "") : ""} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
           ) : (
-            <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a complex drawn from the paper's name`} />
+            <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
           )}
-          {d.cover && <figcaption><b>{d.venue}.</b> {d.coverAlt}</figcaption>}
+          {d.cover && <figcaption><b>{d.venue}.</b> {d.coverCaption ? <Tex text={d.coverCaption} html /> : d.coverAlt}</figcaption>}
         </figure>
       )}
     </div>
     {d.tldr && <p class="paper__tldr"><span class="ply-label">In short</span> <Tex text={d.tldr} /></p>}
+    {Widget && <div class="ply-margin paper__model"><Widget draft={!d.widgetLive} /></div>}
     <Abstract><p><Tex text={d.abstract} /></p></Abstract>
-    {d.keywords.length > 0 && (
-      <ul class="tag-list paper__keywords" role="list" aria-label="Keywords">{d.keywords.map((k) => <li class="ply-tag">{k}</li>)}</ul>
-    )}
+    {d.topics.length > 0 && <TopicTags names={d.topics} placement="paper" class="paper__topics" />}
+    {/* A 3px rule closes the paper's front matter (summary, abstract, topics) before the text. */}
+    {pub.body?.trim() && <hr class="ply-rule paper__divide" />}
     <Content />
+    <References refs={referencesOf(pub.id)} />
     <h2 id="cite" class="paper__cite">Cite</h2>
     <div id="bibtex"><BibTeX entry={d.bibtex.trim()} /></div>
   </Article>
@@ -121,27 +136,42 @@ const code = paperCodeNode(pub);
   }
 </script>
 <style>
-  /* Header and key figure share the head's width; the figure stops at 52rem, or near its
-     printed size for a single-column figure, so raster parts are not enlarged. */
+  /* The key figure takes the head's whole width, text and margin together, so it ends where the
+     margin column and the working model end; a single-column figure takes the text's width and
+     ends with the text. Its caption runs the figure's width. */
   .paper-head { display: grid; gap: 0 var(--ply-space-6); }
-  .paper-head :global(.ply-paper) { padding-bottom: var(--ply-space-6); }
-  .paper__figure { max-width: 52rem; margin-top: 0; margin-bottom: var(--ply-space-7); }
-  .paper__figure--column { max-width: 32rem; }
+  .paper-head :global(.ply-paper) { padding-block: var(--ply-space-6) var(--ply-space-5); }
+  .paper__figure { max-width: none; margin-top: 0; margin-bottom: var(--ply-space-6); }
+  .paper__figure--column { max-width: var(--ply-layout-measure); }
+  .paper__figure figcaption { max-width: none; text-wrap: pretty; }
+  /* The caption shares the figure's left and right edges, so no empty block hangs beside it. A
+     long one under a wide figure sets in two balanced columns, which keeps its lines near the
+     reading measure; a short one runs the figure's width. */
+  @media (min-width: 60rem) {
+    .paper__figure .paper__caption--split { columns: 2; column-gap: var(--ply-space-6); column-fill: balance; orphans: 2; widows: 2; }
+  }
+  .paper__topics { margin-top: var(--ply-space-5); }
+  .paper__divide { clear: none; margin-block: var(--ply-space-6) var(--ply-space-5); max-width: var(--ply-layout-measure); }
   /* A figure in the entry's text (a Polytope Figure with class="figure--column") keeps the same
      single-column width. */
-  :global(.ply-figure.figure--column) { max-width: 32rem; }
+  :global(.ply-figure.figure--column) { max-width: var(--ply-layout-measure); }
   /* Without a key figure, the exhibit stacks under the header, then hangs in the margin
      column beside it once the article has one. */
   .paper-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
   .paper-head__exhibit img { width: 100%; height: auto; }
   .paper-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
   @media (min-width: 60rem) {
-    .paper-head--exhibit { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
-    .paper-head--exhibit :global(.ply-paper) { padding-bottom: var(--ply-space-7); }
-    .paper-head__exhibit { margin-block: var(--ply-space-7); }
+    .paper-head--exhibit { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: start; }
+    .paper-head--exhibit :global(.ply-paper) { padding-bottom: var(--ply-space-6); }
+    .paper-head__exhibit { margin-block: var(--ply-space-6); }
   }
+  /* The paper's working model sits in the margin beside the abstract, clear of the title; in a
+     narrow window it comes before the abstract, in the column. */
+  .paper__model { margin-top: var(--ply-space-4); }
+  .paper__model :global(.ply-exhibit) { margin-block: 0; }
   .paper__tldr { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); }
   .paper__tldr .ply-label { vertical-align: 0.2em; margin-inline-end: var(--ply-space-2); }
-  .paper__cite { margin-top: var(--ply-space-8); }
+  .paper__cite { margin-top: var(--ply-space-7); }
+  :global(.paper__body) { padding-block-end: var(--ply-space-6); }
   .paper__foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

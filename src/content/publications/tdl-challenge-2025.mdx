@@ -72,11 +72,14 @@ authors:
 starNote: "Main organizers, equal contribution"
 venue: "TAG-DS 2025"
 venueFull: "1st Conference on Topology, Algebra, and Geometry in Data Science (TAG-DS 2025)"
+volume: 321
+pages: "4-14"
 kind: conference
-date: 2025-12-01
+date: 2026-02-27
 tldr: "The 2025 Topological Deep Learning Challenge asked the community to extend TopoBench with new datasets, benchmark tasks, and data pipelines; this report describes the challenge and what it received."
 abstract: "This paper describes the 2025 edition of the Topological Deep Learning Challenge: Expanding the Data Landscape, hosted at the first Topology, Algebra, and Geometry in Data Science (TAG-DS) Conference. This year’s challenge aimed to address the data bottleneck in the field by systematically expanding the ecosystem of Topological Deep Learning (TDL). Powered by TopoBench, the challenge was organized into two primary missions: enriching the data landscape with diverse datasets, and advancing core data infrastructure. In particular, participants were invited to contribute to the open-source platform by implementing new dataset loaders, designing new benchmark tasks, or engineering robust, scalable data pipelines. The initiative successfully yielded 44 qualifying submissions. This paper outlines the scope of the competition and summarizes the key results and findings, highlighting the new resources now available to the TDL community."
-keywords: ["Topological deep learning", "TopoBench", "Datasets", "Benchmarks"]
+keywords: ["Graph neural networks", "TopoBench", "TDL Challenge 2025", "Higher-order datasets", "Hypergraphs", "Cell complexes", "Simplicial complexes", "Liftings", "MoleculeNet"]
+topics: ["Topological deep learning", "Benchmarks"]
 links:
   - { label: "PMLR", href: "https://proceedings.mlr.press/v321/bernardez26a.html", icon: paper }
   - { label: "PDF", href: "/publications/tdl-challenge-2025/tdl-challenge-2025.pdf", icon: download }
@@ -84,6 +87,8 @@ links:
 pdf: "/publications/tdl-challenge-2025/tdl-challenge-2025.pdf"
 cover: ./tdl-challenge-2025-card.webp
 coverAlt: "A cell complex of points, edges, and filled faces on a pale backdrop. Illustration from the challenge poster, by its organizers."
+coverCaption: "Illustration from the challenge poster, by its organizers."
+widget: tdl-lifting
 bibtex: |
   @inproceedings{pmlr-v321-bernardez26a,
     title     = {Topological Deep Learning Challenge 2025: Expanding the Data Landscape},
@@ -97,5 +102,32 @@ bibtex: |
     url       = {https://proceedings.mlr.press/v321/bernardez26a.html}
   }
 ---
+
+import LabPlot from "../../components/LabPlot.astro";
+import plot from "./tdl-challenge-2025-plot.svg?raw";
+
+Most graph benchmarks describe a molecule as atoms joined by bonds. Chemists, however, reason about rings, functional groups, and other substructures that involve several atoms at once. Topological Deep Learning (TDL) builds neural networks for such higher-order relations, using hypergraphs, simplicial complexes, and cell complexes, yet the community has been evaluating these models on a handful of datasets (Papamarkou et al., 2024). When every new architecture is compared on the same few benchmarks, it is hard to tell whether an idea generalizes. The 2025 challenge, run at the first Topology, Algebra, and Geometry in Data Science (TAG-DS) conference, treated this as a data problem and asked the community to contribute to TopoBench, an open-source library for benchmarking topological neural networks.
+
+This page is a companion to the report. It explains how the challenge was organized, what kinds of datasets it brought in, and why the results matter for anyone searching for TopoBench datasets, higher-order graph datasets, or hypergraph benchmarks.
+
+## How the challenge worked
+
+Anyone could take part by opening a pull request against TopoBench. Each request had to pass the repository tests and add at most one dataset loader, so every contribution arrived as reviewable, runnable code. The organizers split the work into two missions. Mission A asked for dataset loaders, in two flavors: well-established graph and point cloud datasets (Category A.1), which connect TDL to mainstream graph learning, and datasets where higher-order structure is native to the data (Category A.2), such as hypergraphs and simplicial complexes. Mission B asked for infrastructure: loaders that read from disk so that large datasets avoid the memory cost of lifting to a higher-order domain (Category B.1), and new benchmark tasks, e.g., link prediction in hypergraphs (Category B.2).
+
+## What the datasets cover
+
+The Mission A tables in the report list submissions ranging from social and citation networks (Facebook, Twitch, Coauthor_CS) and the Open Graph Benchmark to molecular graph datasets such as QM9 and MoleculeNet, protein interaction data, analog circuits, water distribution networks, and neuroscience data. The A.1 winner brought ATLAS Top Tagging, a benchmark from particle physics, into the library, and the A.2 winner contributed Cornell Labeled Nodes Hypergraphs, a set of 8 hypergraph datasets. For a researcher looking for molecular graph datasets for topological deep learning, or for hypergraph benchmarks beyond the usual citation graphs, this is a useful starting list, since all of them sit behind one interface.
+
+<LabPlot svg={plot} alt="Bars of submissions per category. Mission A: 25 in A.1 and 9 in A.2. Mission B: 5 in B.1 and 5 in B.2.">
+  <Fragment slot="caption">Number of submissions in each category of the two missions.</Fragment>
+</LabPlot>
+
+The count was 44 submissions from 30 teams, with most of the effort in Mission A (see the chart). Reviewers scored correctness, code quality, and documentation and tests, and not model accuracy. Since performance was not scored, what remains is reusable infrastructure.
+
+## Why it matters for benchmarking
+
+A shared interface makes comparisons fairer: the same model can now be run on many more graphs and higher-order datasets without custom data code. The organizers frame the next step as systematic benchmarking across the new datasets, since it is still unclear which topological domains and liftings, i.e., the conversions of a graph into a hypergraph or complex, fit which application. The on-disk loaders, in the organizers' view, make larger-scale workloads possible, which they connect to cross-domain pretraining and topological foundation models. The report names these directions as open and does not test them.
+
+## My contribution
 
 I contributed a TopoBench loader for MoleculeNet ([pull request #224](https://github.com/geometric-intelligence/TopoBench/pull/224)) in Category A.1, the category for established graph and point cloud datasets.

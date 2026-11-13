@@ -1,0 +1,38 @@
+[
+  {
+    "key": "kruger2025autobench",
+    "cite": [
+      "Kruger, 2025a"
+    ],
+    "title": "AutoBench Third Run: Revolutionizing LLM Evaluation with Record-Breaking Scale, Accuracy, and a New Home at autobench.org",
+    "authors": [
+      "Peter Kruger"
+    ],
+    "venue": "Hugging Face Blog",
+    "year": 2025,
+    "url": "https://huggingface.co/blog/PeterKruger/autobench-run-3",
+    "bibtex": "@misc{kruger2025autobenchrun3, title={AutoBench Third Run: Revolutionizing LLM Evaluation with Record-Breaking Scale, Accuracy, and a New Home at autobench.org}, author={Peter Kruger}, year={2025}, howpublished={Hugging Face Blog}, url={https://huggingface.co/blog/PeterKruger/autobench-run-3} }",
+    "source": "https://huggingface.co/blog/PeterKruger/autobench-run-3 (blog page metadata, datePublished 2025-08-20; BibTeX constructed)"
+  },
+  {
+    "key": "rein2023gpqa",
+    "cite": [],
+    "title": "GPQA: A Graduate-Level Google-Proof Q&A Benchmark",
+    "authors": [
+      "David Rein",
+      "Betty Li Hou",
+      "Asa Cooper Stickland",
+      "Jackson Petty",
+      "Richard Yuanzhe Pang",
+      "Julien Dirani",
+      "Julian Michael",
+      "Samuel R. Bowman"
+    ],
+    "venue": "arXiv preprint",
+    "year": 2023,
+    "arxiv": "2311.12022",
+    "url": "https://arxiv.org/abs/2311.12022",
+    "bibtex": "@misc{rein2023gpqa, title={GPQA: A Graduate-Level Google-Proof Q&A Benchmark}, author={David Rein and Betty Li Hou and Asa Cooper Stickland and Jackson Petty and Richard Yuanzhe Pang and Julien Dirani and Julian Michael and Samuel R. Bowman}, year={2023}, eprint={2311.12022}, archivePrefix={arXiv}, primaryClass={cs.AI}, url={https://arxiv.org/abs/2311.12022} }",
+    "source": "https://export.arxiv.org/api/query?id_list=2311.12022 (arXiv BibTeX format constructed from API metadata)"
+  }
+]

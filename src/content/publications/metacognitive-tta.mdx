@@ -15,13 +15,20 @@ affiliations:
 starNote: "Corresponding author"
 venue: "METACOG-26"
 venueFull: "AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)"
+series: "Proceedings of the AAAI Symposium Series"
+volume: 10
+issue: 1
+pages: "147-162"
+doi: "10.1609/aaaiss.v10i1.43402"
 kind: workshop
 award: "Top 3 paper"
-date: 2026-11-05
+date: 2026-11-06
 tldr: "A cognitive psychology perspective of Test-Time Adaptation: how adaptation should be designed and evaluated to be robust to real-world conditions."
-abstract: "In Test-Time Adaptation (TTA), when out-of-distribution samples interleave unpredictably with corrupted in-distribution samples, adaptation without corrective measures is prone to significant performance decrease. Existing protocols rely on unreliable cues (e.g., predictive entropy) which are unable to distinguish corrupted in-distribution data from semantically novel open-set samples. To address this issue, we formalize TTA through a two-level metacognitive framework that decouples task execution from control, facilitating a unified taxonomy that categorizes existing TTA protocols across three core axes, i.e., which knowledge is monitored, which part of the models are targeted for adaptation, and how adaptation occurs. We provide evidence that robust corrective measures in TTA require monitoring grounded in structured internal representations to reliably estimate model competence. Lastly, we frame monitoring as a resource-allocation problem, examine neuromorphic substrates for bounded self-regulation, and outline key open challenges."
-keywords: ["Test-time adaptation", "Metacognition", "Out-of-distribution data", "Neuromorphic computing"]
+abstract: "In Test-Time Adaptation, when out-of-distribution samples interleave unpredictably with corrupted in-distribution samples, adaptation without corrective measures is prone to significant performance decrease. Existing protocols rely on unreliable cues (e.g., predictive entropy) which are unable to distinguish corrupted in-distribution data from semantically novel open-set samples. To address this issue, we formalize Test-Time Adaptation through a two-level metacognitive framework that decouples task execution from control, facilitating a unified taxonomy that categorizes existing Test-Time Adaptation protocols across three core axes, i.e., which knowledge is monitored, which part of the models are targeted for adaptation, and how adaptation occurs. We provide evidence that robust corrective measures in Test-Time Adaptation require monitoring grounded in structured internal representations to reliably estimate model competence. Lastly, we frame monitoring as a resource-allocation problem, examine neuromorphic substrates for bounded self-regulation, and outline key open challenges."
+keywords: ["Out-of-distribution detection", "Interpretability", "Wild test-time adaptation", "Open-world test-time adaptation", "Entropy minimization", "Tent", "OOD gating", "Concept-based interpretability", "CRAFT", "FACE", "Signal detection theory", "Feeling of Rightness", "Neuromorphic computing"]
+topics: ["Computer vision", "Metacognition", "Test-time adaptation"]
 links:
+  - { label: "AAAI", href: "https://doi.org/10.1609/aaaiss.v10i1.43402", icon: paper }
   - { label: "PDF", href: "/publications/metacognitive-tta/metacognitive-tta.pdf", icon: download }
   - { label: "Code", href: "https://github.com/Restuccia-Group/Metacog-TTA", icon: code }
   - { label: "Google Scholar", href: "https://scholar.google.com/citations?view_op=view_citation&user=r0Ty-c8AAAAJ&citation_for_view=r0Ty-c8AAAAJ:Y0pCki6q_DkC", icon: external }
@@ -35,13 +42,20 @@ figureNum: 1
 figureSize: column
 figureAlt: "A stream of in-distribution car images and out-of-distribution animals under Wild TTA. Left, fluency cues from the task backbone, such as entropy and energy, produce overlapping distributions labeled unreliable. Right, cues from a concept extractor produce separated clusters labeled reliable."
 figureCaption: "Standard vs Concept Cues in Wild Test-Time Adaptation (WTTA)."
+widget: tta-gate
 bibtex: |
-  @inproceedings{loi2026metacognitive,
+  @article{loi2026metacognitive,
     title     = {A Metacognitive Framework for Test-Time Adaptation: Taxonomy and Research Challenges},
     author    = {Dario Loi and Gabriele Onorato and Antonella Coviello and Shahriar Rifat and Nathaniel D. Bastian and Francesco Restuccia},
-    booktitle = {AAAI 2026 Fall Symposium on Artificial Metacognition (METACOG-26)},
+    journal   = {Proceedings of the AAAI Symposium Series},
+    volume    = {10},
+    number    = {1},
+    pages     = {147--162},
     year      = {2026},
-    url       = {https://dario-loi.github.io/publications/metacognitive-tta/}
+    month     = nov,
+    publisher = {Association for the Advancement of Artificial Intelligence (AAAI)},
+    doi       = {10.1609/aaaiss.v10i1.43402},
+    url       = {https://ojs.aaai.org/index.php/AAAI-SS/article/view/43402}
   }
 ---
 import { Picture } from "astro:assets";
@@ -62,10 +76,10 @@ Test-Time Adaptation (TTA) addresses the first case by updating the model on the
 
 <Figure num={2} margin>
   <Picture {...pictureFormats} src={levels} alt="A chip labeled object level and a brain labeled meta level. An arrow labeled monitoring runs from the object level to the meta level, and an arrow labeled control runs back." widths={widthsFor(levels, 576)} sizes={`(min-width: 90rem) 21rem, (min-width: 40rem) 36rem, ${column}`} />
-  <Fragment slot="caption">The two levels of metacognitive adaptation, from the paper.</Fragment>
+  <Fragment slot="caption">The two levels of metacognitive adaptation.</Fragment>
 </Figure>
 
-Cognitive psychology refers to the monitoring and control of a cognitive process, rather than its execution, as metacognition (Flavell, 1979). Nelson and Narens (1990) formalize it as a two-level architecture: (i) an object level performs the task and (ii) a meta level holds a model of the object level, monitors its state, and issues control signals that modify it. TTA can already be framed through this lens. Specifically, the network is the object level, and the adaptation procedure is the meta level, deciding at each step whether and how the network should be updated. By looking at TTA through this framing, we can take inspiration from cognitive psychology to improve the meta level, and thus the overall performance of the system.
+Cognitive psychology uses the term metacognition (Flavell, 1979) for supervising a cognitive process, i.e., watching and steering it instead of carrying it out. Nelson and Narens (1990) formalize it as a two-level architecture: (i) an object level performs the task and (ii) a meta level keeps a model of the object level, observes its state, and sends it control signals that change its behavior. TTA fits this lens naturally. Specifically, the network is the object level, and the adaptation procedure is the meta level, deciding at each step whether and how the network should be updated. By looking at TTA through this framing, we can take inspiration from cognitive psychology to improve the meta level, and thus the overall performance of the system.
 
 Most current protocols monitor the object level through its outputs, using cues such as predictive entropy, confidence margins or free energy, where a low-entropy prediction is taken to be a correct one. These cues estimate what psychologists call the Feeling of Rightness (Thompson, 2009), the sense of correctness induced by the fluent completion of a task, and are comparable to the experience-based cues described by Koriat (1997), which take effortless processing as a proxy for accuracy. As in humans, fluency can be high even when the answer is wrong: under distribution shift, networks become overconfident (Guo et al., 2017), thus an image of something never seen during training can still receive a confident prediction. This is troublesome since most adaptation protocols rely on strengthening this confidence to adapt the model in the absence of true labels (so in any realistic deployment scenario), thus the model's overconfidence can lead to a feedback loop of self-reinforcement, where the model adapts to its own mistakes.
 
@@ -73,11 +87,11 @@ The same literature further separates automatic monitoring, which relies on fast
 
 ## Correctness and competence
 
-We divide metacognitive monitoring into two subcategories: correctness monitoring, assessing whether a prediction is erroneous, and competence monitoring, determining whether an input falls within the model's operational domain. A familiar scene in fog is within the model's competence, even if the prediction turns out to be wrong; an object from a class the model never learned is outside of it, regardless of how confident the prediction is.
+We split metacognitive monitoring in two. Correctness monitoring asks whether a given prediction is wrong, whereas competence monitoring asks whether the input lies inside what the model was built to handle. A familiar scene in fog is within the model's competence, even if the prediction turns out to be wrong; an object from a class the model never learned is outside of it, regardless of how confident the prediction is.
 
 <TtaMonitors class="ply-margin" />
 
-**Entropy is a good correctness signal, but a poor competence signal.** To measure this, we employ a ResNet-34 pretrained on ImageNet, using Imagenette, a 10-class subsample of ImageNet, as ID data, and NINCO, a dataset curated to share no classes with ImageNet, as OOD data. We degrade both with the same corruptions (Gaussian noise, defocus blur, fog and contrast), so that competence cannot be determined by detecting corruptions. Measured by AUROC, where 1.0 is perfect monitoring and 0.5 is chance, entropy scores 0.85 as a correctness monitor, and only 0.61 as a competence monitor.
+**Entropy is a good correctness signal, but a poor competence signal.** To measure this, we employ a ResNet-34 pretrained on ImageNet, using Imagenette, a 10-class subsample of ImageNet, as ID data, and NINCO, a dataset curated to share no classes with ImageNet, as OOD data. We degrade both with the same corruptions (Gaussian noise, defocus blur, fog and contrast), so that a monitor cannot succeed merely by spotting the corruption. Measured by AUROC, where 1.0 is perfect monitoring and 0.5 is chance, entropy scores 0.85 as a correctness monitor, and only 0.61 as a competence monitor.
 
 This was expected. The two notions are similar, and entropy remains a good baseline adaptation loss; however, competence is what OOD gating requires, and entropy must therefore be supplemented in order to work as a gate.
 
@@ -85,9 +99,9 @@ Measuring the monitor in this way is itself one of the proposals of the paper. T
 
 ## A taxonomy of twenty methods
 
-To compare protocols, we express the metacognitive loop as a single update rule, with a variable for each decision a TTA protocol makes: which samples enter the update and with what weight, which parameters are adapted, how large the step is, when to roll the weights back toward the source model, and when to abstain. Each protocol then corresponds to one instantiation of this rule. We categorize twenty protocols<Sidenote n={2}>BN-Adapt, Tent, MEMO, CoTTA, RDumb, EATA, SAR, SoTTA, NOTE, RoTTA, DeYO, OWTTT, PeTTA, ROID, LAME, REM, MECTA, GALA, PALM, and LAW.</Sidenote> along three axes, i.e., which knowledge is monitored, what part of the model is adapted, and how adaptation is regulated.
+To compare protocols, we write the metacognitive loop as one update rule, with a variable for each decision a TTA protocol makes: which samples enter the update and with what weight, which parameters are adapted, how large the step is, when to roll the weights back toward the source model, and when to abstain. Each protocol then corresponds to one instantiation of this rule. We categorize twenty protocols<Sidenote n={2}>BN-Adapt, Tent, MEMO, CoTTA, RDumb, EATA, SAR, SoTTA, NOTE, RoTTA, DeYO, OWTTT, PeTTA, ROID, LAME, REM, MECTA, GALA, PALM, and LAW.</Sidenote> along three axes, i.e., which knowledge is monitored, what part of the model is adapted, and how adaptation is regulated.
 
-A closer look at the resulting taxonomy reveals a few patterns. Deliberate knowledge, e.g., teacher networks or consistency across augmented views, is mostly allocated to loss construction rather than to the decision of which samples to update on. That decision still relies on single-pass forward scores, or on state summaries that drift together with the model, resulting in a circular self-reinforcement of the model's biases. Adaptation loci remain largely static, and the few protocols that select them at run time do so through heuristics, e.g., gradient statistics, rather than the semantic content of the underlying representations. Lastly, abstention is rarely exercised.<Sidenote n={3}>Answering "none of the above" instead of naming a class.</Sidenote>
+A closer look at the resulting taxonomy reveals a few patterns. Deliberate knowledge, e.g., teacher networks or consistency across augmented views, is mostly allocated to loss construction rather than to the decision of which samples to update on. That decision still relies on single-pass forward scores, or on state summaries that drift together with the model, resulting in a circular self-reinforcement of the model's biases. Adaptation loci remain largely static, and the few protocols that select them at run time do so through heuristics, e.g., gradient statistics, rather than what the representations actually encode. Lastly, abstention is rarely exercised.<Sidenote n={3}>Answering "none of the above" instead of naming a class.</Sidenote>
 
 ## A deliberate cue from concepts
 
@@ -99,12 +113,12 @@ On semantic discrimination, the concept residual scores 0.91 with either diction
 
 <Figure num={3} class="figure--column">
   <Picture {...pictureFormats} src={concepts} alt="Two rows of photos. Top: a noisy close-up of a gas pump's meter, beside two small crops, a gas pump and a cassette player's control panel. Bottom: a noisy photo from outside the model's classes, beside two small crops, a church tower and a man with a chain saw." widths={widthsFor(concepts, 512)} sizes={`(min-width: 36rem) 32rem, ${column}`} />
-  <Fragment slot="caption">Top: an Imagenette gas pump under Gaussian noise, with the two most relevant concepts extracted by FACE. Bottom: a NINCO image under the same noise; its two most relevant concepts belong to unrelated classes. Adapted from Figures 3 and 6 of the paper.</Fragment>
+  <Fragment slot="caption">Top: an Imagenette gas pump under Gaussian noise, with the two most relevant concepts extracted by FACE. Bottom: a NINCO image under the same noise; its two most relevant concepts belong to unrelated classes.</Fragment>
 </Figure>
 
 ## Deliberate cues as test-time gates
 
-We then use each cue as a gate. The network is adapted with Tent (Wang et al., 2021), which minimizes entropy over the affine normalization parameters, and only the samples whose score passes the gate's threshold enter the update. The threshold is estimated online from the scores observed in previous batches.<Sidenote n={4}>As in Li et al. (2023): the split that minimizes the variance within each group.</Sidenote> We compare no gate, an entropy gate, our concept-residual gate, and the class-prototype distance of OWTTT (Li et al., 2023), an existing open-world TTA protocol, together with a perfect filter that has access to ground-truth ID/OOD membership as an upper bound.
+We then use each cue as a gate. The network is adapted with Tent (Wang et al., 2021), which minimizes entropy over the affine normalization parameters, and only the samples whose score passes the gate's threshold enter the update. The threshold is estimated online from the scores observed in previous batches.<Sidenote n={4}>As in Li et al. (2023): the split that minimizes the variance within each group.</Sidenote> We compare no gate, an entropy gate, our concept-residual gate, and the class-prototype distance of OWTTT (Li et al., 2023), an existing open-world TTA protocol, together with a perfect filter that knows the true ID/OOD label of every sample as an upper bound.
 
 <TtaAdmitted class="ply-margin" />
 
@@ -123,6 +137,14 @@ The gap widens over longer horizons. The following table reports ID accuracy ove
 | Perfect filter | 0.823 | 0.860 | 0.861 |
 
 Ungated and entropy-gated adaptation decay monotonically, and by step 2,000 have fallen back to around 0.39, the accuracy of the unadapted model. Conversely, both deliberate gates maintain consistent performance across the whole horizon.
+
+## Why self-monitoring matters for safe online adaptation
+
+A model that updates itself after deployment has no supervisor watching the updates. In Wild TTA, the practical question is therefore not only how to adapt, but when the model has earned the right to trust its own reading of an input. This is a question about self-monitoring in neural networks, i.e., about a model's awareness of its own competence, and it is where out-of-distribution detection, open-world test-time adaptation and selective prediction (abstaining on inputs the model cannot answer) meet. Our measurements show why a confidence-based monitor is a weak place to start: with 80% of the stream made of OOD samples, the entropy gate still lets roughly half of them through, whereas the concept-based competence check lets through between under 4% and 35%, depending on the corruption.
+
+Any perception system that runs on a long, unlabeled stream could face this problem, for instance roadside cameras, inspection lines, or the perception stack of a vehicle. For such systems, we see safe online adaptation as depending on two things: a monitor that separates "a familiar scene seen through fog" from "something the model has never learned", and a record of why each update was accepted. The concept residual is a first step in that direction, and the interpretability argument above explains why we think the second requirement is as important as the first.
+
+The taxonomy also points to open questions. Deliberate cues are mostly spent on building the loss rather than on choosing which samples to adapt on, the loci of adaptation are rarely chosen from semantic content, and abstention is seldom used. Combining a competence signal with those decisions, i.e., which samples, which parameters, when to roll back and when to abstain, is a natural next step for self-monitoring adaptation. Deliberate inspection also costs latency, memory and energy at every step, so deciding when it is worth recruiting is itself a design problem that the framework makes explicit.
 
 ## Limitations
 

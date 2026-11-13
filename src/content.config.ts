@@ -4,6 +4,7 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { readdirSync, readFileSync } from "node:fs";
+import { topicNames } from "./data/topics";
 
 // The entries a collection loads. A production build leaves drafts out of the collection itself,
 // so nothing built from a draft (its page, styles, pictures, or a file named after it) reaches
@@ -68,6 +69,16 @@ const publications = defineCollection({
       format: z.string().optional(),
       /** A distinction, such as "Best paper award". Shown on the card and beside the venue. */
       award: z.string().optional(),
+      /** "entry" when the award went to my submission that the paper reports, such as a
+       *  challenge entry, and not to the paper: the paper's schema.org record leaves it out. */
+      awardScope: z.enum(["paper", "entry"]).default("paper"),
+      /** The proceedings series the paper is published in when it is not the venue itself, such
+       *  as "Proceedings of the AAAI Symposium Series"; Scholar reads it as the journal title. */
+      series: z.string().optional(),
+      /** Volume, issue, and page range ("147-162") in the proceedings, as the publisher gives them. */
+      volume: z.union([z.string(), z.number()]).optional(),
+      issue: z.union([z.string(), z.number()]).optional(),
+      pages: z.string().regex(/^\d+(-\d+)?$/).optional(),
       date: z.coerce.date(),
       /** The tab, search-result, and pager title, for a paper title longer than 70 characters. */
       shortTitle: z.string().optional(),
@@ -77,7 +88,11 @@ const publications = defineCollection({
        *  single quotes, since double-quoted YAML turns backslashes into escapes. */
       tldr: z.string().optional(),
       abstract: z.string(),
+      /** Search keywords specific to the paper, for its metadata (schema.org, the PDF). */
       keywords: z.array(z.string()).default([]),
+      /** The broad topics the paper belongs to, by name from src/data/topics.ts. They show as
+       *  tags under the abstract, and each links to that topic's list of papers. */
+      topics: z.array(z.enum(topicNames as [string, ...string[]])).default([]),
       links: z.array(link).default([]),
       arxiv: z.string().optional(),
       doi: z.string().optional(),
@@ -91,6 +106,9 @@ const publications = defineCollection({
       /** Card and header panel image. Without one, both draw a complex seeded from the id. */
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      /** A short caption for the cover on the paper page (inline HTML such as <i> allowed). With
+       *  one, coverAlt becomes the picture's alt text there; without one, coverAlt is the caption. */
+      coverCaption: z.string().optional(),
       /** The cover as a dark page shows it, for a light screenshot that would glare there. */
       coverDark: image().optional(),
       /** The paper's key figure, shown above the abstract. */
@@ -103,6 +121,10 @@ const publications = defineCollection({
       figureAlt: z.string().optional(),
       /** Figure caption; inline HTML such as <sup> and <em> is allowed. */
       figureCaption: z.string().optional(),
+      /** A working model shown beside the paper's header (src/components/widgets). It is a draft
+       *  until widgetLive is set: drafts render under `npm run dev` only. */
+      widget: z.enum(["tta-gate", "ad-threshold", "autobench-loop", "iso-operator", "clip-frequency", "tdl-lifting"]).optional(),
+      widgetLive: z.boolean().default(false),
       draft: z.boolean().default(false),
     }).superRefine((d, ctx) => {
       // Every affiliation number points at a listed affiliation.

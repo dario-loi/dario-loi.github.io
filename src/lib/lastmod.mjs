@@ -30,8 +30,11 @@ const pageSources = {
   "/blog/": ["src/pages/blog/index.astro", "src/content/blog"],
   "/projects/": ["src/pages/projects/index.astro", "src/content/projects"],
   "/publications/": ["src/pages/publications/index.astro", "src/content/publications"],
+  "/publications/topics/": ["src/pages/publications/topics", "src/data/topics.ts", "src/content/publications"],
 };
 function sourcesOf(path) {
+  // A topic's page changes when any paper does, or the list of topics.
+  if (path.startsWith("/publications/topics/")) return pageSources["/publications/topics/"];
   const entry = path.match(/^\/(blog|publications|projects)\/([^/]+)\/$/);
   if (!entry) return pageSources[path];
   const dir = `src/content/${entry[1]}/`;

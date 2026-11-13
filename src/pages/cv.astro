@@ -8,12 +8,12 @@ import CvLink from "../components/CvLink.astro";
 import SectionHead from "../components/SectionHead.astro";
 import { entries, pubRow } from "../lib/content";
 import EmailLink from "../components/EmailLink.astro";
-import { cvEntries } from "../data/cv";
+import { cvAnchor, cvEntries } from "../data/cv";
 import { cv, person } from "../site";
 
 const pubs = (await entries("publications")).map(pubRow);
 ---
-<Base title="CV" description={`Curriculum vitae of ${person.name}: education and research, with a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
+<Base title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}: education and research, with a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
   <div class="ply-container cv-atlas">
     <Atlas label="Where the work has taken me" quiet>
       <Fragment slot="head">
@@ -25,7 +25,7 @@ const pubs = (await entries("publications")).map(pubRow);
         </div>
       </Fragment>
       {cvEntries.map((e) => (
-        <AtlasStop level={2} title={e.title} org={e.org} kind={e.draft ? `${e.kind} (draft)` : e.kind} place={e.place} lat={e.lat} lon={e.lon} from={e.from} to={e.to}>
+        <AtlasStop id={cvAnchor(e)} level={2} title={e.title} org={e.org} kind={e.draft ? `${e.kind} (draft)` : e.kind} place={e.place} lat={e.lat} lon={e.lon} from={e.from} to={e.to}>
           {e.text && <p>{e.text}</p>}
         </AtlasStop>
       ))}

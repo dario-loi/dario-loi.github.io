@@ -4,25 +4,23 @@ import EntryHeader from "../components/EntryHeader.astro";
 import { analytics, person } from "../site";
 const on = Boolean(analytics.websiteId);
 ---
-<Base title="Privacy" description="What this site measures, and what it does not." crumbs={[{ name: person.name, href: "/" }, { name: "Privacy", href: "/privacy/" }]}>
+<Base title="Privacy" description="How dario-loi.github.io counts visits without cookies, what the browser stores, and what is never collected." crumbs={[{ name: person.name, href: "/" }, { name: "Privacy", href: "/privacy/" }]}>
   <div class="ply-container">
-    <EntryHeader title="Privacy" stop lede="This site counts visits in aggregate. It sets no cookies and stores no identifiers on your device, so there is no consent banner." />
+    <EntryHeader title="Privacy" stop lede="I count visits in aggregate. The site sets no cookies and stores no identifiers on your device, so there is no consent banner." />
   </div>
   <hr class="ply-rule" />
   <div class="ply-container privacy">
     <div class="ply-prose">
-      <h2>What is measured</h2>
-      <p>{on ? "Visits are counted with" : "When analytics is enabled, visits are counted with"} <a href="https://umami.is/">Umami Cloud</a>, a privacy-focused analytics service. For each page view it records the page, the referring site, the browser, the operating system, the device type, the screen size, the language, and an approximate location (country, region, and city) looked up from the IP address. The IP address itself is not stored.</p>
-      <p>A few clicks are counted as events: opening or downloading the CV, following an email or profile link, opening a post, paper, or project from a list, following a paper or project link, and copying a paper's BibTeX. Each event records where on the page the link sits and which page or site you came from, so I can tell which parts of the site are useful.</p>
-      <h2>What is not</h2>
-      <ul>
-        <li>No cookies or identifiers are written to your device. If you use the theme switch, your light or dark choice is kept in your browser's local storage, so the next page opens in it, and it is never sent anywhere.</li>
-        <li>Visits are grouped by an anonymous hash of the IP address and browser, salted with a value that changes every month, so you cannot be followed from month to month or across other sites.</li>
-        <li>No advertising, no data sales, no cross-site tracking.</li>
-        <li>If your browser sends Do Not Track, nothing is recorded at all.</li>
-      </ul>
-      <h2>Questions</h2>
-      <p>I only ever read the numbers in aggregate. If you have questions about them, use the email link in the footer.</p>
+      <h2>Analytics</h2>
+      <p>{on ? "Visits are counted with" : "When analytics is enabled, visits are counted with"} <a href="https://umami.is/">Umami Cloud</a>, an analytics service. For each page view it records the page, the referring site, the browser, the operating system, the device type, the screen size, the language, and an approximate location (country, region, and city) looked up from the IP address. The IP address itself is not stored.</p>
+      <p>Visits are grouped by an anonymous hash of the IP address and browser, salted with a value that changes every month, so you cannot be followed from month to month or across other sites. There is no advertising on the site, and I do not sell data or track you across sites.</p>
+      <p>A few clicks are counted as events: opening or downloading the CV, following an email or profile link, opening a post, paper, project, or research topic from a list or from the home page's Latest column, following a paper or project link, and copying a paper's BibTeX. Each event records where on the page the link sits and which page or site you came from, so I can tell which parts of the site are useful.</p>
+      <h2>Cookies and storage</h2>
+      <p>The site writes no cookies or identifiers to your device. If you use the theme switch, your light or dark choice is kept in your browser's local storage so the next page opens in it. It is never sent anywhere.</p>
+      <h2>Do Not Track</h2>
+      <p>If your browser sends Do Not Track, nothing is recorded.</p>
+      <h2>Contact</h2>
+      <p>I only read the numbers in aggregate. If you have questions about them, use the email link in the footer.</p>
     </div>
   </div>
 </Base>

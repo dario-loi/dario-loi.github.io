@@ -1,0 +1,67 @@
+---
+import Base from "../../../layouts/Base.astro";
+import IndexMast from "../../../components/IndexMast.astro";
+import { entries, pubVenue } from "../../../lib/content";
+import { topicPage } from "../../../lib/schema";
+import { topicPath, topics } from "../../../data/topics";
+import { person } from "../../../site";
+
+const pubs = await entries("publications");
+const rows = topics.map((topic) => ({ topic, pubs: pubs.filter((p) => p.data.topics.includes(topic.name)) })).filter((r) => r.pubs.length > 0);
+const description = `Publications by ${person.name} grouped by research topic: ${rows.slice(0, 6).map((r) => r.topic.name.toLowerCase().replace("llm", "LLM")).join(", ")}, and more.`;
+---
+<Base
+  title="Research topics"
+  description={description.length > 160 ? `${description.slice(0, 157)}...` : description}
+  current="Publications"
+  schema={[topicPage("/publications/topics/", `Research topics of ${person.name}`, description, pubs)]}
+  crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: "Topics", href: "/publications/topics/" }]}
+>
+  <IndexMast title="Topics" lede="The papers, grouped by what they are about." />
+  <div class="ply-container">
+    <ul class="topic-wall" role="list">
+      {rows.map(({ topic, pubs }) => (
+        <li class="topic-wall__row">
+          <div class="topic-wall__head">
+            <h2 class="topic-wall__name"><a href={topicPath(topic)} data-track="open-topic" data-track-placement="topics" data-track-label={topic.slug}>{topic.name}</a></h2>
+          </div>
+          <div class="topic-wall__body">
+            <p class="topic-wall__about">{topic.description}</p>
+            <ul class="topic-wall__papers" role="list">
+              {pubs.map((p) => (
+                <li><a href={`/publications/${p.id}/`} data-track="open-publication" data-track-placement="topics" data-track-label={p.id}>{p.data.shortTitle ?? p.data.title}</a> <span class="topic-wall__venue">{pubVenue(p.data)}</span></li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+<style>
+  /* A wall of topics, set like the publications wall: the topic's name where that page puts the
+     year, its description and papers beside it, and a hairline between topics. */
+  .topic-wall { list-style: none; padding: 0; margin: 0; padding-top: var(--ply-space-5); }
+  .topic-wall__row { display: grid; gap: var(--ply-space-3); padding-block: var(--ply-space-4); }
+  .topic-wall__row + .topic-wall__row { border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
+  .topic-wall__row:first-child { padding-top: 0; }
+  .topic-wall__name { font-family: var(--ply-font-text); font-size: var(--ply-size-xl); font-weight: var(--ply-weight-bold); line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; }
+  .topic-wall__name a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+  .topic-wall__body { display: grid; gap: var(--ply-space-3); max-width: var(--ply-layout-measure); }
+  .topic-wall__about { color: var(--ply-color-text-muted); }
+  .topic-wall__papers { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--ply-space-2); }
+  .topic-wall__papers a { font-weight: var(--ply-weight-semibold); }
+  .topic-wall__venue { font-size: var(--ply-size-sm); color: var(--ply-color-text-muted); white-space: nowrap; margin-inline-start: var(--ply-space-1); }
+  @media (min-width: 64rem) {
+    .topic-wall__row { grid-template-columns: var(--ply-layout-toc) minmax(0, 1fr); gap: var(--ply-space-6); align-items: start; }
+    .topic-wall__body { max-width: none; }
+    /* The longest name fits the label column on one line, so every row's name is a single line. */
+    .topic-wall__name { font-size: var(--ply-size-lg); text-wrap: nowrap; }
+  }
+  /* With the room, the description and the papers are two columns, so the row is as tall as its
+     longer side and the right half of the page is used. */
+  @media (min-width: 80rem) {
+    .topic-wall__body { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: var(--ply-space-6); align-items: start; }
+    .topic-wall__about { max-width: var(--ply-layout-measure); }
+  }
+</style>

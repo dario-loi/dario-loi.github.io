@@ -24,3 +24,7 @@ PRODUCT.md
 
 # Browser automation logs
 .playwright-mcp/
+
+# Python bytecode from scripts/plots
+__pycache__/
+*.pyc

@@ -1,0 +1,79 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="369.11pt" height="283.31pt" viewBox="0 0 369.11 283.31" xmlns="http://www.w3.org/2000/svg" version="1.1"><defs><style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style></defs><g id="implicit-sheaf-operators-figure_1"><g id="implicit-sheaf-operators-patch_1"><path d="M 0 283.31 
+L 369.11 283.31 
+L 369.11 0 
+L 0 0 
+L 0 283.31 
+z
+" style="fill: none"/></g><g id="implicit-sheaf-operators-axes_1"><g id="implicit-sheaf-operators-patch_2"><path d="M 51.82 235.18 
+L 355.55 235.18 
+L 355.55 53.27 
+L 51.82 53.27 
+L 51.82 235.18 
+z
+" style="fill: none"/></g><g id="implicit-sheaf-operators-matplotlib.axis_1"><g id="implicit-sheaf-operators-xtick_1"><g id="implicit-sheaf-operators-line2d_1"><path d="M 69.68 235.18 
+L 69.68 53.27 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_2"><defs><path id="implicit-sheaf-operators-md70782f7a4" d="M 0 0 
+L 0 4.5 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#implicit-sheaf-operators-md70782f7a4" x="69.68" y="235.18" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_1"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="69.68" y="254.77" transform="rotate(-0 69.68 254.77)">2</text></g></g><g id="implicit-sheaf-operators-xtick_2"><g id="implicit-sheaf-operators-line2d_3"><path d="M 159.02 235.18 
+L 159.02 53.27 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_4"><g><use xlink:href="#implicit-sheaf-operators-md70782f7a4" x="159.02" y="235.18" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_2"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="159.02" y="254.77" transform="rotate(-0 159.02 254.77)">4</text></g></g><g id="implicit-sheaf-operators-xtick_3"><g id="implicit-sheaf-operators-line2d_5"><path d="M 337.69 235.18 
+L 337.69 53.27 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_6"><g><use xlink:href="#implicit-sheaf-operators-md70782f7a4" x="337.69" y="235.18" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_3"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="337.69" y="254.77" transform="rotate(-0 337.69 254.77)">8</text></g></g><g id="implicit-sheaf-operators-text_4"><g transform="translate(138.61 275.82)"><text><tspan x="0" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">S</tspan><tspan x="10.01" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">t</tspan><tspan x="15.01" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">a</tspan><tspan x="23" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">l</tspan><tspan x="28" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">k</tspan><tspan x="37" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif"></tspan><tspan x="41.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">d</tspan><tspan x="50.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">i</tspan><tspan x="55.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">m</tspan><tspan x="69.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">e</tspan><tspan x="77.49" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">n</tspan><tspan x="86.49" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">s</tspan><tspan x="93.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">i</tspan><tspan x="98.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">o</tspan><tspan x="107.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">n</tspan><tspan x="116.5" y="-0.5" style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif"></tspan><tspan x="121" y="-0.5" style="font-style: italic; font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif">d</tspan></text></g></g></g><g id="implicit-sheaf-operators-matplotlib.axis_2"><g id="implicit-sheaf-operators-ytick_1"><g id="implicit-sheaf-operators-line2d_7"><path d="M 51.82 235.18 
+L 355.55 235.18 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_8"><defs><path id="implicit-sheaf-operators-m8df638cedf" d="M 0 0 
+L -4.5 0 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#implicit-sheaf-operators-m8df638cedf" x="51.82" y="235.18" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_5"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="43.32" y="240.72" transform="rotate(-0 43.32 240.72)">0</text></g></g><g id="implicit-sheaf-operators-ytick_2"><g id="implicit-sheaf-operators-line2d_9"><path d="M 51.82 168.48 
+L 355.55 168.48 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_10"><g><use xlink:href="#implicit-sheaf-operators-m8df638cedf" x="51.82" y="168.48" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_6"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="43.32" y="174.02" transform="rotate(-0 43.32 174.02)">2</text></g></g><g id="implicit-sheaf-operators-ytick_3"><g id="implicit-sheaf-operators-line2d_11"><path d="M 51.82 101.77 
+L 355.55 101.77 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="implicit-sheaf-operators-line2d_12"><g><use xlink:href="#implicit-sheaf-operators-m8df638cedf" x="51.82" y="101.77" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="implicit-sheaf-operators-text_7"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="43.32" y="107.32" transform="rotate(-0 43.32 107.32)">4</text></g></g><g id="implicit-sheaf-operators-text_8"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="26.43" y="144.22" transform="rotate(-90 26.43 144.22)">Speedup in forward time</text></g></g><g id="implicit-sheaf-operators-line2d_13"><path d="M 69.68 189.15 
+L 159.02 190.49 
+L 337.69 191.49 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 8.88,3.84; stroke-dashoffset: 0; stroke: var(--lab-1,#f34c4c); stroke-width: 2.4"/><defs><path id="implicit-sheaf-operators-m0d3ae932ba" d="M 0 -4.5 
+L -4.5 4.5 
+L 4.5 4.5 
+z
+" style="stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></defs><g clip-path="url(#implicit-sheaf-operators-pb1a3fee429)"><use xlink:href="#implicit-sheaf-operators-m0d3ae932ba" x="69.68" y="189.15" style="fill: var(--lab-1,#f34c4c); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/><use xlink:href="#implicit-sheaf-operators-m0d3ae932ba" x="159.02" y="190.49" style="fill: var(--lab-1,#f34c4c); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/><use xlink:href="#implicit-sheaf-operators-m0d3ae932ba" x="337.69" y="191.49" style="fill: var(--lab-1,#f34c4c); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></g></g><g id="implicit-sheaf-operators-line2d_14"><path d="M 69.68 164.81 
+L 159.02 177.15 
+L 337.69 177.48 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke: var(--lab-2,#719bdb); stroke-width: 2.4; stroke-linecap: square"/><defs><path id="implicit-sheaf-operators-mc0bb12ccb9" d="M 0 4.5 
+C 1.19 4.5 2.34 4.03 3.18 3.18 
+C 4.03 2.34 4.5 1.19 4.5 0 
+C 4.5 -1.19 4.03 -2.34 3.18 -3.18 
+C 2.34 -4.03 1.19 -4.5 0 -4.5 
+C -1.19 -4.5 -2.34 -4.03 -3.18 -3.18 
+C -4.03 -2.34 -4.5 -1.19 -4.5 0 
+C -4.5 1.19 -4.03 2.34 -3.18 3.18 
+C -2.34 4.03 -1.19 4.5 0 4.5 
+z
+" style="stroke: currentColor; stroke-width: 0.9"/></defs><g clip-path="url(#implicit-sheaf-operators-pb1a3fee429)"><use xlink:href="#implicit-sheaf-operators-mc0bb12ccb9" x="69.68" y="164.81" style="fill: var(--lab-2,#719bdb); stroke: currentColor; stroke-width: 0.9"/><use xlink:href="#implicit-sheaf-operators-mc0bb12ccb9" x="159.02" y="177.15" style="fill: var(--lab-2,#719bdb); stroke: currentColor; stroke-width: 0.9"/><use xlink:href="#implicit-sheaf-operators-mc0bb12ccb9" x="337.69" y="177.48" style="fill: var(--lab-2,#719bdb); stroke: currentColor; stroke-width: 0.9"/></g></g><g id="implicit-sheaf-operators-line2d_15"><path d="M 69.68 72.76 
+L 159.02 137.13 
+L 337.69 178.15 
+" clip-path="url(#implicit-sheaf-operators-pb1a3fee429)" style="fill: none; stroke-dasharray: 15.36,3.84,2.4,3.84; stroke-dashoffset: 0; stroke: var(--lab-3,#1c0835); stroke-width: 2.4"/><defs><path id="implicit-sheaf-operators-mb2af0587be" d="M -4.5 4.5 
+L 4.5 4.5 
+L 4.5 -4.5 
+L -4.5 -4.5 
+z
+" style="stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></defs><g clip-path="url(#implicit-sheaf-operators-pb1a3fee429)"><use xlink:href="#implicit-sheaf-operators-mb2af0587be" x="69.68" y="72.76" style="fill: var(--lab-3,#1c0835); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/><use xlink:href="#implicit-sheaf-operators-mb2af0587be" x="159.02" y="137.13" style="fill: var(--lab-3,#1c0835); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/><use xlink:href="#implicit-sheaf-operators-mb2af0587be" x="337.69" y="178.15" style="fill: var(--lab-3,#1c0835); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></g></g><g id="implicit-sheaf-operators-patch_3"><path d="M 51.82 235.18 
+L 51.82 53.27 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="implicit-sheaf-operators-patch_4"><path d="M 355.55 235.18 
+L 355.55 53.27 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="implicit-sheaf-operators-patch_5"><path d="M 51.82 235.18 
+L 355.55 235.18 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="implicit-sheaf-operators-patch_6"><path d="M 51.82 53.27 
+L 355.55 53.27 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g></g><g id="implicit-sheaf-operators-legend_1"><g id="implicit-sheaf-operators-patch_7"><path d="M 3.6 34.25 
+L 365.5 34.25 
+L 365.5 3.6 
+L 3.6 3.6 
+z
+" style="fill: var(--lab-paper,#fff); stroke: var(--lab-frame,#808080); stroke-width: 1.1; stroke-linejoin: miter"/></g><g id="implicit-sheaf-operators-line2d_16"><path d="M 11.6 17.2 
+L 30.8 17.2 
+L 50 17.2 
+" style="fill: none; stroke-dasharray: 8.88,3.84; stroke-dashoffset: 0; stroke: var(--lab-1,#f34c4c); stroke-width: 2.4"/><g><use xlink:href="#implicit-sheaf-operators-m0d3ae932ba" x="30.8" y="17.2" style="fill: var(--lab-1,#f34c4c); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></g></g><g id="implicit-sheaf-operators-text_9"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="61.2" y="22.8" transform="rotate(-0 61.2 22.8)">Diagonal</text></g><g id="implicit-sheaf-operators-line2d_17"><path d="M 140.65 17.2 
+L 159.85 17.2 
+L 179.05 17.2 
+" style="fill: none; stroke: var(--lab-2,#719bdb); stroke-width: 2.4; stroke-linecap: square"/><g><use xlink:href="#implicit-sheaf-operators-mc0bb12ccb9" x="159.85" y="17.2" style="fill: var(--lab-2,#719bdb); stroke: currentColor; stroke-width: 0.9"/></g></g><g id="implicit-sheaf-operators-text_10"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="190.25" y="22.8" transform="rotate(-0 190.25 22.8)">Bundle</text></g><g id="implicit-sheaf-operators-line2d_18"><path d="M 257.27 17.2 
+L 276.47 17.2 
+L 295.67 17.2 
+" style="fill: none; stroke-dasharray: 15.36,3.84,2.4,3.84; stroke-dashoffset: 0; stroke: var(--lab-3,#1c0835); stroke-width: 2.4"/><g><use xlink:href="#implicit-sheaf-operators-mb2af0587be" x="276.47" y="17.2" style="fill: var(--lab-3,#1c0835); stroke: currentColor; stroke-width: 0.9; stroke-linejoin: miter"/></g></g><g id="implicit-sheaf-operators-text_11"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="306.87" y="22.8" transform="rotate(-0 306.87 22.8)">General</text></g></g></g><defs><clipPath id="implicit-sheaf-operators-pb1a3fee429"><rect x="51.82" y="53.27" width="303.74" height="181.91"/></clipPath></defs></svg>

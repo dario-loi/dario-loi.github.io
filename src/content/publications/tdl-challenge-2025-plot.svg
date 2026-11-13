@@ -1,0 +1,100 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="332.08pt" height="283.66pt" viewBox="0 0 332.08 283.66" xmlns="http://www.w3.org/2000/svg" version="1.1"><defs><style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style></defs><g id="tdl-challenge-2025-figure_1"><g id="tdl-challenge-2025-patch_1"><path d="M 0 283.66 
+L 332.08 283.66 
+L 332.08 0 
+L 0 0 
+L 0 283.66 
+z
+" style="fill: none"/></g><g id="tdl-challenge-2025-axes_1"><g id="tdl-challenge-2025-patch_2"><path d="M 49.48 235.65 
+L 328.48 235.65 
+L 328.48 47.15 
+L 49.48 47.15 
+L 49.48 235.65 
+z
+" style="fill: none"/></g><g id="tdl-challenge-2025-matplotlib.axis_1"><g id="tdl-challenge-2025-xtick_1"><g id="tdl-challenge-2025-line2d_1"><defs><path id="tdl-challenge-2025-md70782f7a4" d="M 0 0 
+L 0 4.5 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#tdl-challenge-2025-md70782f7a4" x="81.81" y="235.65" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_1"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="81.81" y="255.24" transform="rotate(-0 81.81 255.24)">A.1</text></g></g><g id="tdl-challenge-2025-xtick_2"><g id="tdl-challenge-2025-line2d_2"><g><use xlink:href="#tdl-challenge-2025-md70782f7a4" x="153.26" y="235.65" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_2"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="153.26" y="255.24" transform="rotate(-0 153.26 255.24)">A.2</text></g></g><g id="tdl-challenge-2025-xtick_3"><g id="tdl-challenge-2025-line2d_3"><g><use xlink:href="#tdl-challenge-2025-md70782f7a4" x="224.71" y="235.65" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_3"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="224.71" y="255.24" transform="rotate(-0 224.71 255.24)">B.1</text></g></g><g id="tdl-challenge-2025-xtick_4"><g id="tdl-challenge-2025-line2d_4"><g><use xlink:href="#tdl-challenge-2025-md70782f7a4" x="296.15" y="235.65" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_4"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="296.15" y="255.24" transform="rotate(-0 296.15 255.24)">B.2</text></g></g><g id="tdl-challenge-2025-text_5"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="188.98" y="276.17" transform="rotate(-0 188.98 276.17)">Category</text></g></g><g id="tdl-challenge-2025-matplotlib.axis_2"><g id="tdl-challenge-2025-ytick_1"><g id="tdl-challenge-2025-line2d_5"><path d="M 49.48 235.65 
+L 328.48 235.65 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_6"><defs><path id="tdl-challenge-2025-m8df638cedf" d="M 0 0 
+L -4.5 0 
+" style="stroke: currentColor; stroke-width: 1.1"/></defs><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="235.65" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_6"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="241.19" transform="rotate(-0 40.98 241.19)">0</text></g></g><g id="tdl-challenge-2025-ytick_2"><g id="tdl-challenge-2025-line2d_7"><path d="M 49.48 200.74 
+L 328.48 200.74 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_8"><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="200.74" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_7"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="206.29" transform="rotate(-0 40.98 206.29)">5</text></g></g><g id="tdl-challenge-2025-ytick_3"><g id="tdl-challenge-2025-line2d_9"><path d="M 49.48 165.83 
+L 328.48 165.83 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_10"><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="165.83" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_8"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="171.38" transform="rotate(-0 40.98 171.38)">10</text></g></g><g id="tdl-challenge-2025-ytick_4"><g id="tdl-challenge-2025-line2d_11"><path d="M 49.48 130.93 
+L 328.48 130.93 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_12"><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="130.93" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_9"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="136.47" transform="rotate(-0 40.98 136.47)">15</text></g></g><g id="tdl-challenge-2025-ytick_5"><g id="tdl-challenge-2025-line2d_13"><path d="M 49.48 96.02 
+L 328.48 96.02 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_14"><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="96.02" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_10"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="101.57" transform="rotate(-0 40.98 101.57)">20</text></g></g><g id="tdl-challenge-2025-ytick_6"><g id="tdl-challenge-2025-line2d_15"><path d="M 49.48 61.11 
+L 328.48 61.11 
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: none; stroke-dasharray: 2.22,0.96; stroke-dashoffset: 0; stroke: var(--lab-grid,#7f7f7f); stroke-opacity: 0.45; stroke-width: 0.6"/></g><g id="tdl-challenge-2025-line2d_16"><g><use xlink:href="#tdl-challenge-2025-m8df638cedf" x="49.48" y="61.11" style="stroke: currentColor; stroke-width: 1.1"/></g></g><g id="tdl-challenge-2025-text_11"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: end" x="40.98" y="66.66" transform="rotate(-0 40.98 66.66)">25</text></g></g><g id="tdl-challenge-2025-text_12"><text style="font-size: 18px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: middle" x="16.1" y="141.4" transform="rotate(-90 16.1 141.4)">Submissions</text></g></g><g id="tdl-challenge-2025-patch_3"><path d="M 49.48 235.65 
+L 49.48 47.15 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="tdl-challenge-2025-patch_4"><path d="M 328.48 235.65 
+L 328.48 47.15 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="tdl-challenge-2025-patch_5"><path d="M 49.48 235.65 
+L 328.48 235.65 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="tdl-challenge-2025-patch_6"><path d="M 49.48 47.15 
+L 328.48 47.15 
+" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter; stroke-linecap: square"/></g><g id="tdl-challenge-2025-patch_7"><path d="M 62.17 235.65 
+L 101.46 235.65 
+L 101.46 61.11 
+L 62.17 61.11 
+z
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: url(#tdl-challenge-2025-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-patch_8"><path d="M 133.61 235.65 
+L 172.91 235.65 
+L 172.91 172.81 
+L 133.61 172.81 
+z
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: url(#tdl-challenge-2025-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-patch_9"><path d="M 205.06 235.65 
+L 244.35 235.65 
+L 244.35 200.74 
+L 205.06 200.74 
+z
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: url(#tdl-challenge-2025-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-patch_10"><path d="M 276.51 235.65 
+L 315.8 235.65 
+L 315.8 200.74 
+L 276.51 200.74 
+z
+" clip-path="url(#tdl-challenge-2025-pc825a6c539)" style="fill: url(#tdl-challenge-2025-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g></g><g id="tdl-challenge-2025-legend_1"><g id="tdl-challenge-2025-patch_11"><path d="M 50.24 34.25 
+L 318.73 34.25 
+L 318.73 3.6 
+L 50.24 3.6 
+z
+" style="fill: var(--lab-paper,#fff); stroke: var(--lab-frame,#808080); stroke-width: 1.1; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-patch_12"><path d="M 58.24 22.8 
+L 96.64 22.8 
+L 96.64 11.6 
+L 58.24 11.6 
+z
+" style="fill: url(#tdl-challenge-2025-h3bcca6dd4a); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-text_13"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="107.84" y="22.8" transform="rotate(-0 107.84 22.8)">Mission A</text></g><g id="tdl-challenge-2025-patch_13"><path d="M 194.88 22.8 
+L 233.28 22.8 
+L 233.28 11.6 
+L 194.88 11.6 
+z
+" style="fill: url(#tdl-challenge-2025-hefc3152df1); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: miter"/></g><g id="tdl-challenge-2025-text_14"><text style="font-size: 16px; font-family: 'Times New Roman', Times, 'Liberation Serif', 'Nimbus Roman', serif; text-anchor: start" x="244.48" y="22.8" transform="rotate(-0 244.48 22.8)">Mission B</text></g></g></g><defs><clipPath id="tdl-challenge-2025-pc825a6c539"><rect x="49.48" y="47.15" width="279" height="188.5"/></clipPath></defs><defs><pattern id="tdl-challenge-2025-h3bcca6dd4a" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72"><rect x="0" y="0" width="73" height="73" style="fill:var(--lab-1,#f34c4c)"/><path d="M -36 36 
+L 36 -36 
+M -24 48 
+L 48 -24 
+M -12 60 
+L 60 -12 
+M 0 72 
+L 72 0 
+M 12 84 
+L 84 12 
+M 24 96 
+L 96 24 
+M 36 108 
+L 108 36 
+" style="fill: currentColor; stroke: currentColor; stroke-width: 0.8; stroke-linecap: butt; stroke-linejoin: miter"/></pattern><pattern id="tdl-challenge-2025-hefc3152df1" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72"><rect x="0" y="0" width="73" height="73" style="fill:var(--lab-2,#719bdb)"/><path d="M -36 36 
+L 36 108 
+M -24 24 
+L 48 96 
+M -12 12 
+L 60 84 
+M 0 0 
+L 72 72 
+M 12 -12 
+L 84 60 
+M 24 -24 
+L 96 48 
+M 36 -36 
+L 108 36 
+" style="fill: currentColor; stroke: currentColor; stroke-width: 0.8; stroke-linecap: butt; stroke-linejoin: miter"/></pattern></defs></svg>

@@ -7,12 +7,17 @@ import Button from "@dario-loi/polytope/astro/Button.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Card from "@dario-loi/polytope/astro/Card.astro";
 import Cover from "../components/Cover.astro";
+import { Picture } from "astro:assets";
+import portrait from "../assets/dario-loi.jpg";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
 import SectionHead from "../components/SectionHead.astro";
 import EmailLink from "../components/EmailLink.astro";
 import CvLink from "../components/CvLink.astro";
-import { cardPicture, entries, longDate, pubRow, seedOf } from "../lib/content";
+import ProjectLinks from "../components/ProjectLinks.astro";
+import Latest from "../components/Latest.astro";
+import { cardPicture, entries, longDate, pictureFormats, pubRow, seedOf } from "../lib/content";
 import { cv, person } from "../site";
+import { cvAnchor, cvEntries } from "../data/cv";
 
 const pubs = await entries("publications");
 const selected = pubs.filter((p) => p.data.selected);
@@ -22,45 +27,67 @@ const featured = projects.filter((p) => p.data.featured).slice(0, 3);
 const posts = (await entries("blog")).slice(0, 3);
 
 const pubRows = shownPubs.map(pubRow);
+
+// The newest three entries of the CV, in its own words, for the mast. An entry whose text names
+// one of the papers links to that paper; the rest link to the CV.
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const latest = [...cvEntries].sort((a, b) => b.from.localeCompare(a.from)).slice(0, 3).map((e) => {
+  const [y, m] = e.from.split("-");
+  const phrase = e.text?.includes(": ") ? e.text.slice(e.text.indexOf(": ") + 2).replace(/\.$/, "").toLowerCase() : undefined;
+  const paper = phrase ? pubs.find((p) => p.data.title.toLowerCase().includes(phrase)) : undefined;
+  return { when: `${MONTHS[Number(m) - 1]} ${y}`, title: e.title, rest: e.text ?? e.org, kind: e.kind, href: paper ? `/publications/${paper.id}/` : `/cv/#${cvAnchor(e)}`, paper: Boolean(paper) };
+});
 ---
 <Base description={`${person.name}, ${person.lede}`} current="About" profile>
-  <Mast title={person.name} lede={person.lede}>
+  <Mast title={person.name} lede={person.lede} class="home-mast">
     <div slot="after" class="ply-cluster home-actions">
       <Button href="/publications/">Publications</Button>
       <CvLink placement="home-mast" mode="view" />
       <EmailLink placement="home-mast" />
     </div>
+    {latest.length > 0 && <div class="home-latest" slot="after"><Latest items={latest} placement="home-mast" /></div>}
     <figure class="ply-exhibit" slot="exhibit">
-      <Complex label="A Vietoris-Rips complex drawn from my name" autoplay="visible" seed={seedOf(person.name)} />
-      <figcaption><b>A Vietoris-Rips complex drawn from my name.</b> Sheaf neural networks, part of my research, learn on structures like this one.</figcaption>
+      <Complex label="A Vietoris-Rips complex" autoplay="visible" seed={seedOf(person.name)} />
+      <figcaption><b>A <a href="https://en.wikipedia.org/wiki/Vietoris%E2%80%93Rips_complex">Vietoris-Rips complex</a>.</b> Sheaf neural networks, part of my research, learn on structures like this one.</figcaption>
     </figure>
   </Mast>
-  <hr class="ply-rule" />
+  {latest.length > 0 && <div class="ply-container home-latest-phone"><Latest items={latest} placement="home-mast-phone" /></div>}
 
   <div class="ply-container">
-    <section class="home-section home-about" aria-labelledby="about">
-      <h2 id="about">About</h2>
+    <section class="home-section" aria-labelledby="about">
+      <SectionHead id="about" title="About" fragment="about" />
+      <div class="home-about">
+      <div class="home-about__label">
+        <figure class="home-about__figure">
+          <Picture {...pictureFormats} src={portrait} alt="Dario Loi" widths={[144, 240, 288, 480]} sizes="(min-width: 64rem) 15rem, 12rem" class="home-about__portrait" />
+          <figcaption><b>The author.</b> Thinking about sheaves, probably.</figcaption>
+        </figure>
+      </div>
       <div class="ply-prose">
         <p>I started my Ph.D. in Computer Engineering at Northeastern University in Boston in September 2026. I work on machine learning in the <a href={person.lab.href}>{person.lab.name}</a>.</p>
         <p>Before Northeastern I studied at Sapienza University of Rome, where I earned a B.S. in Applied Computer Science and Artificial Intelligence with full honors and an M.S. in Computer Science. I also build <a href="/projects/polytope/">Polytope</a>, the design system this site runs on.</p>
       </div>
-      <ul class="home-profiles" role="list">
+      <div class="home-about__links">
+        <p class="ply-label">Find me elsewhere</p>
+        <ul class="home-profiles" role="list">
         <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.scholar} data-track="profile-link" data-track-placement="home-about" data-track-label="scholar"><Icon name="external" />Google Scholar</a></li>
         <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.github} data-track="profile-link" data-track-placement="home-about" data-track-label="github"><Icon name="code" />GitHub</a></li>
         <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.linkedin} data-track="profile-link" data-track-placement="home-about" data-track-label="linkedin"><Icon name="external" />LinkedIn</a></li>
         <li><a class="ply-button ply-button--secondary ply-button--sm" href={person.profiles.orcid} data-track="profile-link" data-track-placement="home-about" data-track-label="orcid"><Icon name="external" />ORCID</a></li>
       </ul>
+      </div>
+      </div>
     </section>
 
     <section id="publications" class="home-section" aria-labelledby="publications-h">
-      <SectionHead id="publications-h" title={selected.length > 0 ? "Selected publications" : "Publications"} more={{ label: "All publications", href: "/publications/" }} />
+      <SectionHead id="publications-h" title={selected.length > 0 ? "Selected publications" : "Publications"} fragment="publications" more={{ label: "All publications", href: "/publications/" }} />
       <PubList pubs={pubRows} me={person.name} label={false} fold={12} />
     </section>
 
     {featured.length > 0 && (
       <section class="home-section" aria-labelledby="projects-h">
-        <SectionHead id="projects-h" title="Projects" more={{ label: "All projects", href: "/projects/" }} />
-        <CardGrid>
+        <SectionHead id="projects-h" title="Projects" fragment="projects" more={{ label: "All projects", href: "/projects/" }} />
+        <CardGrid class="card-rows">
           {featured.map((p) => (
             <Card
               href={`/projects/${p.id}/`}
@@ -71,7 +98,8 @@ const pubRows = shownPubs.map(pubRow);
               seed={seedOf(p.id)}
               link={{ "data-track": "open-project", "data-track-placement": "home", "data-track-label": p.id }}
             >
-              {p.data.cover && <Cover slot="figure" {...cardPicture()} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+              <Cover slot="figure" {...cardPicture()} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
+              <ProjectLinks project={p} placement="home-card" />
             </Card>
           ))}
         </CardGrid>
@@ -80,8 +108,8 @@ const pubRows = shownPubs.map(pubRow);
 
     {posts.length > 0 && (
       <section class="home-section" aria-labelledby="writing-h">
-        <SectionHead id="writing-h" title="Writing" more={{ label: "All posts", href: "/blog/" }} />
-        <CardGrid>
+        <SectionHead id="writing-h" title="Writing" fragment="writing" more={{ label: "All posts", href: "/blog/" }} />
+        <CardGrid class="card-rows">
           {posts.map((p) => (
             <Card
               href={`/blog/${p.id}/`}
@@ -92,7 +120,7 @@ const pubRows = shownPubs.map(pubRow);
               seed={seedOf(p.id)}
               link={{ "data-track": "open-post", "data-track-placement": "home", "data-track-label": p.id }}
             >
-              {p.data.cover && <Cover slot="figure" {...cardPicture()} src={p.data.cover} dark={p.data.coverDark} alt="" />}
+              <Cover slot="figure" {...cardPicture()} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
             </Card>
           ))}
         </CardGrid>
@@ -100,7 +128,7 @@ const pubRows = shownPubs.map(pubRow);
     )}
 
     <section class="home-section home-close" aria-labelledby="contact-h">
-      <h2 id="contact-h">Get in touch</h2>
+      <SectionHead id="contact-h" title="Get in touch" fragment="contact" />
       <p class="home-close__text">Always happy to chat.</p>
       <div class="ply-cluster">
         <EmailLink placement="home-close" variant="primary">Email me</EmailLink>
@@ -110,15 +138,61 @@ const pubRows = shownPubs.map(pubRow);
   </div>
 </Base>
 <style>
-  .home-actions { margin-top: var(--ply-space-6); }
-  .home-section { margin-top: var(--ply-space-8); }
-  .home-about { display: grid; gap: var(--ply-space-4) var(--ply-space-8); padding-top: var(--ply-space-2); }
-  .home-about h2 { margin-bottom: var(--ply-space-2); }
-  .home-profiles { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
-  @media (min-width: 64rem) {
-    .home-about { grid-template-columns: 17rem minmax(0, 1fr); align-items: start; }
-    .home-about h2 { grid-row: span 2; }
+  .home-actions { margin-top: var(--ply-space-5); }
+  /* The mast's left column runs the exhibit's height: the "in brief" column closes on the line
+     where the exhibit's caption does. */
+  :global(.home-mast > div:first-child) { display: flex; flex-direction: column; align-self: stretch; }
+  /* "Latest" runs under the buttons in the mast's left column when it fits without making that
+     column taller than the exhibit: three entries from 90rem, the two newest from 80rem. Narrower,
+     it follows the mast, so a phone's first screen is the name, the buttons and the exhibit. */
+  /* The exhibit stays at the right of the name from 48rem, in a column of at most 35rem and 40% of
+     the mast, so the panel never spans the row; narrower, it stacks under the buttons at 24rem
+     at most, on the content edge. Its controls and caption follow the panel's width. */
+  :global(.home-mast .ply-mast__exhibit) { max-width: 24rem; }
+  @media (min-width: 48rem) {
+    :global(.home-mast:has(> .ply-mast__exhibit)) { grid-template-columns: minmax(0, 1fr) minmax(16rem, min(35rem, 40%)); }
+    :global(.home-mast .ply-mast__exhibit) { max-width: none; }
   }
-  .home-close { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); padding-top: var(--ply-space-6); display: grid; gap: var(--ply-space-4); }
+  .home-latest { display: none; }
+  .home-latest-phone { padding-bottom: var(--ply-space-6); }
+  @media (min-width: 80rem) {
+    .home-latest { display: block; margin-top: auto; padding-top: var(--ply-space-5); }
+    .home-latest-phone { display: none; }
+  }
+  @media (min-width: 80rem) and (max-width: 89.99rem) { .home-latest :global(li:nth-child(3)) { display: none; } }
+  .home-section { margin-top: var(--ply-space-7); }
+  /* The mast's bottom padding already separates it from About; About's own rule is the divider. */
+  .home-section:first-child { margin-top: 0; }
+  /* The section's own rule is the top line of its list; the first year's rule would double it. */
+  .home-section :global(.ply-wall__year:first-of-type) { border-top: 0; padding-top: 0; }
+  .home-about { display: grid; gap: var(--ply-space-4) var(--ply-space-6); }
+  .home-about__label { display: grid; gap: var(--ply-space-4); align-content: start; justify-items: start; }
+  /* The portrait hangs in the label column under the heading, on the chrome edge, as wide as the
+     column on a desktop and 12rem on a phone. The hairline keeps its white wall from merging with the white page; the photo is shown as it is
+     in both themes. */
+  .home-about__figure { margin: 0; display: grid; gap: var(--ply-space-2); justify-items: inherit; }
+  /* The wall-label caption of an exhibit: a bold lead in the text color, the rest in caption gray. */
+  .home-about__figure figcaption { font-size: var(--ply-size-sm); color: var(--ply-color-text-muted); line-height: var(--ply-leading-normal); text-wrap: pretty; }
+  .home-about__figure figcaption b { color: var(--ply-color-text); }
+  .home-about__portrait { width: 12rem; height: auto; aspect-ratio: 1; outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
+  .home-about__links { display: grid; gap: var(--ply-space-3); align-content: start; justify-items: start; }
+  .home-profiles { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
+  @media (min-width: 64rem) {
+    .home-about { grid-template-columns: var(--ply-layout-toc) minmax(0, 1fr); align-items: start; }
+    .home-about__links { grid-column: 2; }
+    /* Projects and writing share three tracks, so a pair of posts is not set larger than three projects. */
+    .home-section :global(.ply-cards) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .home-about__portrait { width: 100%; }
+  }
+  /* The links stand in a third column from 72rem; narrower, they run in a row under the text. */
+  @media (min-width: 72rem) {
+    .home-about { grid-template-columns: var(--ply-layout-toc) minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); }
+    /* The links block ends on the section's right edge, the rule's and "All publications"; its label and buttons stay left-aligned inside it. */
+    .home-about__links { grid-column: 3; justify-self: end; }
+    .home-profiles { flex-direction: column; align-items: stretch; width: 12rem; }
+    .home-profiles .ply-button { width: 100%; justify-content: flex-start; }
+  }
+  .home-close { display: grid; gap: var(--ply-space-4); }
+  .home-close :global(.section-head) { margin-bottom: 0; }
   .home-close__text { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); max-width: var(--ply-layout-measure); }
 </style>
