@@ -19,7 +19,6 @@ const target = cv.pdf ?? cv.page;
       </div>
     </Empty>
   </div>
-</Base>
 <script>
   import { track } from "../../scripts/track";
   // Leave once the page has loaded (Umami sends its page view then) and the event is sent, or
@@ -33,6 +32,7 @@ const target = cv.pdf ?? cv.page;
     Promise.race([sent, new Promise((r) => setTimeout(r, 2000))]).finally(() => location.replace(link.href));
   }
 </script>
+</Base>
 <style>
   .cv-pdf { padding-block: var(--ply-space-8); }
 </style>

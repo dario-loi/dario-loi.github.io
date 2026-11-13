@@ -35,6 +35,7 @@ const description = `${n === 1 ? "A paper" : "Papers"} by ${person.name} on ${to
 >
   <IndexMast title={topic.name} lede={topic.description} />
   <div class="ply-container topic">
+    <h2 class="ply-visually-hidden">Papers on {topic.name.toLowerCase().replace("llm", "LLM")}</h2>
     <PubCards pubs={pubs} lead={pubs[0].id} placement="topic" year />
     <nav class="topic__more" aria-labelledby="topic-more">
       <h2 class="topic__more-label" id="topic-more">All topics</h2>

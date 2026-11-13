@@ -8,7 +8,7 @@ import franklin from "@dario-loi/polytope/fonts/libre-franklin-latin-wght.woff2?
 import SiteBar from "../components/SiteBar.astro";
 import EmailLink from "../components/EmailLink.astro";
 import Analytics from "../components/Analytics.astro";
-import katexCss from "katex/dist/katex.min.css?url";
+import katexCss from "katex/dist/katex.min.css?inline";
 import { entries } from "../lib/content";
 import { personNode, profilePageNode, websiteNode } from "../lib/schema";
 import { cv, person, siteMeta } from "../site";
@@ -52,9 +52,10 @@ const hasPosts = (await entries("blog")).length > 0;
 // Each list gets an RSS feed once it has an entry; the blog's appears with its first published
 // post.
 const feeds = [
+  { name: "Site", title: "everything", href: "/rss.xml" },
   ...((await entries("publications")).length > 0 ? [{ name: "Publications", title: "publications", href: "/publications/rss.xml" }] : []),
   ...((await entries("projects")).length > 0 ? [{ name: "Projects", title: "projects", href: "/projects/rss.xml" }] : []),
-  ...(hasPosts ? [{ name: "Blog", title: "blog", href: "/rss.xml" }] : []),
+  ...(hasPosts ? [{ name: "Blog", title: "blog", href: "/blog/rss.xml" }] : []),
 ];
 const tabs = [
   { label: "About", href: "/", current: current === "About" },
@@ -126,7 +127,7 @@ const year = new Date().getFullYear();
          favicon.ico at the address crawlers ask for first. -->
     <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    {math && <link rel="stylesheet" href={katexCss} />}
+    {math && <style set:html={katexCss} />}
     {markdown && <link rel="alternate" type="text/markdown" href={new URL(markdown, pageUrl).href} />}
     {feeds.map((f) => <link rel="alternate" type="application/rss+xml" title={`${person.name}: ${f.title}`} href={f.href} />)}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
@@ -169,11 +170,9 @@ const year = new Date().getFullYear();
         </nav>
       </div>
       <div class="ply-container">
-        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href="/projects/polytope/">Polytope</a>. <a href={siteMeta.repo}>Source</a>. <a class="site-foot__top" href="#">Back to top</a></p>
+        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href="/projects/polytope/">Polytope</a>. <a href={siteMeta.repo}>Source</a>. <a class="site-foot__top" href="#top">Back to top</a></p>
       </div>
     </footer>
-  </body>
-</html>
 <script>
   import "@dario-loi/polytope/js/copy.js";
   import "@dario-loi/polytope/js/scroll.js";
@@ -240,6 +239,8 @@ const year = new Date().getFullYear();
   paintBar();
   new MutationObserver(paintBar).observe(document.documentElement, { attributeFilter: ["data-theme"] });
 </script>
+  </body>
+</html>
 <style is:global>
   /* Sizes that a Polytope utility may override sit in Polytope's components layer, under its
      utilities layer: a footer link is 24px tall, and .ply-target raises it to 44px under a

@@ -15,7 +15,7 @@ import { person } from "../../site";
 const pubs = await entries("publications");
 const years = [...new Set(pubs.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
 const n = pubs.length;
-const description = `Publications by ${person.name}: machine learning machine learning papers with abstracts, PDFs, code, and BibTeX, from sheaf networks to test-time adaptation.`;
+const description = `Publications by ${person.name}: machine learning papers with abstracts, PDFs, code, and BibTeX, from sheaf networks to test-time adaptation.`;
 // The topics a paper lists, in the order of the topic list.
 const used = topics.map((t) => t.name).filter((name) => pubs.some((p) => p.data.topics.includes(name)));
 ---

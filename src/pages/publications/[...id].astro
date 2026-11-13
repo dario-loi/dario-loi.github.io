@@ -119,7 +119,6 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
       />
     </div>
   </div>
-</Base>
 <script>
   // The BibTeX block's own Copy button reports that the entry was copied.
   for (const b of document.querySelectorAll<HTMLElement>("#bibtex .ply-code__copy")) {
@@ -135,6 +134,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
     a.dataset.trackLabel = a.textContent?.trim() ?? "";
   }
 </script>
+</Base>
 <style>
   /* The key figure takes the head's whole width, text and margin together, so it ends where the
      margin column and the working model end; a single-column figure takes the text's width and

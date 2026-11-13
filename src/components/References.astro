@@ -10,7 +10,7 @@ const { refs } = Astro.props;
 {refs.length > 0 && (
   <section class="refs" aria-labelledby="references">
     <h2 id="references">References</h2>
-    <ul class="refs__list">
+    <ul class="refs__list" role="list">
       {refs.map((r) => {
         const href = refHref(r);
         const arxiv = r.arxiv && !href?.includes("arxiv.org") ? `https://arxiv.org/abs/${r.arxiv}` : undefined;
@@ -18,7 +18,7 @@ const { refs } = Astro.props;
           <li id={`ref-${r.key}`} class="refs__item">
             {refAuthors(r.authors)} ({r.year}). {href ? <a href={href} data-track="open-reference">{r.title}</a> : r.title}.
             {r.venue && <> <i>{r.venue}</i>.</>}
-            {arxiv && <> <a href={arxiv} class="refs__alt">arXiv</a></>}
+            {arxiv && <> <a href={arxiv} class="refs__alt" aria-label={`arXiv: ${r.title}`}>arXiv</a></>}
           </li>
         );
       })}
