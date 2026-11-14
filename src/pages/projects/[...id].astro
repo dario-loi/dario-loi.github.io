@@ -1,4 +1,5 @@
 ---
+import ogCards from "../../data/og.json";
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
 import Base from "../../layouts/Base.astro";
@@ -23,6 +24,9 @@ const d = project.data;
 const { Content } = await render(project);
 const seed = seedOf(project.id);
 const og = await preview(d.cover, d.coverAlt);
+// The page's 1200x630 share card (scripts/og.mjs), when it has one: structured data names the
+// same picture the link previews show.
+const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${project.id}/`]?.src;
 ---
 <Base
   title={d.title}
@@ -30,7 +34,7 @@ const og = await preview(d.cover, d.coverAlt);
   current="Projects"
   noindex={d.draft}
   {...og}
-  schema={[projectNode(project, og.image?.src)]}
+  schema={[projectNode(project, shareCard ?? og.image?.src)]}
   crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }, { name: d.title, href: `/projects/${project.id}/` }]}
 >
   <Article>

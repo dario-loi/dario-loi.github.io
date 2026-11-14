@@ -13,6 +13,7 @@ import { awards, cvEntries } from "../data/cv";
 import { lastmod } from "./lastmod.mjs";
 import { topicOf, topicPath } from "../data/topics";
 import { refNode, referencesOf } from "./references";
+import { personHref } from "../data/people";
 
 type Node = Record<string, unknown>;
 
@@ -161,7 +162,7 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
     description: plain(d.description ?? d.tldr ?? "") || undefined,
     abstract: plain(d.abstract),
     author: d.authors.map((a) =>
-      a.name === person.name ? me : { "@type": "Person", name: a.name, affiliation: a.affiliations.length ? institutions(a.affiliations) : undefined },
+      a.name === person.name ? me : { "@type": "Person", name: a.name, url: personHref(a.name), affiliation: a.affiliations.length ? institutions(a.affiliations) : undefined },
     ),
     datePublished: isoDay(d.date),
     dateModified: modified ? modified.toISOString() : isoDay(d.date),

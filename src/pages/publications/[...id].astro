@@ -1,4 +1,6 @@
 ---
+import { personHref } from "../../data/people";
+import ogCards from "../../data/og.json";
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
 import { Picture } from "astro:assets";
@@ -35,6 +37,9 @@ const links = [...d.links, { label: "BibTeX", href: "#cite", icon: "quote" as co
 const seed = seedOf(pub.id);
 // Previews show the card's crop of the paper's figure, else the key figure itself.
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
+// The page's 1200x630 share card (scripts/og.mjs), when it has one: structured data names the
+// same picture the link previews show.
+const shareCard = (ogCards as Record<string, { src: string }>)[`/publications/${pub.id}/`]?.src;
 // The page changes after the paper comes out (a post under the abstract, a newer PDF); until it
 // does, the paper's date is also the page's.
 const changed = lastmod(`/publications/${pub.id}/`);
@@ -53,7 +58,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
   {...og}
   published={d.date}
   modified={modified}
-  schema={[paperNode(pub, [squarePicture(pub), og.image?.src], modified), ...(code ? [code] : [])]}
+  schema={[paperNode(pub, [squarePicture(pub), shareCard ?? og.image?.src], modified), ...(code ? [code] : [])]}
   math={hasMath(d.tldr, d.abstract, d.figureCaption)}
   citation={{
     title: d.title,
@@ -75,7 +80,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
 >
   <Article class="paper__body">
     <div slot="header" class:list={["paper-head", !d.figure && "paper-head--exhibit"]}>
-      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12} />
+      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, href: personHref(a.name), affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12} />
       {/* The key figure leads the page, under the header and at its width. A paper without
           one hangs its card's image, or its card's complex (drawn as Polytope's Card draws
           it, from the same seed), beside the header. */}

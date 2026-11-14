@@ -1,5 +1,6 @@
 ---
 // A grid of publication cards, as the publications page and a topic's page show them.
+import { personHref } from "../data/people";
 import type { CollectionEntry } from "astro:content";
 import Card from "@dario-loi/polytope/astro/Card.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
@@ -34,7 +35,7 @@ const cardLinks = (p: (typeof pubs)[number]) => [...(pubRow(p).links ?? []), { l
     >
       <Cover slot="figure" {...cardPicture(p.id === lead)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
       {p.data.tldr && <Tex slot="summary" text={p.data.tldr} />}
-      <p class="pub-card__authors">{foldAuthors(p.data.authors.map((a) => a.name), person.name).map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : a}</>)}</p>
+      <p class="pub-card__authors">{foldAuthors(p.data.authors.map((a) => a.name), person.name).map((a, i) => <>{i > 0 && ", "}{a === person.name ? <span class="ply-me">{a}</span> : personHref(a) ? <a href={personHref(a)}>{a}</a> : a}</>)}</p>
       <p class="ply-pub__links">{cardLinks(p).map((l) => <a href={l.href} data-track="paper-link" data-track-placement={`${placement}-card`} data-track-label={`${p.id}:${l.label}`}>{l.label}</a>)}</p>
     </Card>
   ))}

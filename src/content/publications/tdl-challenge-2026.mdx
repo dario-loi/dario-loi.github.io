@@ -118,7 +118,7 @@ import universe from "./tdl-challenge-2026-graphuniverse-plot.svg?raw";
 
 Suppose a graph neural network (GNN) and a topological neural network (TNN) both claim to be good at spotting triangles in a network. The two papers use different datasets, different splits, and different code, so the comparison says little about which family is the better tool. The 2026 Topological Deep Learning Challenge set out to remove that excuse. It asked participants to implement recent architectures in TopoBench, the open-source benchmarking library for topological deep learning (TDL), and to run all of them through one evaluation pipeline on graphs whose structure is set by design.
 
-This page is a companion to the report. It explains what made this edition different from [the 2025 one](/publications/tdl-challenge-2025/), what a GNN vs topological neural network benchmark can and cannot tell a practitioner, and what Gabriele Onorato and I submitted as team howyadoin, including the winner of Track 1.
+This page is a companion to the report. It explains what made this edition different from [the 2025 one](/publications/tdl-challenge-2025/), what a GNN vs topological neural network benchmark can and cannot tell a practitioner, and what [Gabriele Onorato](https://www.gabrieleonorato.com/) and I submitted as team howyadoin, including the winner of Track 1.
 
 ## How the challenge worked
 
@@ -146,7 +146,7 @@ For someone choosing a model, both results are useful. The triangle-counting gap
 
 ## My contribution
 
-Gabriele Onorato and I competed as team howyadoin and submitted five models, all from the sheaf family: three in Track 1 and two in Track 2. Our implementation of the Directed Sheaf Neural Network (DSNN, from Fiorini et al., ICLR 2026) took **first place in Track 1 (Graph Neural Networks)**, and the team received the honorable mention "Excellent portfolio", given to two teams for "multiple high-quality contributions across both tracks".
+[Gabriele Onorato](https://www.gabrieleonorato.com/) and I competed as team howyadoin and submitted five models, all from the sheaf family: three in Track 1 and two in Track 2. Our implementation of the Directed Sheaf Neural Network (DSNN, from Fiorini et al., ICLR 2026) took **first place in Track 1 (Graph Neural Networks)**, and the team received the honorable mention "Excellent portfolio", given to two teams for "multiple high-quality contributions across both tracks".
 
 DSNN ([pull request #412](https://github.com/geometric-intelligence/topobench/pull/412)) is a directed sheaf neural network implementation in PyTorch. Its restriction maps carry a phase read off the adjacency, which gives a Hermitian directed sheaf Laplacian that reduces to the ordinary one on undirected graphs. We implemented it with a real-valued lifting, so no complex tensor is ever materialized. The pull request carries 223 unit tests that check the paper's theorems rather than tensor shapes, full line coverage of its new files, API documentation, and a notebook that reproduces the paper's directed stochastic block model figure, where only edge directions reveal the communities. For readers who care about speed, our own work on sheaf networks is in [Implicit Sheaf Operators](/publications/implicit-sheaf-operators/).
 

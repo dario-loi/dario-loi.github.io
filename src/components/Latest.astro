@@ -1,4 +1,5 @@
 ---
+import { linkPeople } from "../data/people";
 // The newest entries of the CV in brief: a dated line each, headed by a wall label.
 interface Item { when: string; kind?: string; title: string; rest: string; href: string }
 interface Props { items: Item[]; placement: string; class?: string }
@@ -10,7 +11,7 @@ const { items, placement, class: className } = Astro.props;
     {items.map((e) => (
       <li>
         <span class="latest__meta"><time class="latest__when">{e.when}</time>{e.kind && <span class="latest__kind">{e.kind}</span>}</span>
-        <span class="latest__what"><a href={e.href} data-track="open-latest" data-track-placement={placement} data-track-label={e.title}>{e.title}</a>. {e.rest}</span>
+        <span class="latest__what"><a href={e.href} data-track="open-latest" data-track-placement={placement} data-track-label={e.title}>{e.title}</a>. <Fragment set:html={linkPeople(e.rest)} /></span>
       </li>
     ))}
   </ol>
