@@ -64,7 +64,7 @@ const latest = [...cvEntries].sort((a, b) => b.from.localeCompare(a.from)).slice
         </figure>
       </div>
       <div class="ply-prose">
-        <p>I started my Ph.D. in Computer Engineering at Northeastern University in Boston in September 2026. I work on machine learning in the <a href={person.lab.href}>{person.lab.name}</a>.</p>
+        <p>I started my Ph.D. in Computer Engineering at Northeastern University in Boston in September 2026. I work in the <a href={person.lab.href}>{person.lab.name}</a> on topological deep learning, mainly sheaf neural networks and learning on graphs and simplicial complexes. My other line of papers covers test-time adaptation and metacognition.</p>
         <p>Before Northeastern I studied at Sapienza University of Rome, where I earned a B.S. in Applied Computer Science and Artificial Intelligence with full honors and an M.S. in Computer Science. I also build <a href="/projects/polytope/">Polytope</a>, the design system this site runs on.</p>
       </div>
       <div class="home-about__links">
@@ -93,7 +93,7 @@ const latest = [...cvEntries].sort((a, b) => b.from.localeCompare(a.from)).slice
               href={`/projects/${p.id}/`}
               title={p.data.title}
               summary={p.data.description}
-              meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context.split(",")[0]] : [])]}
+              meta={[String(p.data.date.getUTCFullYear()), ...(p.data.context ? [p.data.context.split(",")[0]] : []), ...(p.data.stars ? [`${p.data.stars} GitHub stars`] : [])]}
               badge={p.data.draft ? "Draft" : undefined}
               seed={seedOf(p.id)}
               link={{ "data-track": "open-project", "data-track-placement": "home", "data-track-label": p.id }}

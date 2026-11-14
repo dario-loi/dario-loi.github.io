@@ -103,6 +103,19 @@ Google titles a PDF result from them, and reference managers fill a record from 
 (`.github/workflows/papers.yml`) runs the check every Monday and opens an issue when a source
 changes. It does not commit anything.
 
+## Share cards
+
+Every page shares a 1200x630 image (Open Graph and Twitter). `npm run og` renders them into
+`public/og/` with headless Chromium and writes `src/data/og.json`, which `Base.astro` reads by
+path; the home page keeps `public/og.png`. Pages with no picture (CV, lists, topics, privacy)
+get a title card: an Ultra headline with the tomato full stop beside a complex seeded from the
+page path. A paper or project with a cover uses it, cropped to 1200x630 when the cover is at
+least 1200px wide, and composed at native size under the title when it is smaller, so nothing
+is stretched. An entry with no cover gets a title card; drafts get none. Run `npm run og`
+after adding or retitling a page, entry, topic, or cover, and commit the output. `CHROMIUM`
+names the browser binary if it is not `chromium`. Set a crop's focal point in `FOCUS` in
+`scripts/og.mjs`.
+
 ## Search engines and language models
 
 Every page carries schema.org records built from the collections (`src/lib/schema.ts`): the

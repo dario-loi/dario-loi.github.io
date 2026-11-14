@@ -51,6 +51,7 @@ const profileNames: Record<keyof typeof person.profiles, string> = {
   orcid: "ORCID",
   github: "GitHub",
   linkedin: "LinkedIn",
+  wikidata: "Wikidata",
 };
 
 type Paper = CollectionEntry<"publications">;

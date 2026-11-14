@@ -9,6 +9,16 @@ import SiteBar from "../components/SiteBar.astro";
 import EmailLink from "../components/EmailLink.astro";
 import Analytics from "../components/Analytics.astro";
 import katexCss from "katex/dist/katex.min.css?inline";
+import ogCards from "../data/og.json";
+// The KaTeX faces a paper's math uses. Left to the stylesheet they are found only once the first
+// layout needs them, so the math swaps in late and pushes the text below it down; preloaded they
+// arrive with the page.
+import katexMain from "katex/dist/fonts/KaTeX_Main-Regular.woff2?url";
+import katexMainBold from "katex/dist/fonts/KaTeX_Main-Bold.woff2?url";
+import katexMathItalic from "katex/dist/fonts/KaTeX_Math-Italic.woff2?url";
+import katexAms from "katex/dist/fonts/KaTeX_AMS-Regular.woff2?url";
+import katexCaligraphic from "katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2?url";
+const katexFonts = [katexMain, katexMathItalic, katexAms, katexMainBold, katexCaligraphic];
 import { entries } from "../lib/content";
 import { personNode, profilePageNode, websiteNode } from "../lib/schema";
 import { cv, person, siteMeta } from "../site";
@@ -69,7 +79,7 @@ const tabs = [
 // than through Seo's `person` so they can carry the lab, the alma mater, and the ids the other
 // records point at. A page adds its own records through `schema`.
 const isHome = Astro.url.pathname === "/";
-const records = [...(profile ? [personNode()] : []), ...(isHome ? [websiteNode(), profilePageNode()] : []), ...schema];
+const records = [...(profile ? [personNode()] : []), websiteNode(), ...(isHome ? [profilePageNode()] : []), ...schema];
 // Scholar reads each citation_author with the citation_author_institution tags right after it,
 // which Seo does not write, so the author tags are written here and Seo gets the rest of the
 // citation. The paper's own record (schema) carries the authors for structured data.
@@ -80,7 +90,12 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const { keywords: citationKeywords = [], ...seoCitation } = citation ?? ({} as NonNullable<typeof citation>);
 // Link-preview scrapers that read only twitter: tags get the same title, text, and picture as og:.
 const previewTitle = headTitle;
-const previewImage = image ?? { src: "/og.png", width: 1200, height: 630 };
+// A page with a share card (scripts/og.mjs, src/data/og.json) uses it: every card is 1200x630.
+const card = (ogCards as Record<string, { src: string; type: string; alt: string }>)[Astro.url.pathname];
+const shareImage = card ? { src: card.src, width: 1200, height: 630 } : (image ?? { src: "/og.png", width: 1200, height: 630 });
+const shareType = card?.type ?? (typeof shareImage === "object" && shareImage.src.endsWith(".jpg") ? "image/jpeg" : "image/png");
+const shareAlt = imageAlt ?? card?.alt ?? `${person.name}, ${person.lede}`;
+const previewImage = shareImage;
 const previewSrc = new URL(typeof previewImage === "string" ? previewImage : previewImage.src, pageUrl).href;
 const year = new Date().getFullYear();
 ---
@@ -99,8 +114,8 @@ const year = new Date().getFullYear();
       published={published}
       modified={modified}
       citation={citation && { ...seoCitation, authors: [] }}
-      image={image ?? { src: "/og.png", width: 1200, height: 630 }}
-      imageAlt={imageAlt ?? `${person.name}, ${person.lede}`}
+      image={shareImage}
+      imageAlt={shareAlt}
       schema={records}
       breadcrumbs={crumbs}
       sitemap="/sitemap-index.xml"
@@ -118,7 +133,8 @@ const year = new Date().getFullYear();
     <meta name="twitter:title" content={previewTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={previewSrc} />
-    <meta name="twitter:image:alt" content={imageAlt ?? `${person.name}, ${person.lede}`} />
+    <meta name="twitter:image:alt" content={shareAlt} />
+    <meta property="og:image:type" content={shareType} />
     {citation && <meta name="citation_language" content="en" />}
     {/* Search may show this page's pictures at full width, as in Discover. */}
     {!noindex && <meta name="robots" content="max-image-preview:large" />}
@@ -132,6 +148,7 @@ const year = new Date().getFullYear();
     {feeds.map((f) => <link rel="alternate" type="application/rss+xml" title={`${person.name}: ${f.title}`} href={f.href} />)}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
+    {math && katexFonts.map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)" />
     <script is:inline>try{var t=localStorage.getItem("ply-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
@@ -242,6 +259,13 @@ const year = new Date().getFullYear();
   </body>
 </html>
 <style is:global>
+  /* Glyphs outside the self-hosted Latin subset (accented author names, the multiplication sign,
+     math operators) used to send the browser searching every installed font for a stand-in, which
+     put hundreds of milliseconds into the first layout on a slow CPU. Naming the stand-in (the
+     metric-compatible Arial family the stack already ends on) turns that search into one lookup.
+     No size-adjust, so the glyphs keep the size they had. */
+  @font-face { font-family: "Libre Franklin Variable"; font-style: normal; font-weight: 100 549; src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans"), local("DejaVu Sans"); unicode-range: U+0100-024F, U+2200-22FF, U+2061; }
+  @font-face { font-family: "Libre Franklin Variable"; font-style: normal; font-weight: 550 900; src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold"), local("DejaVu Sans Bold"); unicode-range: U+0100-024F, U+2200-22FF, U+2061; }
   /* Sizes that a Polytope utility may override sit in Polytope's components layer, under its
      utilities layer: a footer link is 24px tall, and .ply-target raises it to 44px under a
      finger. The layer order is restated so this sheet never sets it first. */

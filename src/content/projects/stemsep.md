@@ -5,6 +5,7 @@ date: 2025-04-05
 context: "Open source, Apache 2.0"
 tags: ["Python", "Audio", "Gradio"]
 featured: true
+stars: 23
 links:
   - { label: "Code", href: "https://github.com/dario-loi/stemsep", icon: code }
   - { label: "Docker image", href: "https://hub.docker.com/r/darioloi/stemsep", icon: download }

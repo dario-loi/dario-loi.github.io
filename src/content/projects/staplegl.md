@@ -5,6 +5,7 @@ date: 2023-04-24
 context: "Open source, MIT"
 tags: ["C++", "OpenGL", "Graphics"]
 featured: true
+stars: 51
 links:
   - { label: "Documentation", href: "https://dario-loi.github.io/staplegl/", icon: external }
   - { label: "Code", href: "https://github.com/dario-loi/staplegl", icon: code }

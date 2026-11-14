@@ -7,6 +7,7 @@
 import { Picture } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
+import CoverComplex from "./CoverComplex.astro";
 import { pictureFormats } from "../lib/content";
 
 interface Props {
@@ -33,7 +34,9 @@ const failed = "this.style.visibility='hidden'";
 {/* The panel's own complex, under the picture: a picture that is slow, missing, or failed leaves it
     instead of a black void, and the loaded picture covers it. It is server-rendered, so it needs
     no script. The parent panel must be positioned (a card's panel is). */}
-{seed !== undefined && <div class="cover-fallback" aria-hidden="true"><Complex seed={seed} points={28} radius={0.17} controls={false} label="A Vietoris-Rips complex" id={`cx-cover-${seed}`} /></div>}
+{seed !== undefined && <div class="cover-fallback" aria-hidden="true">{src
+  ? <CoverComplex seed={seed} />
+  : <Complex seed={seed} points={28} radius={0.17} controls={false} label="A Vietoris-Rips complex" id={`cx-cover-${seed}`} />}</div>}
 {src && <Picture {...pictureFormats} {...rest} src={src} class:list={[className, dark && "theme-light-only"]} onerror={failed} />}
 {src && dark && <Picture {...pictureFormats} {...rest} loading="lazy" fetchpriority="auto" src={dark} class:list={[className, "theme-dark-only"]} onerror={failed} />}
 <style is:global>

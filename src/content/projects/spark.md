@@ -4,6 +4,8 @@ description: "A small OpenGL renderer written in C++, built to learn graphics pr
 date: 2021-12-06
 context: "Personal project"
 tags: ["C++", "OpenGL", "Graphics"]
+cover: ./spark.webp
+coverAlt: "A robot model with a long cannon, drawn by the Spark renderer on a black background, with a small pale cube above it."
 links:
   - { label: "Code", href: "https://github.com/dario-loi/Spark", icon: code }
 draft: true

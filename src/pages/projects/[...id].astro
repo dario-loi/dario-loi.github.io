@@ -35,7 +35,7 @@ const og = await preview(d.cover, d.coverAlt);
 >
   <Article>
     <div slot="header" class="project-head">
-      <EntryHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : [])]}>
+      <EntryHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : []), ...(d.stars ? [`${d.stars} GitHub stars`] : [])]}>
         {d.links.length > 0 && (
           <div class="ply-cluster">
             {d.links.map((l, i) => (

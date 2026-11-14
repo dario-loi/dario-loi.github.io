@@ -15,7 +15,8 @@
     "design:check": "polytope-design --check",
     "papers:check": "node scripts/papers.mjs check",
     "papers:sync": "node scripts/papers.mjs sync",
-    "papers:meta": "node scripts/papers.mjs meta"
+    "papers:meta": "node scripts/papers.mjs meta",
+    "og": "node scripts/og.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.3",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.0",
     "yaml": "^2.9.1"
   }

@@ -148,6 +148,8 @@ const projects = defineCollection({
       links: z.array(link).default([]),
       /** Shown on the home page. */
       featured: z.boolean().default(false),
+      /** GitHub stars: a snapshot (51 and 23 as of 2026-11-14), updated by hand. */
+      stars: z.number().int().nonnegative().optional(),
       cover: image().optional(),
       coverAlt: z.string().optional(),
       /** The cover as a dark page shows it, for a light screenshot that would glare there. */

@@ -5,9 +5,12 @@
 // @id, so the person, the site, and every paper, project, and post form one graph, and a paper's
 // author resolves to the Person record on the home page.
 import type { CollectionEntry } from "astro:content";
+import { execFileSync } from "node:child_process";
 import { isoDay } from "./content";
 import { plain } from "./tex";
 import { person, siteMeta } from "../site";
+import { awards, cvEntries } from "../data/cv";
+import { lastmod } from "./lastmod.mjs";
 import { topicOf, topicPath } from "../data/topics";
 import { refNode, referencesOf } from "./references";
 
@@ -18,7 +21,8 @@ const abs = (path: string) => new URL(path, site).href;
 const home = abs("/");
 export const personId = `${home}#person`;
 export const websiteId = `${home}#website`;
-const me = { "@type": "Person", "@id": personId, name: person.name };
+// The site owner as the author of a page's records: enough to identify the same person elsewhere.
+const me = { "@type": "Person", "@id": personId, name: person.name, url: home, sameAs: Object.values(person.profiles) };
 const external = (href: string) => /^https?:\/\//.test(href);
 
 export const portraitId = `${home}#portrait`;
@@ -35,6 +39,12 @@ const portraitNode = (): Node => ({
   creditText: person.name,
 });
 
+const sapienza = { "@type": "CollegeOrUniversity", name: person.alumniOf, url: "https://www.uniroma1.it/" };
+/** The degrees the CV lists as finished, as credentials from the university that gave them. */
+const degrees = cvEntries
+  .filter((e) => e.kind === "Education" && e.to && e.to !== "now" && e.org === person.alumniOf)
+  .map((e) => ({ "@type": "EducationalOccupationalCredential", name: e.title, credentialCategory: "degree", recognizedBy: sapienza }));
+
 const northeastern = { "@type": "CollegeOrUniversity", name: person.affiliation, url: "https://www.northeastern.edu/" };
 
 /** The site owner, with the lab, the alma mater, and the profiles that identify the same person
@@ -47,7 +57,9 @@ export const personNode = (): Node => ({
   jobTitle: person.role,
   affiliation: northeastern,
   memberOf: { "@type": "ResearchOrganization", name: person.lab.name, url: person.lab.href, parentOrganization: northeastern },
-  alumniOf: { "@type": "CollegeOrUniversity", name: person.alumniOf },
+  alumniOf: sapienza,
+  hasCredential: degrees.length ? degrees : undefined,
+  award: awards.map((a) => `${a.text} (${a.year})`),
   knowsAbout: person.topics,
   sameAs: Object.values(person.profiles),
 });
@@ -59,8 +71,19 @@ export const websiteNode = (): Node => ({
   url: home,
   description: siteMeta.description,
   inLanguage: "en",
-  author: { "@id": personId },
+  author: me,
+  publisher: me,
 });
+
+/** The ISO date of the commit that added `file`, or undefined without full git history. */
+function firstCommit(file: string): string | undefined {
+  try {
+    const out = execFileSync("git", ["log", "--diff-filter=A", "--follow", "--format=%cI", "--", file], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    return out.trim().split("\n").pop() || undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 /** The home page is the person's profile, and its picture is the portrait on the page. */
 export const profilePageNode = (): Node => ({
@@ -71,6 +94,8 @@ export const profilePageNode = (): Node => ({
   mainEntity: { "@id": personId },
   isPartOf: { "@id": websiteId },
   primaryImageOfPage: { "@id": portraitId },
+  dateCreated: firstCommit("src/pages/index.astro"),
+  dateModified: lastmod("/"),
 });
 
 const paperUrl = (p: CollectionEntry<"publications">) => abs(`/publications/${p.id}/`);
@@ -80,6 +105,25 @@ const paperId = (p: CollectionEntry<"publications">) => `${paperUrl(p)}#article`
 const projectId = (p: CollectionEntry<"projects">) => `${projectUrl(p)}#work`;
 const postId = (p: CollectionEntry<"blog">) => `${postUrl(p)}#post`;
 const codeLink = (links: { href: string; icon?: string }[]) => links.find((l) => l.icon === "code" && external(l.href));
+
+/** The publisher of the proceedings a paper appeared in, read from what the paper itself links:
+ *  PMLR for a proceedings.mlr.press page, AAAI for a 10.1609 DOI. Others have none to name. */
+function publisherOf(d: CollectionEntry<"publications">["data"]): Node | undefined {
+  if (d.links.some((l) => l.href.startsWith("https://proceedings.mlr.press/"))) return { "@type": "Organization", name: "PMLR", url: "https://proceedings.mlr.press/" };
+  if (d.doi?.startsWith("10.1609/")) return { "@type": "Organization", name: "Association for the Advancement of Artificial Intelligence", url: "https://aaai.org/" };
+  return undefined;
+}
+
+/** Where a paper sits in the proceedings: the series, the volume, and the issue, as it gives them. */
+function partOf(d: CollectionEntry<"publications">["data"]): Node | undefined {
+  if (d.kind === "preprint") return undefined;
+  const name = d.venueFull ?? d.venue;
+  const series = d.series ?? (publisherOf(d)?.name === "PMLR" ? "Proceedings of Machine Learning Research" : undefined);
+  const root: Node | undefined = series ? { "@type": "CreativeWorkSeries", name: series } : undefined;
+  const volume: Node | undefined = d.volume != null ? { "@type": "PublicationVolume", volumeNumber: String(d.volume), name, isPartOf: root } : undefined;
+  const issue: Node | undefined = d.issue != null ? { "@type": "PublicationIssue", issueNumber: String(d.issue), isPartOf: volume ?? root } : undefined;
+  return issue ?? volume ?? { "@type": d.kind === "journal" ? "Periodical" : "CreativeWork", name, isPartOf: root };
+}
 
 const scholar = (href: string) => /^https:\/\/scholar\.google\.[a-z.]+\//.test(href);
 
@@ -126,8 +170,11 @@ export function paperNode(p: CollectionEntry<"publications">, images: (string | 
     about: d.topics.length ? d.topics.map(topicTerm) : undefined,
     identifier: identifier.length ? identifier : undefined,
     thumbnailUrl: pictures[0],
-    isPartOf: d.kind === "preprint" ? undefined : { "@type": d.kind === "journal" ? "Periodical" : "CreativeWork", name: d.venueFull ?? d.venue },
+    isPartOf: partOf(d),
+    publisher: publisherOf(d),
     pagination: d.pages,
+    pageStart: d.pages?.split("-")[0],
+    pageEnd: d.pages?.split("-")[1],
     citation: referencesOf(p.id).length ? referencesOf(p.id).map(refNode) : undefined,
     creativeWorkStatus: d.kind === "preprint" ? "Preprint" : undefined,
     award: d.awardScope === "paper" ? d.award : undefined,
@@ -147,6 +194,7 @@ export function paperCodeNode(p: CollectionEntry<"publications">): Node | undefi
     "@type": "SoftwareSourceCode",
     "@id": `${paperUrl(p)}#code`,
     name: `${p.data.shortTitle ?? p.data.title}: code`,
+    description: `Source code released with the paper "${p.data.title}".`,
     url: code.href,
     codeRepository: code.href,
     citation: { "@id": paperId(p) },
@@ -154,6 +202,13 @@ export function paperCodeNode(p: CollectionEntry<"publications">): Node | undefi
     isAccessibleForFree: true,
   };
 }
+
+const known = ["C++", "C", "CUDA", "Python", "JavaScript", "TypeScript", "Rust", "Java", "SQL"];
+/** The programming languages among a project's tags, if any. */
+const languages = (tags: string[]) => {
+  const found = tags.filter((t) => known.includes(t));
+  return found.length ? found : undefined;
+};
 
 /** A project: source code when it links a repository, else a creative work. */
 export function projectNode(p: CollectionEntry<"projects">, image?: string): Node {
@@ -173,8 +228,10 @@ export function projectNode(p: CollectionEntry<"projects">, image?: string): Nod
     inLanguage: "en",
     keywords: d.tags.length ? d.tags : undefined,
     codeRepository: code?.href,
+    programmingLanguage: code ? languages(d.tags) : undefined,
     image: image && abs(image),
     sameAs: sameAs.length ? sameAs : undefined,
+    interactionStatistic: code && d.stars ? { "@type": "InteractionCounter", interactionType: "https://schema.org/LikeAction", userInteractionCount: d.stars } : undefined,
   };
 }
 

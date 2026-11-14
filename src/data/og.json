@@ -1,0 +1,137 @@
+{
+  "/blog/": {
+    "src": "/og/blog.png",
+    "type": "image/png",
+    "alt": "Blog. Writing by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/cv/": {
+    "src": "/og/cv.png",
+    "type": "image/png",
+    "alt": "Curriculum vitae. Dario Loi, Ph.D. student in Computer Engineering at Northeastern University. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/cv/pdf/": {
+    "src": "/og/cv.png",
+    "type": "image/png",
+    "alt": "Curriculum vitae. Dario Loi, Ph.D. student in Computer Engineering at Northeastern University. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/privacy/": {
+    "src": "/og/privacy.png",
+    "type": "image/png",
+    "alt": "Privacy. How this site counts visits without cookies. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/projects/": {
+    "src": "/og/projects.png",
+    "type": "image/png",
+    "alt": "Projects. Software and research code by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/projects/exposure-fusion/": {
+    "src": "/og/projects-exposure-fusion.jpg",
+    "type": "image/jpeg",
+    "alt": "An exposure-fused photograph of a desk at night with a laptop, a statuette, and a lit lamp."
+  },
+  "/projects/mine-rcnn/": {
+    "src": "/og/projects-mine-rcnn.jpg",
+    "type": "image/jpeg",
+    "alt": "Mine-RCNN. A Minecraft forest scene with a creeper detected inside a green bounding box."
+  },
+  "/projects/next-poi-gnn/": {
+    "src": "/og/projects-next-poi-gnn.jpg",
+    "type": "image/jpeg",
+    "alt": "Next-POI recommendation. The model as a diagram. Seven inputs, the last visited place, the user, and the place at five coarser levels labeled G@2 to G@6, enter an embedding layer, then a block labeled GRN with an attention box inside that also takes two small graphs, then a feed-forward layer that outputs the next place at each level."
+  },
+  "/projects/polytope/": {
+    "src": "/og/projects-polytope.jpg",
+    "type": "image/jpeg",
+    "alt": "The Polytope documentation site: a wood-type title beside a black panel holding a live Vietoris-Rips complex with a radius slider."
+  },
+  "/projects/staplegl/": {
+    "src": "/og/projects-staplegl.jpg",
+    "type": "image/jpeg",
+    "alt": "The Utah teapot rendered with StapleGL and a bloom effect, glowing over water at dusk."
+  },
+  "/projects/stemsep/": {
+    "src": "/og/projects-stemsep.jpg",
+    "type": "image/jpeg",
+    "alt": "StemSep. The StemSep web interface: an input panel above waveform players, one for each separated stem."
+  },
+  "/publications/": {
+    "src": "/og/publications.png",
+    "type": "image/png",
+    "alt": "Publications. Papers by Dario Loi on topological deep learning and sheaf neural networks. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/autobench/": {
+    "src": "/og/publications-autobench.jpg",
+    "type": "image/jpeg",
+    "alt": "Six rows of Figure 3 of the paper: the mean score each of six judge models gives twelve answering models, with a harsh judge in red between lenient judges in teal."
+  },
+  "/publications/implicit-inversion-clip/": {
+    "src": "/og/publications-implicit-inversion-clip.jpg",
+    "type": "image/jpeg",
+    "alt": "Implicit Inversion turns CLIP into a Decoder. Eight images generated from text prompts with a frozen CLIP model and no decoder, taken from Figure 1."
+  },
+  "/publications/implicit-sheaf-operators/": {
+    "src": "/og/publications-implicit-sheaf-operators.jpg",
+    "type": "image/jpeg",
+    "alt": "Figure 2 of the paper: the sheaf Laplacian built as a block matrix, beside the same computation done locally at one node of a three-node sheaf."
+  },
+  "/publications/metacognitive-ad/": {
+    "src": "/og/publications-metacognitive-ad.jpg",
+    "type": "image/jpeg",
+    "alt": "Figure 1 of the paper: a frozen encoder as the object level feeds a scorer as the meta level, which monitors the features and controls the threshold that marks defects."
+  },
+  "/publications/metacognitive-tta/": {
+    "src": "/og/publications-metacognitive-tta.jpg",
+    "type": "image/jpeg",
+    "alt": "Figure 1 of the paper: fluency cues from the task backbone give overlapping, unreliable distributions, while concept cues give separated, reliable clusters."
+  },
+  "/publications/tdl-challenge-2025/": {
+    "src": "/og/publications-tdl-challenge-2025.jpg",
+    "type": "image/jpeg",
+    "alt": "A cell complex of points, edges, and filled faces on a pale backdrop. Illustration from the challenge poster, by its organizers."
+  },
+  "/publications/tdl-challenge-2026/": {
+    "src": "/og/publications-tdl-challenge-2026.jpg",
+    "type": "image/jpeg",
+    "alt": "A faceted low-poly mouse at the center, ringed by arcs and small pink graphs, simplices, and cells. Illustration from the challenge page, by its organizers."
+  },
+  "/publications/topics/": {
+    "src": "/og/publications-topics.png",
+    "type": "image/png",
+    "alt": "Topics. Publications by Dario Loi, grouped by research topic. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/anomaly-detection/": {
+    "src": "/og/publications-topics-anomaly-detection.png",
+    "type": "image/png",
+    "alt": "Anomaly detection. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/benchmarks/": {
+    "src": "/og/publications-topics-benchmarks.png",
+    "type": "image/png",
+    "alt": "Benchmarks. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/computer-vision/": {
+    "src": "/og/publications-topics-computer-vision.png",
+    "type": "image/png",
+    "alt": "Computer vision. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/metacognition/": {
+    "src": "/og/publications-topics-metacognition.png",
+    "type": "image/png",
+    "alt": "Metacognition. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/sheaf-neural-networks/": {
+    "src": "/og/publications-topics-sheaf-neural-networks.png",
+    "type": "image/png",
+    "alt": "Sheaf neural networks. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/test-time-adaptation/": {
+    "src": "/og/publications-topics-test-time-adaptation.png",
+    "type": "image/png",
+    "alt": "Test-time adaptation. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  },
+  "/publications/topics/topological-deep-learning/": {
+    "src": "/og/publications-topics-topological-deep-learning.png",
+    "type": "image/png",
+    "alt": "Topological deep learning. Publications by Dario Loi. A card in the style of dario-loi.github.io: the title beside a drawing of a Vietoris-Rips complex."
+  }
+}
