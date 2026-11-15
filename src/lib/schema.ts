@@ -7,7 +7,7 @@
 import type { CollectionEntry } from "astro:content";
 import { execFileSync } from "node:child_process";
 import { isoDay } from "./content";
-import { plain } from "./tex";
+import { plain } from "@dario-loi/polytope/astro/tex.ts";
 import { person, siteMeta } from "../site";
 import { awards, cvEntries } from "../data/cv";
 import { lastmod } from "./lastmod.mjs";

@@ -2,11 +2,12 @@
 import Base from "../../layouts/Base.astro";
 import Empty from "@dario-loi/polytope/astro/Empty.astro";
 import Button from "@dario-loi/polytope/astro/Button.astro";
-import IndexMast from "../../components/IndexMast.astro";
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
 import Card from "@dario-loi/polytope/astro/Card.astro";
-import Cover from "../../components/Cover.astro";
+import ThemedImage from "@dario-loi/polytope/astro/ThemedImage.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
-import { cardPicture, entries, longDate, readingTime, seedOf } from "../../lib/content";
+import { seedOf } from "@dario-loi/polytope/astro/complex.ts";
+import { cardPicture, entries, longDate, readingTime } from "../../lib/content";
 import { postsPage } from "../../lib/schema";
 import { person } from "../../site";
 
@@ -14,8 +15,8 @@ const posts = await entries("blog");
 const n = posts.length;
 const description = `Writing by ${person.name}, a Ph.D. student at Northeastern University, on machine learning research and software engineering.`;
 ---
-<Base title="Blog" description={description} current="Blog" noindex={n === 0} schema={n > 0 ? [postsPage(posts, description)] : []} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
-  <IndexMast title="Blog" lede="Notes on research and engineering." />
+<Base kind="Pages" title="Blog" description={description} current="Blog" noindex={n === 0} schema={n > 0 ? [postsPage(posts, description)] : []} crumbs={[{ name: person.name, href: "/" }, { name: "Blog", href: "/blog/" }]}>
+  <Mast title="Blog" lede="Notes on research and engineering." compact wideLede rule dense />
   <div class="ply-container posts">
     {n === 0 ? (
       <Empty title="Posts are coming" body="Meanwhile, the publications and projects are ready to read.">
@@ -25,7 +26,7 @@ const description = `Writing by ${person.name}, a Ph.D. student at Northeastern 
         </div>
       </Empty>
     ) : (
-      <CardGrid class="card-rows">
+      <CardGrid class="ply-cards--aligned ply-cards--dense">
         {posts.map((p, i) => (
           <Card
             href={`/blog/${p.id}/`}
@@ -39,7 +40,7 @@ const description = `Writing by ${person.name}, a Ph.D. student at Northeastern 
             seed={seedOf(p.id)}
             link={{ "data-track": "open-post", "data-track-placement": "blog", "data-track-label": p.id }}
           >
-            <Cover slot="figure" {...cardPicture(i === 0)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
+            {p.data.cover && <ThemedImage slot="figure" {...cardPicture(i === 0)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
           </Card>
         ))}
       </CardGrid>

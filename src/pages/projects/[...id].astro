@@ -7,9 +7,12 @@ import Article from "@dario-loi/polytope/astro/Article.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
 import Complex from "@dario-loi/polytope/astro/Complex.astro";
-import EntryHeader from "../../components/EntryHeader.astro";
-import Cover from "../../components/Cover.astro";
-import { column, entries, neighbors, preview, seedOf, widthsFor } from "../../lib/content";
+import PostHeader from "@dario-loi/polytope/astro/PostHeader.astro";
+import Tag from "@dario-loi/polytope/astro/Tag.astro";
+import ThemedImage from "@dario-loi/polytope/astro/ThemedImage.astro";
+import { column, widthsFor } from "@dario-loi/polytope/astro/images.ts";
+import { seedOf } from "@dario-loi/polytope/astro/complex.ts";
+import { entries, neighbors, preview } from "../../lib/content";
 import { projectNode } from "../../lib/schema";
 import { person } from "../../site";
 
@@ -29,6 +32,7 @@ const og = await preview(d.cover, d.coverAlt);
 const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${project.id}/`]?.src;
 ---
 <Base
+  kind="Projects"
   title={d.title}
   description={d.description}
   current="Projects"
@@ -39,7 +43,7 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
 >
   <Article>
     <div slot="header" class="project-head">
-      <EntryHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : []), ...(d.stars ? [`${d.stars} GitHub stars`] : [])]}>
+      <PostHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : []), ...(d.stars ? [`${d.stars} GitHub stars`] : [])]}>
         {d.links.length > 0 && (
           <div class="ply-cluster">
             {d.links.map((l, i) => (
@@ -47,10 +51,10 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
             ))}
           </div>
         )}
-      </EntryHeader>
+      </PostHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover seed={seed} src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
         ) : (
           <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
         )}
@@ -60,19 +64,16 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
     </div>
     <Content />
     <div data-read-end={project.id} aria-hidden="true"></div>
-    {d.tags.length > 0 && <ul class="tag-list project-body__tags" role="list" aria-label="Topics">{d.tags.map((t) => <li class="ply-tag">{t}</li>)}</ul>}
+    {d.tags.length > 0 && <ul class="ply-tag-list project-body__tags" role="list" aria-label="Topics">{d.tags.map((t) => <li><Tag>{t}</Tag></li>)}</ul>}
+    <Pager
+      slot="foot"
+      label="More projects"
+      prevText="Newer"
+      nextText="Older"
+      prev={newer && { label: newer.data.title, href: `/projects/${newer.id}/` }}
+      next={older && { label: older.data.title, href: `/projects/${older.id}/` }}
+    />
   </Article>
-  <div class="ply-container ply-article ply-article--head project-foot">
-    <div class="ply-article__main">
-      <Pager
-        label="More projects"
-        prevText="Newer"
-        nextText="Older"
-        prev={newer && { label: newer.data.title, href: `/projects/${newer.id}/` }}
-        next={older && { label: older.data.title, href: `/projects/${older.id}/` }}
-      />
-    </div>
-  </div>
 </Base>
 <style>
   /* The exhibit stacks under the header, then hangs in the margin column beside it once
@@ -81,11 +82,9 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
   .project-head { display: grid; gap: 0 var(--ply-space-6); }
   .project-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
   .project-head__exhibit img { width: 100%; height: auto; }
-  .project-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
   @media (min-width: 60rem) {
     .project-head { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
     .project-head__exhibit { margin-block: var(--ply-space-7); }
   }
   .project-body__tags { margin-top: var(--ply-space-6); }
-  .project-foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

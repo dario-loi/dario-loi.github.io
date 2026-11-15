@@ -30,7 +30,7 @@ const axisY = top + rows.length * rowH;
   subtitle="Share admitted by each gate when 80% of the stream is OOD."
   legend={series.map((s) => ({ label: s.label, slot: s.slot, shape: "bar" as const }))}
   source="Table 7 of the paper, mean of 15 seeds."
-  class:list={["site-chart", className]}
+  class:list={["ply-chart--margin", className]}
 >
   <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="With 80% of the stream OOD, the entropy gate admits 51% to 57% of OOD samples under every corruption. The concept residual gate admits 23% under Gaussian noise, 35% under defocus blur, 4% under fog, and 3% under contrast.">
     {rows.map((r, i) => {

@@ -9,19 +9,22 @@ import Article from "@dario-loi/polytope/astro/Article.astro";
 import PaperHeader from "@dario-loi/polytope/astro/PaperHeader.astro";
 import Abstract from "@dario-loi/polytope/astro/Abstract.astro";
 import BibTeX from "@dario-loi/polytope/astro/BibTeX.astro";
-import Button from "@dario-loi/polytope/astro/Button.astro";
-import Icon from "@dario-loi/polytope/astro/Icon.astro";
 import Pager from "@dario-loi/polytope/astro/Pager.astro";
-import Complex from "@dario-loi/polytope/astro/Complex.astro";
-import Tex from "../../components/Tex.astro";
-import References from "../../components/References.astro";
+import ComplexStatic from "@dario-loi/polytope/astro/ComplexStatic.astro";
+import Figure from "@dario-loi/polytope/astro/Figure.astro";
+import References from "@dario-loi/polytope/astro/References.astro";
+import Tex from "@dario-loi/polytope/astro/Tex.astro";
+import ThemedImage from "@dario-loi/polytope/astro/ThemedImage.astro";
+import Tldr from "@dario-loi/polytope/astro/Tldr.astro";
+import { refHref, type Reference } from "@dario-loi/polytope/astro/references.ts";
+import { column, pictureFormats, widthsFor } from "@dario-loi/polytope/astro/images.ts";
+import { seedOf } from "@dario-loi/polytope/astro/complex.ts";
+import { hasMath, plain } from "@dario-loi/polytope/astro/tex.ts";
 import { referencesOf } from "../../lib/references";
-import Cover from "../../components/Cover.astro";
 import TopicTags from "../../components/TopicTags.astro";
-import { column, entries, neighbors, pictureFormats, preview, pubVenue, seedOf, squarePicture, widthsFor } from "../../lib/content";
+import { entries, neighbors, preview, pubVenue, squarePicture } from "../../lib/content";
 import { paperCodeNode, paperNode } from "../../lib/schema";
 import { lastmod } from "../../lib/lastmod.mjs";
-import { hasMath, plain } from "../../lib/tex";
 import { person } from "../../site";
 import { widgets } from "../../components/widgets";
 
@@ -37,6 +40,12 @@ const { Content } = await render(pub);
 const venueLine = pubVenue(d, true);
 const links = [...d.links, { label: "BibTeX", href: "#cite", icon: "quote" as const }];
 const seed = seedOf(pub.id);
+// The reference list as Polytope's References takes it: the title's address, and an arXiv copy
+// when the version of record is somewhere else. Order is the site's (referencesOf).
+const refs: Reference[] = referencesOf(pub.id).map((r) => {
+  const href = refHref(r);
+  return { key: r.key, authors: r.authors, year: r.year, title: r.title, venue: r.venue, href, cite: r.cite, alt: r.arxiv && !href?.includes("arxiv.org") ? { label: "arXiv", href: `https://arxiv.org/abs/${r.arxiv}` } : undefined };
+});
 // Previews show the card's crop of the paper's figure, else the key figure itself.
 const og = d.cover ? await preview(d.cover, d.coverAlt) : await preview(d.figure, d.figureAlt);
 // The page's 1200x630 share card (scripts/og.mjs), when it has one: structured data names the
@@ -51,6 +60,7 @@ const code = paperCodeNode(pub);
 const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.widget] : undefined;
 ---
 <Base
+  kind="Papers"
   title={d.shortTitle ?? d.title}
   unnamed
   description={plain(d.description ?? d.tldr ?? d.abstract.slice(0, 155))}
@@ -81,56 +91,49 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
   crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: d.title, href: `/publications/${pub.id}/` }]}
 >
   <Article class="paper__body">
-    <div slot="header" class:list={["paper-head", !d.figure && "paper-head--exhibit"]}>
-      <PaperHeader title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, href: personHref(a.name), affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12} />
+    <PaperHeader slot="header" title={d.title} venue={venueLine} authors={d.authors.map((a) => ({ name: a.name, href: personHref(a.name), affiliations: a.affiliations, equal: a.starred }))} affiliations={d.affiliations} equalNote={d.starNote} me={person.name} links={links} fold={12}>
       {/* The key figure leads the page, under the header and at its width. A paper without
           one hangs its card's image, or its card's complex (drawn as Polytope's Card draws
           it, from the same seed), beside the header. */}
       {d.figure ? (
-        <figure class:list={["ply-figure paper__figure", d.figureSize === "column" && "paper__figure--column"]}>
+        <Figure slot="figure" num={d.figureNum} column={d.figureSize === "column"} split={d.figureSize !== "column" && (d.figureCaption?.length ?? 0) > 240}>
           {d.figureSize === "column"
-            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 608)} sizes={`(min-width: 38rem) 38rem, ${column}`} loading="eager" fetchpriority="high" />
-            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 976)} sizes={`(min-width: 64rem) 61rem, ${column}`} loading="eager" fetchpriority="high" />}
-          {d.figureCaption && <figcaption class:list={[d.figureSize !== "column" && d.figureCaption.length > 240 && "paper__caption--split"]}><span class="ply-figure__num">Figure {d.figureNum}.</span><Tex text={d.figureCaption} html /></figcaption>}
-        </figure>
+            ? <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 608)} sizes={`(min-width: 38rem) 38rem, ${column()}`} loading="eager" fetchpriority="high" />
+            : <Picture {...pictureFormats} src={d.figure} alt={d.figureAlt ?? ""} widths={widthsFor(d.figure, 976)} sizes={`(min-width: 64rem) 61rem, ${column()}`} loading="eager" fetchpriority="high" />}
+          {d.figureCaption && <Fragment slot="caption"><Tex text={d.figureCaption} html /></Fragment>}
+        </Figure>
       ) : (
-        <figure class="ply-exhibit paper-head__exhibit">
+        <figure slot="exhibit" class="ply-exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><Cover seed={seed} src={d.cover} dark={d.coverDark} alt={d.coverCaption ? (d.coverAlt ?? "") : ""} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column}`} loading="eager" fetchpriority="high" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverCaption ? (d.coverAlt ?? "") : ""} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
           ) : (
-            <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
+            <ComplexStatic seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
           )}
           {d.cover && <figcaption><b>{d.venue}.</b> {d.coverCaption ? <Tex text={d.coverCaption} html /> : d.coverAlt}</figcaption>}
         </figure>
       )}
-    </div>
-    {d.tldr && <p class="paper__tldr"><span class="ply-label">In short</span> <Tex text={d.tldr} /></p>}
+    </PaperHeader>
+    {d.tldr && <Tldr><Tex text={d.tldr} /></Tldr>}
     {Widget && <div class="ply-margin paper__model"><Widget draft={!d.widgetLive} /></div>}
     <Abstract><p><Tex text={d.abstract} /></p></Abstract>
     {d.topics.length > 0 && <TopicTags names={d.topics} placement="paper" class="paper__topics" />}
     {/* A 3px rule closes the paper's front matter (summary, abstract, topics) before the text. */}
-    {pub.body?.trim() && <hr class="ply-rule paper__divide" />}
+    {pub.body?.trim() && <hr class="ply-rule ply-rule--measure" />}
     <Content />
     <div data-read-end={pub.id} aria-hidden="true"></div>
-    <References refs={referencesOf(pub.id)} />
+    {/* The list repeats what the page already says, so search leaves it out. */}
+    <div data-pagefind-ignore><References refs={refs} linkAttrs={{ "data-track": "open-reference" }} /></div>
     <h2 id="cite" class="paper__cite">Cite</h2>
-    <div id="bibtex"><BibTeX entry={d.bibtex.trim()} /></div>
-    <p class="paper__cite-files">
-      <Button href={`/publications/${pub.id}/${pub.id}.bib`} download variant="secondary" size="sm" data-track="citation-download" data-track-label="bib" data-track-placement="cite"><Icon name="download" /> Download .bib</Button>
-      <Button href={`/publications/${pub.id}/${pub.id}.ris`} download variant="secondary" size="sm" data-track="citation-download" data-track-label="ris" data-track-placement="cite"><Icon name="download" /> Download .ris</Button>
-    </p>
+    <div id="bibtex" data-pagefind-ignore><BibTeX entry={d.bibtex.trim()} bib={`/publications/${pub.id}/${pub.id}.bib`} ris={`/publications/${pub.id}/${pub.id}.ris`} downloadAttrs={{ "data-track": "citation-download", "data-track-label": "{format}", "data-track-placement": "cite" }} /></div>
+    <Pager
+      slot="foot"
+      label="More publications"
+      prevText="Newer"
+      nextText="Older"
+      prev={newer && { label: newer.data.shortTitle ?? newer.data.title, href: `/publications/${newer.id}/` }}
+      next={older && { label: older.data.shortTitle ?? older.data.title, href: `/publications/${older.id}/` }}
+    />
   </Article>
-  <div class="ply-container ply-article ply-article--head paper__foot">
-    <div class="ply-article__main">
-      <Pager
-        label="More publications"
-        prevText="Newer"
-        nextText="Older"
-        prev={newer && { label: newer.data.shortTitle ?? newer.data.title, href: `/publications/${newer.id}/` }}
-        next={older && { label: older.data.shortTitle ?? older.data.title, href: `/publications/${older.id}/` }}
-      />
-    </div>
-  </div>
 <script>
   // The BibTeX block's own Copy button reports that the entry was copied.
   for (const b of document.querySelectorAll<HTMLElement>("#bibtex .ply-code__copy")) {
@@ -139,7 +142,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
     b.dataset.trackLabel = location.pathname.split("/").filter(Boolean).pop() ?? "";
   }
   // Paper links (OpenReview, PDF, arXiv, Code) report which one was followed.
-  for (const a of document.querySelectorAll<HTMLAnchorElement>(".paper-head .ply-paper__links a")) {
+  for (const a of document.querySelectorAll<HTMLAnchorElement>(".ply-paper__links a")) {
     if (a.getAttribute("href")?.startsWith("#")) continue;
     a.dataset.track = "paper-link";
     a.dataset.trackPlacement = "paper-header";
@@ -148,43 +151,11 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
 </script>
 </Base>
 <style>
-  /* The key figure takes the head's whole width, text and margin together, so it ends where the
-     margin column and the working model end; a single-column figure takes the text's width and
-     ends with the text. Its caption runs the figure's width. */
-  .paper-head { display: grid; gap: 0 var(--ply-space-6); }
-  .paper-head :global(.ply-paper) { padding-block: var(--ply-space-6) var(--ply-space-5); }
-  .paper__figure { max-width: none; margin-top: 0; margin-bottom: var(--ply-space-6); }
-  .paper__figure--column { max-width: var(--ply-layout-measure); }
-  .paper__figure figcaption { max-width: none; text-wrap: pretty; }
-  /* The caption shares the figure's left and right edges, so no empty block hangs beside it. A
-     long one under a wide figure sets in two balanced columns, which keeps its lines near the
-     reading measure; a short one runs the figure's width. */
-  @media (min-width: 60rem) {
-    .paper__figure .paper__caption--split { columns: 2; column-gap: var(--ply-space-6); column-fill: balance; orphans: 2; widows: 2; }
-  }
   .paper__topics { margin-top: var(--ply-space-5); }
-  .paper__divide { clear: none; margin-block: var(--ply-space-6) var(--ply-space-5); max-width: var(--ply-layout-measure); }
-  /* A figure in the entry's text (a Polytope Figure with class="figure--column") keeps the same
-     single-column width. */
-  :global(.ply-figure.figure--column) { max-width: var(--ply-layout-measure); }
-  /* Without a key figure, the exhibit stacks under the header, then hangs in the margin
-     column beside it once the article has one. */
-  .paper-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
-  .paper-head__exhibit img { width: 100%; height: auto; }
-  .paper-head__exhibit .ply-panel { outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
-  @media (min-width: 60rem) {
-    .paper-head--exhibit { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: start; }
-    .paper-head--exhibit :global(.ply-paper) { padding-bottom: var(--ply-space-6); }
-    .paper-head__exhibit { margin-block: var(--ply-space-6); }
-  }
   /* The paper's working model sits in the margin beside the abstract, clear of the title; in a
      narrow window it comes before the abstract, in the column. */
   .paper__model { margin-top: var(--ply-space-4); }
   .paper__model :global(.ply-exhibit) { margin-block: 0; }
-  .paper__tldr { font-size: var(--ply-size-lg); line-height: var(--ply-leading-normal); }
-  .paper__tldr .ply-label { vertical-align: 0.2em; margin-inline-end: var(--ply-space-2); }
   .paper__cite { margin-top: var(--ply-space-7); }
-  .paper__cite-files { display: flex; flex-wrap: wrap; gap: var(--ply-space-3); margin-top: var(--ply-space-3); }
   :global(.paper__body) { padding-block-end: var(--ply-space-6); }
-  .paper__foot :global(.ply-pager) { max-width: var(--ply-layout-measure); margin-top: 0; }
 </style>

@@ -1,12 +1,12 @@
 ---
 import type { GetStaticPaths } from "astro";
 import Base from "../../../layouts/Base.astro";
-import IndexMast from "../../../components/IndexMast.astro";
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
 import PubCards from "../../../components/PubCards.astro";
 import TopicTags from "../../../components/TopicTags.astro";
 import { entries } from "../../../lib/content";
 import { topicPage } from "../../../lib/schema";
-import { hasMath } from "../../../lib/tex";
+import { hasMath } from "@dario-loi/polytope/astro/tex.ts";
 import { topicPath, topics, type Topic } from "../../../data/topics";
 import { person } from "../../../site";
 
@@ -26,6 +26,7 @@ const path = topicPath(topic);
 const description = `${n === 1 ? "A paper" : "Papers"} by ${person.name} on ${topic.name.toLowerCase().replace("llm", "LLM")}: ${topic.description.charAt(0).toLowerCase()}${topic.description.slice(1)}`;
 ---
 <Base
+  kind="Topics"
   title={`${topic.name}: publications`}
   description={description.length > 160 ? `${description.slice(0, 157)}...` : description}
   current="Publications"
@@ -33,7 +34,7 @@ const description = `${n === 1 ? "A paper" : "Papers"} by ${person.name} on ${to
   math={hasMath(...pubs.map((p) => p.data.tldr))}
   crumbs={[{ name: person.name, href: "/" }, { name: "Publications", href: "/publications/" }, { name: "Topics", href: "/publications/topics/" }, { name: topic.name, href: path }]}
 >
-  <IndexMast title={topic.name} lede={topic.description} />
+  <Mast title={topic.name} lede={topic.description} compact wideLede rule dense />
   <div class="ply-container topic">
     <h2 class="ply-visually-hidden">Papers on {topic.name.toLowerCase().replace("llm", "LLM")}</h2>
     <PubCards pubs={pubs} lead={pubs[0].id} placement="topic" year />

@@ -1,0 +1,18 @@
+# Site search index (npm run build runs `pagefind --site dist` after Astro).
+force_language: en
+# What is left out of the text people search:
+#  - decorative marks (the headlines' tomato full stop, icons, drawings), whose full stop would
+#    otherwise end every result title;
+#  - lists that repeat other pages (card grids and publication walls, which each paper's own page
+#    already covers), the on-this-page list, and the link rows, affiliation marks, and pager of a
+#    paper's header and foot, which run into the sentences around them.
+exclude_selectors:
+  - '[aria-hidden="true"]'
+  - ".ply-cards"
+  - ".ply-wall__entries"
+  - ".ply-toc"
+  - ".ply-article__contents"
+  - ".ply-paper__links"
+  - ".ply-authors sup"
+  - ".ply-affiliations sup"
+  - ".ply-pager"

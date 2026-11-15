@@ -5,7 +5,8 @@
 // across sites. It runs only on the production host and only when the build has a website id.
 // Do Not Track is not honored (data-do-not-track="false"): there is nothing stored for it to
 // switch off. data-performance adds page-load timings (Core Web Vitals), shown under Umami's
-// Performance tab.
+// Performance tab. The query string is left out of every recorded address, so the text a visitor
+// types on the search page (/search/?q=) never reaches the analytics.
 import { analytics } from "../site";
 const on = import.meta.env.PROD && Boolean(analytics.websiteId);
 ---
@@ -19,5 +20,6 @@ const on = import.meta.env.PROD && Boolean(analytics.websiteId);
     data-do-not-track="false"
     data-performance="true"
     data-exclude-hash="true"
+    data-exclude-search="true"
   ></script>
 )}

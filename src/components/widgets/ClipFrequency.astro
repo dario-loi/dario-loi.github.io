@@ -3,7 +3,7 @@
 // representation, and a toy 1-D signal built band by band under it. The paper specifies a Gaussian
 // over the layers, centered on one layer that moves on, and 400 inversion steps; the number of
 // layers shown, the width, the smooth sweep, and the band frequencies and amplitudes are ours.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Slider from "@dario-loi/polytope/astro/Slider.astro";
 import Readout from "@dario-loi/polytope/astro/Readout.astro";
 interface Props { draft?: boolean }
@@ -40,25 +40,25 @@ const BASE = 22, BH = 17, BW = 7, BC = 11.5, PITCH = 11, bx = (i: number) => BC 
 const target = sig(AMP.map(() => 1));
 const pct = (e: number) => `${Math.round(e * 100)}%`;
 ---
-<Model name="clip-frequency" title="Coarse to fine" draft={draft} firstRun>
+<Model name="clip-frequency" title="Coarse to fine" draft={import.meta.env.DEV && draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={`Eight bars for the layers of an implicit neural representation, low to high frequency, with the learning rate peaked on layer ${s.peak + 1}; below, a toy signal drawn up to the bands that the layers have fitted so far, at step ${DEFAULT} of ${T}.`}>
     <g data-bars>
-      {s.m.map((m, i) => <rect class={i === s.peak ? "m-move" : "m-chalk-fill"} x={bx(i)} y={BASE - BH * m} width={BW} height={BH * m} />)}
+      {s.m.map((m, i) => <rect class={i === s.peak ? "ply-m-move" : "ply-m-chalk-fill"} x={bx(i)} y={BASE - BH * m} width={BW} height={BH * m} />)}
     </g>
-    <line class="m-rule" x1="4" y1={BASE + 0.8} x2="96" y2={BASE + 0.8} stroke-width="0.4" />
-    <text class="m-text-quiet" x="4" y="27" font-size="3.6">low</text>
-    <text class="m-text-quiet" x="96" y="27" font-size="3.6" text-anchor="end">high</text>
-    <path class="m-quiet" d={target} stroke-width="0.4" />
-    <path class="m-chalk" d={sig(s.p)} stroke-width="0.6" data-line />
+    <line class="ply-m-rule" x1="4" y1={BASE + 0.8} x2="96" y2={BASE + 0.8} stroke-width="0.4" />
+    <text class="ply-m-text-quiet" x="4" y="27" font-size="3.6">low</text>
+    <text class="ply-m-text-quiet" x="96" y="27" font-size="3.6" text-anchor="end">high</text>
+    <path class="ply-m-quiet" d={target} stroke-width="0.4" />
+    <path class="ply-m-chalk" d={sig(s.p)} stroke-width="0.6" data-line />
   </svg>
   <Fragment slot="controls">
-    <div class="model__axis" style={`--x0:${BC / 100};--x1:${(BC + (L - 1) * PITCH) / 100}`}><Slider label="Optimization step" name="clip-step" min={0} max={T} step={1} value={DEFAULT} /></div>
+    <div class="ply-model__axis" style={`--x0:${BC / 100};--x1:${(BC + (L - 1) * PITCH) / 100}`}><Slider label="Optimization step" name="clip-step" min={0} max={T} step={1} value={DEFAULT} /></div>
     <Readout label="Schedule and signal" items={[{ label: "Peak layer", value: `${s.peak + 1} of ${L}` }, { label: "Signal energy fitted", value: pct(s.energy) }]} />
   </Fragment>
   <Fragment slot="caption">The learning rate peaks on one layer of the implicit neural representation at a time, sweeping from low to high frequencies, so layout and color settle before fine texture.</Fragment>
 </Model>
 <script>
-  import { firstRun, easeOut } from "./firstRun";
+  import { firstRun, easeOut } from "@dario-loi/polytope/js/firstrun.js";
   const L = 8, T = 400, SIGMA = 0.9, N = 400, X0 = 6, X1 = 94, MID = 43, SC = 3.6, BASE = 22, BH = 17;
   const FREQ = [1, 2, 3, 5, 8, 12, 17, 23], AMP = [1, 0.8, 0.6, 0.45, 0.33, 0.24, 0.17, 0.12];
   const mult = (i: number, s: number) => Math.exp(-((i - ((L - 1) * s) / T) ** 2) / (2 * SIGMA ** 2));
@@ -87,7 +87,7 @@ const pct = (e: number) => `${Math.round(e * 100)}%`;
     rects.forEach((r, i) => {
       set(r, "y", (BASE - BH * m[i]).toFixed(2));
       set(r, "height", (BH * m[i]).toFixed(2));
-      set(r, "class", i === peak ? "m-move" : "m-chalk-fill");
+      set(r, "class", i === peak ? "ply-m-move" : "ply-m-chalk-fill");
     });
     const energy = Math.round(100 * p.reduce((q, v, b) => q + v * v * AMP[b] ** 2, 0) / e2);
     const a = `${peak + 1} of ${L}`, b = `${energy}%`;

@@ -1,7 +1,7 @@
 // Citation files for a paper: BibTeX is the entry from front matter, RIS takes authors, title, year, volume, issue,
 // pages, and DOI from that same entry (front matter only as a fallback). Served at /publications/<id>/<id>.bib and /publications/<id>/<id>.ris.
 import type { CollectionEntry } from "astro:content";
-import { plain } from "./tex";
+import { plain } from "@dario-loi/polytope/astro/tex.ts";
 
 type Pub = CollectionEntry<"publications">;
 

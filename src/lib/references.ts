@@ -3,6 +3,7 @@
 // lists them under "References", its body's citations link to them (src/lib/hast-cite-links.mjs),
 // and its schema.org record names them as the works it cites.
 import { z } from "astro/zod";
+import { refAuthors, refHref } from "@dario-loi/polytope/astro/references.ts";
 
 const ref = z.object({
   /** The entry's anchor on the page, #ref-<key>. */
@@ -44,13 +45,6 @@ for (const [path, data] of Object.entries(files)) {
 }
 
 export const referencesOf = (id: string): Ref[] => byId.get(id) ?? [];
-
-/** Authors as a reference list prints them: all of up to six, else the first six and "et al." */
-export const refAuthors = (a: string[]) =>
-  a.length > 6 ? `${a.slice(0, 6).join(", ")}, et al.` : a.length > 2 ? `${a.slice(0, -1).join(", ")}, and ${a.at(-1)}` : a.join(" and ");
-
-/** The address the entry's title links to: the DOI, else the version of record, else arXiv. */
-export const refHref = (r: Ref) => (r.doi ? `https://doi.org/${r.doi}` : (r.url ?? (r.arxiv ? `https://arxiv.org/abs/${r.arxiv}` : undefined)));
 
 /** A plain-text reference, for Markdown and llms-full.txt. */
 export const refText = (r: Ref) => {

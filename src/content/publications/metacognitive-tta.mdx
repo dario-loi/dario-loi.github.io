@@ -52,7 +52,7 @@ import Sidenote from "@dario-loi/polytope/astro/Sidenote.astro";
 import TtaMonitors from "../../components/charts/TtaMonitors.astro";
 import TtaAdmitted from "../../components/charts/TtaAdmitted.astro";
 import TtaHorizon from "../../components/charts/TtaHorizon.astro";
-import { column, pictureFormats, widthsFor } from "../../lib/content";
+import { column, pictureFormats, widthsFor } from "@dario-loi/polytope/astro/images.ts";
 import concepts from "./metacognitive-tta-concepts.webp";
 import levels from "./metacognitive-tta-figure2.webp";
 
@@ -63,7 +63,7 @@ Test-Time Adaptation (TTA) addresses the first case by updating the model on the
 ## Feeling of Rightness in adaptation
 
 <Figure num={2} margin>
-  <Picture {...pictureFormats} src={levels} alt="A chip labeled object level and a brain labeled meta level. An arrow labeled monitoring runs from the object level to the meta level, and an arrow labeled control runs back." widths={widthsFor(levels, 576)} sizes={`(min-width: 90rem) 21rem, (min-width: 40rem) 36rem, ${column}`} />
+  <Picture {...pictureFormats} src={levels} alt="A chip labeled object level and a brain labeled meta level. An arrow labeled monitoring runs from the object level to the meta level, and an arrow labeled control runs back." widths={widthsFor(levels, 576)} sizes={`(min-width: 90rem) 21rem, (min-width: 40rem) 36rem, ${column()}`} />
   <Fragment slot="caption">The two levels of metacognitive adaptation.</Fragment>
 </Figure>
 
@@ -99,8 +99,8 @@ Two properties make the residual a suitable competence cue. First, it is indepen
 
 On semantic discrimination, the concept residual reaches 0.91 with either dictionary, against 0.61 for entropy. It is a weaker correctness monitor than entropy (0.82 against 0.85), consistent with the distinction between the two kinds of monitoring.
 
-<Figure num={3} class="figure--column">
-  <Picture {...pictureFormats} src={concepts} alt="Two rows of photos. Top: a noisy close-up of a gas pump's meter, beside two small crops, a gas pump and a cassette player's control panel. Bottom: a noisy photo from outside the model's classes, beside two small crops, a church tower and a man with a chain saw." widths={widthsFor(concepts, 512)} sizes={`(min-width: 36rem) 32rem, ${column}`} />
+<Figure num={3} column>
+  <Picture {...pictureFormats} src={concepts} alt="Two rows of photos. Top: a noisy close-up of a gas pump's meter, beside two small crops, a gas pump and a cassette player's control panel. Bottom: a noisy photo from outside the model's classes, beside two small crops, a church tower and a man with a chain saw." widths={widthsFor(concepts, 512)} sizes={`(min-width: 36rem) 32rem, ${column()}`} />
   <Fragment slot="caption">Top: an Imagenette gas pump under Gaussian noise, with the two most relevant concepts extracted by FACE. Bottom: a NINCO image under the same noise; its two most relevant concepts belong to unrelated classes.</Fragment>
 </Figure>
 

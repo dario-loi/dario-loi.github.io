@@ -97,6 +97,24 @@ if (end && "IntersectionObserver" in window) {
   io.observe(end);
 }
 
+// Site search (Polytope's <ply-search> in the top bar, and the results page, which reports the same
+// events). Only what the events carry is sent: that the field was used, how many results a query
+// settled on (a bucket), and which page kind and path a result led to. The query text is never in
+// an event, and never read here.
+const BUCKETS = new Set(["0", "1-5", "6+"]);
+const detailOf = (e: Event) => ((e as CustomEvent).detail ?? {}) as Record<string, unknown>;
+document.addEventListener("ply-search:open", () => track("search-open"));
+document.addEventListener("ply-search:results", (e) => {
+  const bucket = String(detailOf(e).bucket ?? "");
+  if (BUCKETS.has(bucket)) track("search-results", undefined, { bucket });
+});
+document.addEventListener("ply-search:select", (e) => {
+  const { url, kind } = detailOf(e);
+  // The path only: a query string would be the reader's words.
+  const path = String(url ?? "").split("?")[0];
+  track("search-select", undefined, { kind: String(kind ?? ""), label: path });
+});
+
 /** The 404 page: send `not-found` once Umami exists (its script is deferred), for up to 5 seconds. */
 export function notFound() {
   let tries = 0;

@@ -5,7 +5,7 @@
 // sheaf Laplacian (a block matrix that fills in), an Implicit Sheaf Operator computes every node's
 // update from its incident edges at once (pulses along the edges, nodes lighting). Both run at
 // the same scale, slowed down to be seen. The server draws the finished race for d = 2.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Button from "@dario-loi/polytope/astro/Button.astro";
 interface Props { draft?: boolean }
 const { draft = false } = Astro.props;
@@ -34,44 +34,44 @@ const gy = (y: number) => TOPS[1] + 1.2 + (y - 7) * 0.42;
 const pts = NODES.map(([x, y]) => [gx(x), gy(y)]);
 const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
 ---
-<Model name="iso-operator" title="One diffusion step, timed" draft={draft}>
+<Model name="iso-operator" title="One diffusion step, timed" draft={import.meta.env.DEV && draft}>
   <svg viewBox="0 0 100 56" role="img" aria-label={sentence(D0)} data-d={D0}>
-    <path class="m-rule" d="M3 28.5H97" stroke-width="0.3" />
-    <g class="m-text" font-size="3.8">
+    <path class="ply-m-rule" d="M3 28.5H97" stroke-width="0.3" />
+    <g class="ply-m-text" font-size="3.8">
       <text x={IX} y={TOPS[0] - 2.4}>Explicit</text>
       <text x={IX} y={TOPS[1] - 2.4}>ISO</text>
     </g>
     <g data-matrix>
-      {blocks.map(([r, c]) => <rect class="m-note" x={IX + c * B} y={TOPS[0] + r * B} width={B} height={B} />)}
-      <path class="m-quiet" d={grid} stroke-width="0.2" />
-      <rect class="m-chalk" x={IX} y={TOPS[0]} width={IW} height={IW} stroke-width="0.4" />
+      {blocks.map(([r, c]) => <rect class="ply-m-note" x={IX + c * B} y={TOPS[0] + r * B} width={B} height={B} />)}
+      <path class="ply-m-quiet" d={grid} stroke-width="0.2" />
+      <rect class="ply-m-chalk" x={IX} y={TOPS[0]} width={IW} height={IW} stroke-width="0.4" />
     </g>
-    <g class="m-chalk" stroke-width="0.4">
+    <g class="ply-m-chalk" stroke-width="0.4">
       {EDGES.map(([u, v]) => <line x1={pts[u][0]} y1={pts[u][1]} x2={pts[v][0]} y2={pts[v][1]} />)}
     </g>
     <g data-nodes>
-      {pts.map(([x, y]) => <circle class="m-move" cx={x} cy={y} r="1.6" />)}
+      {pts.map(([x, y]) => <circle class="ply-m-move" cx={x} cy={y} r="1.6" />)}
     </g>
-    <g class="m-move" data-pulses visibility="hidden">
+    <g class="ply-m-move" data-pulses visibility="hidden">
       {dirs.map(() => <circle cx="0" cy="0" r="0.8" />)}
     </g>
     {TOPS.map((top) => (
       <g>
-        <line class="m-quiet" stroke-width="0.3" x1={TX0} y1={top + IW / 2} x2={TX1} y2={top + IW / 2} />
-        <line class="m-chalk" stroke-width="0.4" x1={TX1} y1={top + IW / 2 - 3} x2={TX1} y2={top + IW / 2 + 3} />
+        <line class="ply-m-quiet" stroke-width="0.3" x1={TX0} y1={top + IW / 2} x2={TX1} y2={top + IW / 2} />
+        <line class="ply-m-chalk" stroke-width="0.4" x1={TX1} y1={top + IW / 2 - 3} x2={TX1} y2={top + IW / 2 + 3} />
       </g>
     ))}
-    <line class="m-chalk" stroke-width="0.6" x1={TX0} y1={TOPS[0] + IW / 2} x2={TX1} y2={TOPS[0] + IW / 2} data-trail="e" />
-    <line class="m-move-line" stroke-width="0.6" x1={TX0} y1={TOPS[1] + IW / 2} x2={TX1} y2={TOPS[1] + IW / 2} data-trail="i" />
-    <circle class="m-chalk-fill" cx={TX1} cy={TOPS[0] + IW / 2} r="1.6" data-ball="e" />
-    <circle class="m-move" cx={TX1} cy={TOPS[1] + IW / 2} r="1.6" data-ball="i" />
-    <g class="m-text m-num" font-size="3.8" text-anchor="end">
+    <line class="ply-m-chalk" stroke-width="0.6" x1={TX0} y1={TOPS[0] + IW / 2} x2={TX1} y2={TOPS[0] + IW / 2} data-trail="e" />
+    <line class="ply-m-move-line" stroke-width="0.6" x1={TX0} y1={TOPS[1] + IW / 2} x2={TX1} y2={TOPS[1] + IW / 2} data-trail="i" />
+    <circle class="ply-m-chalk-fill" cx={TX1} cy={TOPS[0] + IW / 2} r="1.6" data-ball="e" />
+    <circle class="ply-m-move" cx={TX1} cy={TOPS[1] + IW / 2} r="1.6" data-ball="i" />
+    <g class="ply-m-text ply-m-num" font-size="3.8" text-anchor="end">
       <text class="iso-time" x="98" y={TOPS[0] + IW / 2 - 3.6} data-time="e" data-on>{f2(E0)} ms</text>
       <text class="iso-time" x="98" y={TOPS[1] + IW / 2 - 3.6} data-time="i" data-on>{f2(I0)} ms</text>
     </g>
     <g class="iso-payoff" data-payoff data-on>
-      <text class="m-chalk-fill" font-size="12" x="30.5" y={TOPS[1] + IW / 2 - 2.3} data-payoff-num>{f2(E0 / I0)}&times;</text>
-      <text class="m-text-quiet" font-size="3.6" x="68" y={TOPS[1] + IW / 2 - 2.3}>faster</text>
+      <text class="ply-m-chalk-fill" font-size="12" x="30.5" y={TOPS[1] + IW / 2 - 2.3} data-payoff-num>{f2(E0 / I0)}&times;</text>
+      <text class="ply-m-text-quiet" font-size="3.6" x="68" y={TOPS[1] + IW / 2 - 2.3}>faster</text>
     </g>
   </svg>
   <Fragment slot="controls">
@@ -118,7 +118,7 @@ const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
     const pts = NODES.map(([x, y]) => [IX + 2.8 + (x - 8) * 0.42, TOP1 + 1.2 + (y - 7) * 0.42]);
     const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
     const svg = root.querySelector<SVGSVGElement>("svg")!;
-    const rects = [...root.querySelectorAll<SVGRectElement>("[data-matrix] rect.m-note")];
+    const rects = [...root.querySelectorAll<SVGRectElement>("[data-matrix] rect.ply-m-note")];
     const nodes = [...root.querySelectorAll<SVGCircleElement>("[data-nodes] circle")];
     const pulseG = root.querySelector("[data-pulses]")!;
     const pulses = [...pulseG.querySelectorAll("circle")];
@@ -161,7 +161,7 @@ const dirs = EDGES.flatMap(([u, v]) => [[u, v], [v, u]]);
         });
       }
       const lit = done; // a node turns on once, when its pulses arrive, and stays on
-      nodes.forEach((n) => set(n, "class", lit ? "m-move" : "m-chalk-fill"));
+      nodes.forEach((n) => set(n, "class", lit ? "ply-m-move" : "ply-m-chalk-fill"));
       toggle(label.e, "data-on", pe >= 1);
       toggle(label.i, "data-on", done);
       text(label.e, `${f2(E)} ms`);

@@ -2,7 +2,7 @@
 // Where the threshold lands. A lognormal stand-in for the anomaly scores of normal pixels
 // (mu = 0, shape sigma set by the slider). Marker (a) is mean + 3 sd in closed form; marker (b)
 // is the score exceeded by a fixed 0.135% of normal pixels (1 - Phi(3), z = 3), standing in for a tail fit.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Slider from "@dario-loi/polytope/astro/Slider.astro";
 import Readout from "@dario-loi/polytope/astro/Readout.astro";
 
@@ -40,25 +40,25 @@ const lab = (xb: number) => (xb > 72 ? { x: xb - 1.2, anchor: "end" } : { x: xb 
 const lb = lab(m.xb);
 const pct = (v: number) => v.toFixed(2) + "%";
 ---
-<Model name="ad-threshold" title="Where the threshold sits" draft={draft} firstRun>
+<Model name="ad-threshold" title="Where the threshold sits" draft={import.meta.env.DEV && draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={`The density of anomaly scores of normal pixels, a lognormal curve with a heavy right tail. A tomato line marks mean plus three standard deviations and a dashed chalk line marks the score exceeded by 0.135 percent of normal pixels. At the default tail weight, ${pct(m.flagged)} of normal pixels lie right of the tomato line.`}>
-    <path class="m-note" data-fill d={m.fill} />
-    <path class="m-chalk" data-curve d={m.curve} stroke-width="0.5" stroke-linejoin="round" />
-    <line class="m-rule" x1={X0} y1={BASE} x2={X1} y2={BASE} stroke-width="0.4" />
+    <path class="ply-m-note" data-fill d={m.fill} />
+    <path class="ply-m-chalk" data-curve d={m.curve} stroke-width="0.5" stroke-linejoin="round" />
+    <line class="ply-m-rule" x1={X0} y1={BASE} x2={X1} y2={BASE} stroke-width="0.4" />
     {[0, 3, 6, 9, 12].map((s) => (
       <>
-        <line class="m-rule" x1={X(s)} y1={BASE} x2={X(s)} y2={BASE + 1.2} stroke-width="0.4" />
-        <text class="m-text-quiet m-num" x={X(s)} y="51" font-size="3.2" text-anchor="middle">{s}</text>
+        <line class="ply-m-rule" x1={X(s)} y1={BASE} x2={X(s)} y2={BASE + 1.2} stroke-width="0.4" />
+        <text class="ply-m-text-quiet ply-m-num" x={X(s)} y="51" font-size="3.2" text-anchor="middle">{s}</text>
       </>
     ))}
-    <text class="m-text-quiet" x={X1} y="55" font-size="3.2" text-anchor="end">score</text>
-    <line class="m-chalk" data-b stroke-dasharray="1.2 1" stroke-width="0.5" x1={m.xb} y1="16" x2={m.xb} y2={BASE} />
-    <line class="m-move-line" data-a stroke-width="0.6" x1={m.xa} y1="11" x2={m.xa} y2={BASE} />
-    <text class="m-text" data-la x={m.xa + 1.2} y="9.4" font-size="3.2">mean + 3 sd</text>
-    <text class="m-text" data-lb x={lb.x} y="14.6" font-size="3.2" text-anchor={lb.anchor}>{m.off ? "tail 0.135% >" : "tail 0.135%"}</text>
+    <text class="ply-m-text-quiet" x={X1} y="55" font-size="3.2" text-anchor="end">score</text>
+    <line class="ply-m-chalk" data-b stroke-dasharray="1.2 1" stroke-width="0.5" x1={m.xb} y1="16" x2={m.xb} y2={BASE} />
+    <line class="ply-m-move-line" data-a stroke-width="0.6" x1={m.xa} y1="11" x2={m.xa} y2={BASE} />
+    <text class="ply-m-text" data-la x={m.xa + 1.2} y="9.4" font-size="3.2">mean + 3 sd</text>
+    <text class="ply-m-text" data-lb x={lb.x} y="14.6" font-size="3.2" text-anchor={lb.anchor}>{m.off ? "tail 0.135% >" : "tail 0.135%"}</text>
   </svg>
   <Fragment slot="controls">
-    <div class="model__axis" style={`--x0:${X0 / 100};--x1:${X1 / 100}`}><Slider label="Tail weight" name="ad-sigma" min={0.2} max={0.9} step={0.05} value={start} format="fixed2" /></div>
+    <div class="ply-model__axis" style={`--x0:${X0 / 100};--x1:${X1 / 100}`}><Slider label="Tail weight" name="ad-sigma" min={0.2} max={0.9} step={0.05} value={start} format="fixed2" /></div>
     <Readout label="Share of normal pixels flagged as defects" items={[
       { label: "Flagged at mean + 3 sd", value: pct(m.flagged) },
       { label: "Flagged at tail quantile", value: "0.135%" },
@@ -67,7 +67,7 @@ const pct = (v: number) => v.toFixed(2) + "%";
   <Fragment slot="caption">As the tail of the normal scores grows heavier, a threshold at the mean plus three standard deviations flags more normal pixels, whereas one fitted on the tail keeps its rate.</Fragment>
 </Model>
 <script>
-  import { firstRun, easeOut } from "./firstRun";
+  import { firstRun, easeOut } from "@dario-loi/polytope/js/firstrun.js";
   const SMAX = 12, X0 = 5, X1 = 95, BASE = 46, HEIGHT = 28, Z = 3;
   const X = (s: number) => X0 + (s / SMAX) * (X1 - X0);
   const erfc = (x: number) => {

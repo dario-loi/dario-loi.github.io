@@ -3,7 +3,8 @@
 // alongside one of the owner's own papers lists after it.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getImage } from "astro:assets";
-import type { ImageMetadata, ImageOutputFormat } from "astro";
+import type { ImageMetadata } from "astro";
+import { column } from "@dario-loi/polytope/astro/images.ts";
 import type { Pub } from "@dario-loi/polytope/astro/PubList.astro";
 
 type Name = "blog" | "publications" | "projects";
@@ -29,28 +30,11 @@ export function entries<N extends Name>(name: N): Promise<CollectionEntry<N>[]> 
   return cache.get(name) as Promise<CollectionEntry<N>[]>;
 }
 
-/** Formats for every <Picture> on the site: AVIF where the browser takes it, else WebP. */
-export const pictureFormats: { formats: ImageOutputFormat[]; fallbackFormat: ImageOutputFormat } = { formats: ["avif", "webp"], fallbackFormat: "webp" };
-
-/** The page column's width on a phone, for `sizes`: the viewport less the container's gutters
- *  (Polytope's --ply-layout-gutter, about 1.25rem a side at phone widths). "100vw" overstates it
- *  by a tenth, which is enough for a phone to fetch the next size up. */
-export const column = "calc(100vw - 2.5rem)";
-
-const STEPS = [360, 480, 640, 720, 840, 1024, 1280, 1600, 2048];
-/** Widths to offer for a picture shown at most `maxCss` CSS pixels wide: close steps, so the one
- *  a screen picks is never much larger than it shows, up to three device pixels a CSS pixel and
- *  never past the source. */
-export function widthsFor(src: ImageMetadata, maxCss: number) {
-  const top = Math.min(src.width, maxCss * 3);
-  return [...STEPS.filter((w) => w < top), top];
-}
-
-/** Settings for a <Cover> in a Polytope Card's "figure" slot. A lead card's panel takes about
+/** Settings for a ThemedImage in a Polytope Card's "figure" slot. A lead card's panel takes about
  *  half the row, and it is the first thing on its list page, so its cover loads first. */
 export const cardPicture = (lead = false) => ({
   widths: [360, 480, 640, 720, 840, 1024, 1200],
-  sizes: lead ? `(min-width: 64rem) 50vw, ${column}` : `(min-width: 64rem) 30vw, ${column}`,
+  sizes: lead ? `(min-width: 64rem) 50vw, ${column()}` : `(min-width: 64rem) 30vw, ${column()}`,
   ...(lead ? { loading: "eager" as const, fetchpriority: "high" as const } : {}),
 });
 
@@ -89,13 +73,6 @@ export function readingTime(body = "") {
   return Math.max(1, Math.round(words / 230));
 }
 
-/** A stable 32-bit seed from a string (FNV-1a), so each entry draws its own complex. */
-export function seedOf(s: string) {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
-  return h >>> 0 || 1;
-}
-
 /** "ICLR 2026, Poster" or "METACOG-26, Top 3 paper": the venue as lists show it. `full` is the
  *  paper page's line: the full name keeps the short one that lists and citations use, as in
  *  "The Fourteenth International Conference on Learning Representations (ICLR 2026), Poster",
@@ -119,3 +96,10 @@ export const pubRow = (p: CollectionEntry<"publications">): Pub => ({
     .filter((l) => l.label !== "PDF" || !p.data.links.some((o) => /openreview|arxiv/i.test(o.label)))
     .map(({ label, href }) => ({ label, href })),
 });
+
+/** A project card's way to the code: the repository link from the project's front matter, as
+ *  Polytope's Card shows its link row. A project with no code link gets none. */
+export const projectCardLinks = (p: CollectionEntry<"projects">, placement: string) =>
+  p.data.links
+    .filter((l) => l.icon === "code")
+    .map((l) => ({ label: l.label, href: l.href, attrs: { "aria-label": `${l.label} for ${p.data.title}`, "data-track": "project-link", "data-track-placement": placement, "data-track-label": `${p.id}:${l.label}` } }));

@@ -2,7 +2,7 @@
 // Lifting a molecular graph: every chordless cycle of the graph with at most N atoms is filled
 // as a 2-cell. The cycles are found from the edge list by the same function on the server (here)
 // and in the script below, so no count is hard-coded.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Slider from "@dario-loi/polytope/astro/Slider.astro";
 interface Props { draft?: boolean }
 const { draft = false } = Astro.props;
@@ -57,11 +57,11 @@ const count = (m: number) => cycles.filter((c) => c.length <= m).length;
 const start = 6;
 const label = `A molecular-style graph of ${pts.length} atoms and ${edges.length} bonds, with ${count(start)} rings filled as cells.`;
 ---
-<Model name="tdl-lifting" title="Lifting a molecular graph" draft={draft} firstRun>
+<Model name="tdl-lifting" title="Lifting a molecular graph" draft={import.meta.env.DEV && draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={label} data-n={pts.length} data-edges={JSON.stringify(edges)}>
-    <g>{cycles.map((c) => <polygon class="m-note tdl-cell" data-size={c.length} data-on="true" points={c.map((i) => pts[i].join(",")).join(" ")} />)}</g>
-    <g>{edges.map(([a, b]) => <line class="m-chalk" stroke-width="0.45" stroke-opacity="0.8" x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} />)}</g>
-    <g>{pts.map(([x, y]) => <circle class="m-chalk-fill" cx={x} cy={y} r="1.15" />)}</g>
+    <g>{cycles.map((c) => <polygon class="ply-m-note tdl-cell" data-size={c.length} data-on="true" points={c.map((i) => pts[i].join(",")).join(" ")} />)}</g>
+    <g>{edges.map(([a, b]) => <line class="ply-m-chalk" stroke-width="0.45" stroke-opacity="0.8" x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} />)}</g>
+    <g>{pts.map(([x, y]) => <circle class="ply-m-chalk-fill" cx={x} cy={y} r="1.15" />)}</g>
   </svg>
   <Fragment slot="controls">
     <Slider label="Largest ring lifted" name="tdl-ring" min={2} max={MAXR} step={1} value={start} id="tdl-ring" />
@@ -80,7 +80,7 @@ const label = `A molecular-style graph of ${pts.length} atoms and ${edges.length
   @media (prefers-reduced-motion: reduce) { .tdl-cell { transition: none; } }
 </style>
 <script>
-  import { firstRun, stages } from "./firstRun";
+  import { firstRun, stages } from "@dario-loi/polytope/js/firstrun.js";
   function chordlessCycles(n: number, edges: [number, number][], maxLen: number): number[][] {
     const adj = Array.from({ length: n }, () => new Set<number>());
     for (const [a, b] of edges) { adj[a].add(b); adj[b].add(a); }

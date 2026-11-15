@@ -5,7 +5,7 @@
 // file alone.
 import type { CollectionEntry } from "astro:content";
 import { entries, longDate, pubVenue } from "./content";
-import { plain } from "./tex";
+import { plain } from "@dario-loi/polytope/astro/tex.ts";
 import { referencesOf, refText } from "./references";
 import { topicOf, topicPath, topics } from "../data/topics";
 import { cv, person, siteMeta } from "../site";

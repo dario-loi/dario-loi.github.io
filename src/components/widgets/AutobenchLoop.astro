@@ -4,7 +4,7 @@
 // c(t) = ((t-1) c(t-1) + r(t)) / t; and w(t+1) = c(t) / sum_k c_k(t). The ratings are made up
 // from a seeded generator; the same math runs here and in the script, so the page is complete
 // without JavaScript.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Slider from "@dario-loi/polytope/astro/Slider.astro";
 import Button from "@dario-loi/polytope/astro/Button.astro";
 interface Props { draft?: boolean }
@@ -43,24 +43,24 @@ const state = (t: number) => {
 const st = state(T);
 const ROW = [5, 15, 25, 35];
 ---
-<Model name="autobench-loop" title="Judge weights over iterations" draft={draft} firstRun>
+<Model name="autobench-loop" title="Judge weights over iterations" draft={import.meta.env.DEV && draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={`Four bars, one per toy model A to D, showing each model's weight as a judge after ${T} iterations. Ranking ${st.rank}; largest weight ${st.max.toFixed(2)}. A dotted tick marks the equal weight 0.25.`}>
     {NAMES.map((n, i) => (
       <g>
-        <text class="m-text" x="3.5" y={ROW[i] + 4.6} font-size="4.4" text-anchor="middle">{n}</text>
-        <rect class="m-rule" x={X0} y={ROW[i]} width={SPAN} height="6" stroke-width="0.3" />
-        <rect class="m-chalk m-chalk-fill" data-bar={i} x={X0} y={ROW[i]} width={(st.w[i] / WMAX) * SPAN} height="6" stroke-width="0.4" />
-        <text class="m-text m-num" data-num={i} x={X0 + SPAN + 3} y={ROW[i] + 4.6} font-size="4">{st.w[i].toFixed(2)}</text>
+        <text class="ply-m-text" x="3.5" y={ROW[i] + 4.6} font-size="4.4" text-anchor="middle">{n}</text>
+        <rect class="ply-m-rule" x={X0} y={ROW[i]} width={SPAN} height="6" stroke-width="0.3" />
+        <rect class="ply-m-chalk ply-m-chalk-fill" data-bar={i} x={X0} y={ROW[i]} width={(st.w[i] / WMAX) * SPAN} height="6" stroke-width="0.4" />
+        <text class="ply-m-text ply-m-num" data-num={i} x={X0 + SPAN + 3} y={ROW[i] + 4.6} font-size="4">{st.w[i].toFixed(2)}</text>
       </g>
     ))}
-    <line class="m-quiet" x1={X0 + (0.25 / WMAX) * SPAN} x2={X0 + (0.25 / WMAX) * SPAN} y1="3" y2="43" stroke-width="0.3" stroke-dasharray="1 1" />
-    <line class="m-rule" x1={X0} x2={X0 + SPAN} y1="51" y2="51" stroke-width="0.4" />
-    {Array.from({ length: T + 1 }, (_, k) => <line class="m-rule" x1={X0 + (k / T) * SPAN} x2={X0 + (k / T) * SPAN} y1="49.8" y2="52.2" stroke-width="0.3" />)}
-    <circle class="m-move" data-ball cx={X0 + SPAN} cy="51" r="2.4" />
-    <text class="m-text m-num" data-t x={X0 + SPAN + 5.5} y="52.4" font-size="4">{T} of {T}</text>
+    <line class="ply-m-quiet" x1={X0 + (0.25 / WMAX) * SPAN} x2={X0 + (0.25 / WMAX) * SPAN} y1="3" y2="43" stroke-width="0.3" stroke-dasharray="1 1" />
+    <line class="ply-m-rule" x1={X0} x2={X0 + SPAN} y1="51" y2="51" stroke-width="0.4" />
+    {Array.from({ length: T + 1 }, (_, k) => <line class="ply-m-rule" x1={X0 + (k / T) * SPAN} x2={X0 + (k / T) * SPAN} y1="49.8" y2="52.2" stroke-width="0.3" />)}
+    <circle class="ply-m-move" data-ball cx={X0 + SPAN} cy="51" r="2.4" />
+    <text class="ply-m-text ply-m-num" data-t x={X0 + SPAN + 5.5} y="52.4" font-size="4">{T} of {T}</text>
   </svg>
   <Fragment slot="controls">
-    <div class="model__axis" style={`--x0:${X0 / 100};--x1:${(X0 + SPAN) / 100}`}><Slider label="Iteration" name="iteration" min={0} max={T} step={1} value={T} /></div>
+    <div class="ply-model__axis" style={`--x0:${X0 / 100};--x1:${(X0 + SPAN) / 100}`}><Slider label="Iteration" name="iteration" min={0} max={T} step={1} value={T} /></div>
     <dl class="ply-readout" aria-label="Result at this iteration">
       <dt>Ranking</dt><dd data-rank>{st.rank}</dd>
       <dt>Largest weight</dt><dd data-max>{st.max.toFixed(2)}</dd>
@@ -73,7 +73,7 @@ const ROW = [5, 15, 25, 35];
   .abl__new { min-height: 2.75rem; justify-self: start; }
 </style>
 <script>
-  import { firstRun, easeOut, stages, type Player } from "./firstRun";
+  import { firstRun, easeOut, stages, type Player } from "@dario-loi/polytope/js/firstrun.js";
   const T = 12, N = 4, QUALITY = [4.2, 3.6, 3.0, 2.4], NOISE = 1.2, NAMES = ["A", "B", "C", "D"];
   const X0 = 10, SPAN = 62, WMAX = 0.5;
   function run(seed: number) {

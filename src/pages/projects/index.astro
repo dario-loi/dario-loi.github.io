@@ -1,12 +1,12 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Empty from "@dario-loi/polytope/astro/Empty.astro";
-import IndexMast from "../../components/IndexMast.astro";
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
 import Card from "@dario-loi/polytope/astro/Card.astro";
-import ProjectLinks from "../../components/ProjectLinks.astro";
-import Cover from "../../components/Cover.astro";
+import ThemedImage from "@dario-loi/polytope/astro/ThemedImage.astro";
 import CardGrid from "@dario-loi/polytope/astro/CardGrid.astro";
-import { cardPicture, entries, seedOf } from "../../lib/content";
+import { seedOf } from "@dario-loi/polytope/astro/complex.ts";
+import { cardPicture, entries, projectCardLinks } from "../../lib/content";
 import { projectsPage } from "../../lib/schema";
 import { person } from "../../site";
 
@@ -14,13 +14,13 @@ const projects = await entries("projects");
 const n = projects.length;
 const description = `Software and research projects by ${person.name}, including the Polytope design system, computer vision and graphics code, and machine learning tools, with source.`;
 ---
-<Base title="Projects" description={description} current="Projects" schema={[projectsPage(projects, description)]} crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
-  <IndexMast title="Projects" lede="Research software and open source." />
+<Base kind="Pages" title="Projects" description={description} current="Projects" schema={[projectsPage(projects, description)]} crumbs={[{ name: person.name, href: "/" }, { name: "Projects", href: "/projects/" }]}>
+  <Mast title="Projects" lede="Research software and open source." compact wideLede rule dense />
   <div class="ply-container projects">
     {n === 0 ? (
       <Empty title="Projects will appear here" />
     ) : (
-      <CardGrid class="card-rows">
+      <CardGrid class="ply-cards--aligned ply-cards--dense">
         {projects.map((p, i) => (
           <Card
             href={`/projects/${p.id}/`}
@@ -33,9 +33,9 @@ const description = `Software and research projects by ${person.name}, including
             badge={p.data.draft ? "Draft" : undefined}
             seed={seedOf(p.id)}
             link={{ "data-track": "open-project", "data-track-placement": "projects", "data-track-label": p.id }}
+            links={projectCardLinks(p, "projects-card")}
           >
-            <Cover slot="figure" {...cardPicture(i === 0)} seed={seedOf(p.id)} src={p.data.cover} dark={p.data.coverDark} alt="" />
-            <ProjectLinks project={p} placement="projects-card" />
+            {p.data.cover && <ThemedImage slot="figure" {...cardPicture(i === 0)} src={p.data.cover} dark={p.data.coverDark} alt="" />}
           </Card>
         ))}
       </CardGrid>

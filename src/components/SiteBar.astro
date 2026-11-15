@@ -1,14 +1,17 @@
 ---
 // The site's top bar: Polytope's TopBar markup with the wordmark's tomato full stop, and
-// the CV tab tracked like every other CV link. Tabs show where they fit and fold into the
-// chapter menu where they do not (polytope js/topbar.js).
+// the CV tab tracked like every other CV link, and the site search (Polytope's inline field,
+// over the Pagefind index that `npm run build` writes). Tabs show where they fit and fold into
+// the menu where they do not (polytope js/topbar.js), and the field folds to an icon with them.
+// The bar keeps its own markup because the home page swaps the wordmark for the emblem.
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import Search from "@dario-loi/polytope/astro/Search.astro";
 import ThemeToggle from "@dario-loi/polytope/astro/ThemeToggle.astro";
 import { person, siteMeta } from "../site";
 
 export interface Tab { label: string; href: string; current?: boolean; track?: string }
-interface Props { tabs: Tab[] }
-const { tabs } = Astro.props;
+interface Props { tabs: Tab[]; topics?: { label: string; href: string }[] }
+const { tabs, topics = [] } = Astro.props;
 const home = Astro.url.pathname === "/";
 ---
 <header class="ply-topbar">
@@ -33,6 +36,7 @@ const home = Astro.url.pathname === "/";
       ))}
     </nav>
     <div class="ply-topbar__tools">
+      <Search variant="inline" id="site-search" href="/publications/" links={topics} hint="Papers, projects, and the CV." emptyText="Try one of these topics." resultsHref="/search/" />
       <a class="ply-button ply-button--ghost ply-button--icon ply-button--sm ply-hide-narrow" href={siteMeta.repo} aria-label="Source of this site on GitHub"><Icon name="code" /></a>
       <ThemeToggle />
       <details class="ply-menu ply-menu--chapters">
@@ -48,16 +52,6 @@ const home = Astro.url.pathname === "/";
 </header>
 <script>import "@dario-loi/polytope/js/topbar.js";</script>
 <style is:global>
-  /* Enlarged text on a narrow window: once the tabs have folded into the menu, the bar's parts may
-     wrap to a second row instead of running past the edge. Only then: while the tabs show, a wrap
-     would give them a row of their own, topbar.js would see them fit, and a phone would get the
-     tabs and the tools on rows of their own. Without the script (no data-ply-tabs), Polytope's
-     breakpoint shows the menu. Nothing changes while everything fits on one line. */
-  @media (max-width: 30rem) {
-    .ply-topbar:is([data-ply-tabs="menu"], :not([data-ply-tabs])) .ply-topbar__inner { flex-wrap: wrap; }
-    .ply-topbar .ply-wordmark { flex: 0 1 auto; min-width: 0; white-space: normal; overflow-wrap: anywhere; }
-    .ply-topbar__tools { flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-end; }
-  }
   /* The home page's bar carries the emblem where inner pages carry the wordmark (their folio). The
      link holds the wordmark's own box, set invisibly, so the tabs sit exactly where they do on every
      other page; the emblem is the favicon's object, drawn at its left edge. */

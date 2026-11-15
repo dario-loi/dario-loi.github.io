@@ -6,7 +6,7 @@ import AtlasStop from "@dario-loi/polytope/astro/AtlasStop.astro";
 import MastTitle from "@dario-loi/polytope/astro/MastTitle.astro";
 import PubList from "@dario-loi/polytope/astro/PubList.astro";
 import CvLink from "../components/CvLink.astro";
-import SectionHead from "../components/SectionHead.astro";
+import SectionHead from "@dario-loi/polytope/astro/SectionHead.astro";
 import { entries, pubRow } from "../lib/content";
 import EmailLink from "../components/EmailLink.astro";
 import { awards, cvAnchor, cvEntries, service, skills } from "../data/cv";
@@ -14,7 +14,7 @@ import { cv, person } from "../site";
 
 const pubs = (await entries("publications")).map(pubRow);
 ---
-<Base title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}, with education, research, and a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
+<Base kind="CV" title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}, with education, research, and a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
   <div class="ply-container cv-atlas">
     <Atlas label="Where the work has taken me" quiet>
       <Fragment slot="head">
@@ -33,29 +33,29 @@ const pubs = (await entries("publications")).map(pubRow);
       ))}
     </Atlas>
     <section class="cv-block cv-block--first" aria-labelledby="cv-awards-h">
-      <SectionHead id="cv-awards-h" title="Honors and awards" fragment="awards" />
-      <ul class="cv-awards" role="list">
-        {awards.map((a) => <li><span>{a.text}</span><span class="cv-awards__year">{a.year}</span></li>)}
+      <SectionHead id="cv-awards-h" title="Honors and awards" rule mark="awards" />
+      <ul class="ply-ledger" role="list">
+        {awards.map((a) => <li><span class="ply-ledger__text">{a.text}</span><span class="ply-ledger__when">{a.year}</span></li>)}
       </ul>
     </section>
     <section class="cv-block" aria-labelledby="cv-service-h">
-      <SectionHead id="cv-service-h" title="Service" fragment="service" />
-      <dl class="cv-skills">
-        <div><dt>Reviewer</dt><dd><ul class="cv-skills__chips" role="list">{service.reviewer.map((v) => <li>{v}</li>)}</ul></dd></div>
+      <SectionHead id="cv-service-h" title="Service" rule mark="service" />
+      <dl class="ply-wall cv-skills">
+        <div class="ply-wall__row"><dt class="ply-wall__name">Reviewer</dt><dd class="ply-wall__body"><ul class="ply-chips" role="list">{service.reviewer.map((v) => <li>{v}</li>)}</ul></dd></div>
       </dl>
-      <ul class="cv-awards cv-service" role="list">
-        {service.roles.map((r) => <li><span>{r.role}, {r.org}</span><span class="cv-awards__year">{r.years}</span></li>)}
+      <ul class="ply-ledger cv-service" role="list">
+        {service.roles.map((r) => <li><span class="ply-ledger__text">{r.role}, {r.org}</span><span class="ply-ledger__when">{r.years}</span></li>)}
       </ul>
     </section>
     <section class="cv-block" aria-labelledby="cv-skills-h">
-      <SectionHead id="cv-skills-h" title="Skills" fragment="skills" />
-      <dl class="cv-skills">
-        {skills.map((g) => <div><dt>{g.name}</dt><dd><ul class="cv-skills__chips" role="list">{g.items.map((it) => <li>{it}</li>)}</ul></dd></div>)}
+      <SectionHead id="cv-skills-h" title="Skills" rule mark="skills" />
+      <dl class="ply-wall cv-skills">
+        {skills.map((g) => <div class="ply-wall__row"><dt class="ply-wall__name">{g.name}</dt><dd class="ply-wall__body"><ul class="ply-chips" role="list">{g.items.map((it) => <li>{it}</li>)}</ul></dd></div>)}
       </dl>
     </section>
     {pubs.length > 0 && (
       <section class="cv-pubs" aria-labelledby="cv-pubs-h">
-        <SectionHead id="cv-pubs-h" title="Publications" fragment="publications" more={{ label: "All publications", href: "/publications/" }} />
+        <SectionHead id="cv-pubs-h" title="Publications" rule mark="publications" more={{ label: "All publications", href: "/publications/" }} />
         <PubList pubs={pubs} me={person.name} label={false} fold={12} />
       </section>
     )}
@@ -65,22 +65,18 @@ const pubs = (await entries("publications")).map(pubRow);
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
   .cv-pubs, .cv-block { margin-top: var(--ply-space-6); }
+  /* The atlas list's scroll runway under its last stop: 10svh is enough to bring that stop to the current line. */
+  .cv-atlas :global(.ply-atlas__list) { padding-block-end: 10svh; }
   /* Stacked, the pinned globe closes on its own 3px rule, so the first section after it drops
      its rule: two bars in a row read as a mistake. */
-  @media (max-width: 54rem) { .cv-block--first > :global(.sec-rule) { display: none; } }
-  .cv-awards { list-style: none; padding: 0; margin: 0; }
-  .cv-awards li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ply-space-1) var(--ply-space-5); padding-block: var(--ply-space-3); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
-  .cv-awards li:last-child { border-bottom: var(--ply-border-hair) solid var(--ply-color-rule); }
-  .cv-awards li > span:first-child { flex: 1 1 24rem; min-width: 0; max-width: var(--ply-layout-measure); text-wrap: pretty; }
-  .cv-awards__year { color: var(--cv-gold); font-weight: var(--ply-weight-bold); font-variant-numeric: tabular-nums; }
+  @media (max-width: 54rem) { .cv-block--first > :global(.ply-rule--stair) { display: none; } }
+  .cv-block { --ply-ledger-when: var(--cv-gold); }
   .cv-service { margin-top: var(--ply-space-4); }
-  .cv-skills { margin: 0; display: grid; gap: var(--ply-space-4); }
-  .cv-skills > div { display: grid; gap: var(--ply-space-2); align-items: baseline; }
-  .cv-skills dt { margin: 0; color: var(--ply-color-link); font-size: var(--ply-size-xs); font-weight: var(--ply-weight-bold); letter-spacing: 0.06em; text-transform: uppercase; }
-  .cv-skills dd { margin: 0; min-width: 0; }
-  .cv-skills__chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); max-width: var(--ply-layout-measure); }
-  .cv-skills__chips li { padding: 0.15rem 0.55rem; background: var(--ply-color-surface-sunken); border: var(--ply-border-hair) solid var(--ply-color-rule); font-family: var(--ply-font-mono); font-size: var(--ply-size-sm); overflow-wrap: anywhere; }
-  @media (min-width: 44rem) { .cv-skills > div { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--ply-space-5); } }
+  /* Skill groups stand a step apart, without the hairlines a wall draws between its rows. */
+  .cv-skills { gap: var(--ply-space-4); }
+  .cv-skills :global(.ply-wall__row) { padding-block: 0; border-top: 0; }
+  /* A skill group's name is a small teal term in capitals. */
+  .cv-skills :global(.ply-wall__name) { color: var(--ply-color-link); font-family: var(--ply-font-text); font-size: var(--ply-size-xs); letter-spacing: 0.06em; text-transform: uppercase; }
   /* A stop's kind label takes the kind's color: Education teal, Experience tomato, Conference mustard. */
   .cv-atlas :global(.ply-atlas__stop[data-kind="Education"] .ply-label) { background: var(--cv-edu); color: var(--cv-on-edu); }
   .cv-atlas :global(.ply-atlas__stop[data-kind="Experience"] .ply-label) { background: var(--cv-exp); color: var(--cv-on-exp); }

@@ -8,7 +8,7 @@ Personal academic site of Dario Loi, built with [Astro](https://astro.build) and
 ```sh
 npm install
 npm run dev       # http://localhost:4321, drafts included
-npm run build     # static site in dist/, drafts left out
+npm run build     # static site in dist/ plus the search index (dist/pagefind), drafts left out
 npm run check     # type-check Astro and TypeScript
 npm run design:check   # fails if DESIGN.md is older than the installed Polytope
 ```
@@ -18,6 +18,11 @@ Node 22.12 or newer.
 A production build leaves drafts out and rewrites `.astro/` without them. A dev server left
 running during `npm run build` then fails on draft pages until you save a draft or restart the
 server.
+
+Search needs the index that `npm run build` writes (Pagefind runs after Astro). Under `npm run dev`
+the field opens but reports that search is not available; use `npm run build && npm run preview`
+to try it. Each page's `<main>` is indexed when its layout is given a `kind` (Papers, Projects,
+Posts, CV, Topics, Pages); a page without one, such as the 404, privacy, and search pages, stays out.
 
 ## Add content
 
@@ -166,6 +171,11 @@ Custom events, each with `page`, `source` (the referrer: `direct`, a host name, 
 | `not-found` | The 404 page loads (`path` is the address asked for) |
 | `outbound` | A link to another host that carries no `data-track` (`label` is the host without `www.`) |
 | `theme-toggle` | The theme switch (`label` is the new theme, `light` or `dark`) |
+| `search-open` | The search field gains focus (or the search page opens it) |
+| `search-results` | A query settles, once per pause in typing (`bucket` is `0`, `1-5`, or `6+` results) |
+| `search-select` | A result is followed (`kind` is the page kind, such as `Papers`, or `all` for the All results link; `label` is the path of the page opened) |
+
+Search never records what a visitor types. Polytope's `<ply-search>` events carry no query text, `src/scripts/track.ts` forwards only the three fields above, and the analytics script drops query strings from every address (`data-exclude-search`), so `/search/?q=` is recorded as `/search/`.
 
 In Umami, open Events, pick an event, and break it down by any of these properties.
 

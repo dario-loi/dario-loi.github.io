@@ -51,6 +51,7 @@ jobs:
           path: node_modules/.astro/assets
           key: astro-assets-${{ hashFiles('src/content/**/*.webp', 'src/content/**/*.png', 'src/content/**/*.jpg', 'package-lock.json') }}
           restore-keys: astro-assets-
+      # Astro builds the site, then Pagefind writes the search index into dist/pagefind.
       - name: Build
         run: npm run build
         env:

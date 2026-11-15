@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import { entryFiles, isDraft, lastmod } from "./src/lib/lastmod.mjs";
 import { plyCodeFrame } from "./src/lib/shiki-ply-code.mjs";
 import { plyTables } from "./src/lib/hast-ply-tables.mjs";
-import { plyCiteLinks } from "./src/lib/hast-cite-links.mjs";
+import { citeLinks } from "@dario-loi/polytope/astro/cite-links.mjs";
 
 const requireJson = createRequire(import.meta.url);
 const codeTheme = requireJson("@dario-loi/polytope/code-theme.json");
@@ -62,7 +62,7 @@ export default defineConfig({
   ],
   markdown: {
     // No smart punctuation: "--" would become an em dash, which the writing rules forbid.
-    processor: satteri({ features: { smartPunctuation: false }, hastPlugins: [plyTables, plyCiteLinks()] }),
+    processor: satteri({ features: { smartPunctuation: false }, hastPlugins: [plyTables, citeLinks({ match: /[\\/]content[\\/]publications[\\/][^\\/]+\.mdx$/ })] }),
     shikiConfig: { theme: codeTheme, transformers: [plyCodeFrame()] },
   },
   // Pages are small and static, so the next one loads while the pointer rests on its link.

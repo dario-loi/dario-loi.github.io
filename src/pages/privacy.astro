@@ -1,18 +1,20 @@
 ---
 import Base from "../layouts/Base.astro";
-import EntryHeader from "../components/EntryHeader.astro";
+import PostHeader from "@dario-loi/polytope/astro/PostHeader.astro";
 import { analytics, person } from "../site";
 const on = Boolean(analytics.websiteId);
 ---
 <Base title="Privacy" description="How this site counts visits in aggregate with Umami, and the one setting your browser keeps." crumbs={[{ name: person.name, href: "/" }, { name: "Privacy", href: "/privacy/" }]}>
   <div class="ply-container">
-    <EntryHeader title="Privacy" stop lede="I count visits to this site in aggregate. It shows me which pages people find useful." />
+    <PostHeader title="Privacy" stop lede="I count visits to this site in aggregate. It shows me which pages people find useful." />
   </div>
   <hr class="ply-rule" />
   <div class="ply-container privacy">
     <div class="ply-prose">
       <h2>Analytics</h2>
       <p>{on ? "Visits are counted anonymously with" : "When analytics is enabled, visits are counted anonymously with"} <a href="https://umami.is/">Umami</a>, a privacy-friendly analytics service. Your IP address is used only to estimate a rough location. It is then discarded. I can also see which links and interactive figures people use. Page load times come through too. Both tell me what to fix.</p>
+      <h2>Search</h2>
+      <p>Search runs in your browser on an index it downloads from this site. The words you type stay on your device. I see that a search happened, roughly how many results it found, and which kind of page was opened.</p>
       <h2>Cookies and storage</h2>
       <p>If you switch between light and dark themes, your browser remembers the choice. The next page then opens the same way. That setting stays on your device.</p>
       <h2>Contact</h2>

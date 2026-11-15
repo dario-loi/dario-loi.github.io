@@ -3,7 +3,7 @@
 // separation is set by the AUROC the paper reports for semantic discrimination (Table 3):
 // entropy 0.609, concept residual 0.908 (FACE) / 0.912 (CRAFT), shown as 0.61 and 0.91.
 // AUROC = Phi(d' / sqrt 2), so d' = sqrt 2 * Phi^-1(AUROC). An illustration, not the paper's data.
-import Model from "./Model.astro";
+import Model from "@dario-loi/polytope/astro/Model.astro";
 import Slider from "@dario-loi/polytope/astro/Slider.astro";
 interface Props { draft?: boolean }
 const { draft = false } = Astro.props;
@@ -47,22 +47,22 @@ const pct = (p: number) => `${Math.round(p * 100)}%`;
 const idAdm = pct(phi(t0)), oodAdm = pct(phi(t0 - cue.d));
 const label = `Two bell curves on a score axis, in-distribution centered at 0 and out-of-distribution at ${cue.d.toFixed(1)}, with a gate at ${t0.toFixed(2)} admitting ${idAdm} of in-distribution and ${oodAdm} of out-of-distribution samples.`;
 ---
-<Model name="tta-gate" title="A gate on the monitor's score" draft={draft} firstRun>
+<Model name="tta-gate" title="A gate on the monitor's score" draft={import.meta.env.DEV && draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={label} data-lo={X0} data-hi={X1}>
-    <path class="m-note" data-ood-area d={area(cue.d, t0)}></path>
-    <path class="m-chalk-fill" fill-opacity="0.18" data-id-area d={area(0, t0)}></path>
-    <line class="m-rule" x1={X(X0)} y1={BASE} x2={X(X1)} y2={BASE} stroke-width="0.4"></line>
-    {[-2, 0, 2, 4].map((s) => <text class="m-text-quiet m-num" x={X(s)} y="50" font-size="3.6" text-anchor="middle">{s}</text>)}
-    <text class="m-text-quiet" x="95" y="54.5" font-size="3.4" text-anchor="end">score</text>
-    <path class="m-chalk" data-ood-line d={curve(cue.d)} stroke-width="0.7"></path>
-    <path class="m-chalk" data-id-line d={curve(0)} stroke-width="0.7"></path>
-    <text class="m-text" x={X(-1.1)} y="22" font-size="4" text-anchor="end">ID</text>
-    <text class="m-text" data-ood-label x={X(cue.d + 1.1)} y="22" font-size="4">OOD</text>
-    <line class="m-move-line" data-gate-line x1={X(t0)} y1="5" x2={X(t0)} y2={BASE} stroke-width="0.7"></line>
-    <circle class="m-move" data-gate-ball cx={X(t0)} cy={BASE} r="1.9"></circle>
+    <path class="ply-m-note" data-ood-area d={area(cue.d, t0)}></path>
+    <path class="ply-m-chalk-fill" fill-opacity="0.18" data-id-area d={area(0, t0)}></path>
+    <line class="ply-m-rule" x1={X(X0)} y1={BASE} x2={X(X1)} y2={BASE} stroke-width="0.4"></line>
+    {[-2, 0, 2, 4].map((s) => <text class="ply-m-text-quiet ply-m-num" x={X(s)} y="50" font-size="3.6" text-anchor="middle">{s}</text>)}
+    <text class="ply-m-text-quiet" x="95" y="54.5" font-size="3.4" text-anchor="end">score</text>
+    <path class="ply-m-chalk" data-ood-line d={curve(cue.d)} stroke-width="0.7"></path>
+    <path class="ply-m-chalk" data-id-line d={curve(0)} stroke-width="0.7"></path>
+    <text class="ply-m-text" x={X(-1.1)} y="22" font-size="4" text-anchor="end">ID</text>
+    <text class="ply-m-text" data-ood-label x={X(cue.d + 1.1)} y="22" font-size="4">OOD</text>
+    <line class="ply-m-move-line" data-gate-line x1={X(t0)} y1="5" x2={X(t0)} y2={BASE} stroke-width="0.7"></line>
+    <circle class="ply-m-move" data-gate-ball cx={X(t0)} cy={BASE} r="1.9"></circle>
   </svg>
   <Fragment slot="controls">
-    <div class="model__axis" style={`--x0:${AXL / 100};--x1:${AXR / 100}`}><Slider label="Gate threshold (score)" name="tta-threshold" id="tta-threshold" min={-3} max={5} step={0.05} value={t0} format="fixed2" /></div>
+    <div class="ply-model__axis" style={`--x0:${AXL / 100};--x1:${AXR / 100}`}><Slider label="Gate threshold (score)" name="tta-threshold" id="tta-threshold" min={-3} max={5} step={0.05} value={t0} format="fixed2" /></div>
     <div class="ply-segmented" role="group" aria-label="Monitor cue" data-cues>
       {cues.map((c) => <button type="button" value={c.id} data-d={c.d} aria-pressed={c.id === cue.id ? "true" : "false"}>{c.label}</button>)}
     </div>
@@ -75,11 +75,11 @@ const label = `Two bell curves on a score axis, in-distribution centered at 0 an
 </Model>
 <style is:global>
   /* In the margin column the choice stacks: two labels do not fit side by side at 224 px. */
-  .model [data-cues] { display: grid; grid-template-columns: minmax(0, 1fr); }
-  .model [data-cues] button { justify-content: flex-start; text-align: start; }
+  .ply-model [data-cues] { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .ply-model [data-cues] button { justify-content: flex-start; text-align: start; }
 </style>
 <script>
-  import { firstRun, easeOut, type Player } from "./firstRun";
+  import { firstRun, easeOut, type Player } from "@dario-loi/polytope/js/firstrun.js";
   const SQ2 = Math.SQRT2;
   const phi = (x: number) => {
     const z = Math.abs(x) / SQ2, t = 1 / (1 + 0.3275911 * z);

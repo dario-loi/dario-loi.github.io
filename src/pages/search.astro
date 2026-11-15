@@ -1,0 +1,184 @@
+---
+// The full results page for site search: the top bar's field links here with ?q=, and the form
+// below searches again in place. It reads the same Pagefind index as the field (Pagefind runs
+// after the build) and draws results with Polytope's search classes. The query is read and shown
+// in the browser only: it is not written to the address, and nothing here sends it anywhere.
+// The page is kept out of search results and out of its own index.
+import Base from "../layouts/Base.astro";
+import Mast from "@dario-loi/polytope/astro/Mast.astro";
+import Icon from "@dario-loi/polytope/astro/Icon.astro";
+import { topicLinks } from "../lib/search";
+import { person } from "../site";
+
+const topics = await topicLinks();
+---
+<Base title="Search" description={`Search the papers, projects, and CV of ${person.name}.`} noindex crumbs={[{ name: person.name, href: "/" }, { name: "Search", href: "/search/" }]}>
+  <meta slot="head" name="referrer" content="origin" />
+  <Mast title="Search" lede="Papers, projects, and the CV on this site." compact wideLede rule dense />
+  <div class="ply-container search-page">
+    <noscript>
+      <p class="search-page__nojs">Search needs JavaScript. <a href="/publications/">The publications list</a> shows every paper, and <a href="/publications/topics/">the topics page</a> groups them by subject.</p>
+    </noscript>
+    <ply-search-page class="search-page__app" bundle="/pagefind/" hidden>
+      <form class="ply-field search-page__form" role="search" action="/search/" method="get">
+        <label class="ply-field__label" for="search-page-q">Search the site</label>
+        <div class="search-page__row">
+          <input class="ply-input" id="search-page-q" name="q" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" />
+          <button class="ply-button" type="submit"><Icon name="search" />Search</button>
+        </div>
+      </form>
+      <p class="search-page__status" role="status"></p>
+      <div class="ply-search__idle search-page__idle" hidden>
+        <p>Try one of these topics.</p>
+        <ul>{topics.map((t) => <li><a href={t.href}>{t.label}</a></li>)}</ul>
+      </div>
+      <ul class="ply-search__results search-page__results"></ul>
+      <button class="ply-button ply-button--secondary ply-button--sm search-page__more" type="button" hidden>Show more</button>
+    </ply-search-page>
+  </div>
+</Base>
+<script>
+  // Results from the Pagefind index, drawn with Polytope's search classes. Each result is a plain
+  // link, so Tab and Enter work as on any list. The page reports the same events as the top bar's
+  // field (ply-search:results with a bucket, ply-search:select with a path and a kind), never the
+  // query, and src/scripts/track.ts sends them to analytics.
+  const PAGE = 10;
+  const SECTIONS = 3;
+  const decoder = document.createElement("textarea");
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string) {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    return node;
+  }
+  // Pagefind marks matches with <mark>; everything else is text.
+  function excerpt(html: string) {
+    const frag = document.createDocumentFragment();
+    let mark: HTMLElement | null = null;
+    for (const part of String(html ?? "").split(/(<\/?mark>)/)) {
+      if (part === "<mark>") { mark = el("mark"); frag.append(mark); continue; }
+      if (part === "</mark>") { mark = null; continue; }
+      if (!part) continue;
+      decoder.innerHTML = part;
+      (mark ?? frag).append(decoder.value);
+    }
+    return frag;
+  }
+
+  class PlySearchPage extends HTMLElement {
+    private pf: Promise<any> | null = null;
+    private results: any[] = [];
+    private shown = 0;
+    private run = 0;
+    private settle = 0;
+    connectedCallback() {
+      const input = this.querySelector<HTMLInputElement>("#search-page-q")!;
+      this.hidden = false;
+      this.status = this.querySelector(".search-page__status")!;
+      this.idle = this.querySelector(".search-page__idle")!;
+      this.list = this.querySelector(".search-page__results")!;
+      this.more = this.querySelector(".search-page__more")!;
+      this.input = input;
+      this.more.addEventListener("click", () => this.render());
+      this.list.addEventListener("click", (e) => {
+        const a = (e.target as Element).closest("a");
+        if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || (e as MouseEvent).button) return;
+        const li = a.closest<HTMLElement>("li");
+        this.dispatchEvent(new CustomEvent("ply-search:select", { bubbles: true, detail: { url: new URL(a.href).pathname + new URL(a.href).hash, kind: li?.dataset.kind ?? "" } }));
+      });
+      this.querySelector("form")!.addEventListener("submit", (e) => { e.preventDefault(); this.search(); });
+      input.addEventListener("input", () => this.search(150));
+      const q = new URLSearchParams(location.search).get("q")?.trim() ?? "";
+      if (q) { input.value = q; this.search(); } else { this.empty(); input.focus(); }
+    }
+    status!: HTMLElement; idle!: HTMLElement; list!: HTMLElement; more!: HTMLButtonElement; input!: HTMLInputElement;
+
+    private load() {
+      return (this.pf ??= import(/* @vite-ignore */ `${this.getAttribute("bundle") ?? "/pagefind/"}pagefind.js`)
+        .then(async (pf) => { await pf.options({ baseUrl: "/" }); await pf.init?.(); return pf; })
+        .catch(() => null));
+    }
+    private empty() {
+      this.list.replaceChildren();
+      this.more.hidden = true;
+      this.status.textContent = "";
+      this.idle.hidden = false;
+    }
+    async search(wait = 0) {
+      const q = this.input.value.trim();
+      const run = ++this.run;
+      if (!q) return this.empty();
+      const pf = await this.load();
+      if (!pf) {
+        this.list.replaceChildren();
+        this.more.hidden = true;
+        this.status.textContent = "Search is not available right now. The publications list shows every paper.";
+        return;
+      }
+      const found = wait ? await pf.debouncedSearch(q, {}, wait) : await pf.search(q);
+      if (found === null || run !== this.run) return;
+      this.results = found.results;
+      this.shown = 0;
+      this.list.replaceChildren();
+      await this.render(run);
+      const n = this.results.length;
+      this.status.textContent = n ? `${n} ${n === 1 ? "result" : "results"} for "${q.length > 60 ? `${q.slice(0, 59)}...` : q}"` : `Nothing matches "${q.length > 60 ? `${q.slice(0, 59)}...` : q}". Try a shorter word.`;
+      this.idle.hidden = n > 0;
+      clearTimeout(this.settle);
+      // Once the reader pauses: how many results, never what was asked.
+      this.settle = window.setTimeout(() => this.dispatchEvent(new CustomEvent("ply-search:results", { bubbles: true, detail: { bucket: n === 0 ? "0" : n <= 5 ? "1-5" : "6+" } })), 800);
+    }
+    async render(run = this.run) {
+      const batch = this.results.slice(this.shown, this.shown + PAGE);
+      const data = await Promise.all(batch.map((r) => r.data()));
+      if (run !== this.run) return;
+      for (const d of data) this.list.append(...this.hits(d));
+      this.shown += batch.length;
+      this.more.hidden = this.shown >= this.results.length;
+    }
+    private hit(type: string, url: string, title: string, html?: string, kind?: string, summary?: string) {
+      const li = el("li", `ply-search__hit ply-search__hit--${type}`);
+      li.dataset.kind = kind ?? "";
+      const a = el("a");
+      a.href = url;
+      const t = el("span", "ply-search__title");
+      t.textContent = title;
+      a.append(t);
+      if (kind && type === "page") { const k = el("span", "ply-label"); k.textContent = kind; a.append(k); }
+      if (html || summary) {
+        const ex = el("span", "ply-search__excerpt");
+        if (html) ex.append(excerpt(html)); else ex.textContent = summary ?? "";
+        a.append(ex);
+      }
+      li.append(a);
+      return li;
+    }
+    private hits(d: any) {
+      const title = d.meta?.title || d.url;
+      const page = this.hit("page", d.url, title, d.meta?.summary ? undefined : d.excerpt, d.meta?.kind, d.meta?.summary);
+      const subs = (d.sub_results ?? [])
+        .filter((s: any) => s.url !== d.url && s.url.includes("#") && s.title && s.title !== title)
+        .slice(0, SECTIONS)
+        .map((s: any) => this.hit("section", s.url, s.title, s.excerpt, d.meta?.kind));
+      return [page, ...subs];
+    }
+  }
+  if (!customElements.get("ply-search-page")) customElements.define("ply-search-page", PlySearchPage);
+</script>
+<style>
+  .search-page { padding-block: var(--ply-space-5) var(--ply-space-8); }
+  .search-page__app { display: grid; gap: var(--ply-space-4); max-width: 52rem; }
+  .search-page__app[hidden] { display: none; }
+  .search-page__form { max-width: none; }
+  .search-page__row { display: flex; flex-wrap: wrap; gap: var(--ply-space-3); }
+  .search-page__row .ply-input { flex: 1 1 16rem; min-width: 0; }
+  .search-page__status { font-weight: var(--ply-weight-semibold); }
+  .search-page__status:empty { display: none; }
+  .search-page__idle { padding-inline: 0; }
+  .search-page__results { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); }
+  .search-page__results:empty { display: none; }
+  .search-page__results :global(.ply-search__hit a) { padding-inline: 0 var(--ply-space-4); }
+  .search-page__results :global(.ply-search__hit--section a) { padding-inline-start: var(--ply-space-5); }
+  .search-page__more { justify-self: start; }
+  .search-page__nojs { max-width: var(--ply-layout-measure); }
+</style>

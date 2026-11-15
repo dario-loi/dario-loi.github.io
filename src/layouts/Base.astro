@@ -3,23 +3,17 @@
 import "@dario-loi/polytope/css";
 import Seo from "@dario-loi/polytope/astro/Seo.astro";
 import type { Citation, SeoImage } from "@dario-loi/polytope/astro/Seo.astro";
+import KatexAssets from "@dario-loi/polytope/astro/KatexAssets.astro";
+import SiteFooter from "@dario-loi/polytope/astro/SiteFooter.astro";
+import BackToTop from "@dario-loi/polytope/astro/BackToTop.astro";
 import ultra from "@dario-loi/polytope/fonts/ultra-latin-400.woff2?url";
 import franklin from "@dario-loi/polytope/fonts/libre-franklin-latin-wght.woff2?url";
 import SiteBar from "../components/SiteBar.astro";
 import EmailLink from "../components/EmailLink.astro";
 import Analytics from "../components/Analytics.astro";
-import katexCss from "katex/dist/katex.min.css?inline";
 import ogCards from "../data/og.json";
-// The KaTeX faces a paper's math uses. Left to the stylesheet they are found only once the first
-// layout needs them, so the math swaps in late and pushes the text below it down; preloaded they
-// arrive with the page.
-import katexMain from "katex/dist/fonts/KaTeX_Main-Regular.woff2?url";
-import katexMainBold from "katex/dist/fonts/KaTeX_Main-Bold.woff2?url";
-import katexMathItalic from "katex/dist/fonts/KaTeX_Math-Italic.woff2?url";
-import katexAms from "katex/dist/fonts/KaTeX_AMS-Regular.woff2?url";
-import katexCaligraphic from "katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2?url";
-const katexFonts = [katexMain, katexMathItalic, katexAms, katexMainBold, katexCaligraphic];
 import { entries } from "../lib/content";
+import { topicLinks } from "../lib/search";
 import { personNode, profilePageNode, websiteNode } from "../lib/schema";
 import { cv, person, siteMeta } from "../site";
 
@@ -37,7 +31,7 @@ interface Props {
   published?: Date;
   modified?: Date;
   /** A paper, for Google Scholar: Polytope's Citation, with each author's institutions. */
-  citation?: Omit<Citation, "authors"> & { keywords?: string[]; authors: (string | { name: string; href?: string; institutions?: string[] })[] };
+  citation?: Citation;
   /** The link-preview picture; the site card when left out. */
   image?: SeoImage;
   imageAlt?: string;
@@ -47,18 +41,25 @@ interface Props {
   profile?: boolean;
   /** The page's own schema.org records, such as the paper or the list it shows. */
   schema?: Record<string, unknown>[];
-  /** The page shows inline math (hasMath in src/lib/tex.ts), so it loads the KaTeX stylesheet. */
+  /** The page shows inline math (hasMath from Polytope), so it loads the KaTeX stylesheet. */
   math?: boolean;
+  /** What the page is, for site search: the page enters the index (Pagefind) under this kind and is
+   *  shown beside its results. A page without one stays out of search, as 404, privacy, and the
+   *  results page do. */
+  kind?: "Papers" | "Projects" | "Posts" | "CV" | "Topics" | "Pages";
   /** A Markdown version of the page, such as a paper's index.md, offered to tools that read it. */
   markdown?: string;
 }
-const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [], math = false, markdown } = Astro.props;
+const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [], math = false, markdown, kind } = Astro.props;
+// Drafts and noindex pages stay out of the search index, as they stay out of Google.
+const indexed = kind !== undefined && !noindex;
 // Search results cut titles past about 70 characters, so a long one drops the name.
 const named = title && !unnamed ? `${title} - ${person.name}` : "";
 const headTitle = !title ? `${person.name}, ${person.role}` : named && named.length <= 70 ? named : title;
 
 // The Blog tab, and the RSS links, appear once there is a post to read.
 const hasPosts = (await entries("blog")).length > 0;
+const searchTopics = await topicLinks();
 // Each list gets an RSS feed once it has an entry; the blog's appears with its first published
 // post.
 const feeds = [
@@ -80,23 +81,12 @@ const tabs = [
 // records point at. A page adds its own records through `schema`.
 const isHome = Astro.url.pathname === "/";
 const records = [...(profile ? [personNode()] : []), websiteNode(), ...(isHome ? [profilePageNode()] : []), ...schema];
-// Scholar reads each citation_author with the citation_author_institution tags right after it,
-// which Seo does not write, so the author tags are written here and Seo gets the rest of the
-// citation. The paper's own record (schema) carries the authors for structured data.
-const scholarAuthors = (citation?.authors ?? []).map((a) => (typeof a === "string" ? { name: a, institutions: [] } : { name: a.name, institutions: a.institutions ?? [] }));
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
-// Seo writes no citation_keywords or citation_arxiv_id, and a Scholar record carries both; the
-// rest of the citation goes to Seo without `keywords`.
-const { keywords: citationKeywords = [], ...seoCitation } = citation ?? ({} as NonNullable<typeof citation>);
-// Link-preview scrapers that read only twitter: tags get the same title, text, and picture as og:.
-const previewTitle = headTitle;
 // A page with a share card (scripts/og.mjs, src/data/og.json) uses it: every card is 1200x630.
 const card = (ogCards as Record<string, { src: string; type: string; alt: string }>)[Astro.url.pathname];
 const shareImage = card ? { src: card.src, width: 1200, height: 630 } : (image ?? { src: "/og.png", width: 1200, height: 630 });
 const shareType = card?.type ?? (typeof shareImage === "object" && shareImage.src.endsWith(".jpg") ? "image/jpeg" : "image/png");
 const shareAlt = imageAlt ?? card?.alt ?? `${person.name}, ${person.lede}`;
-const previewImage = shareImage;
-const previewSrc = new URL(typeof previewImage === "string" ? previewImage : previewImage.src, pageUrl).href;
 const year = new Date().getFullYear();
 ---
 <!doctype html>
@@ -113,64 +103,34 @@ const year = new Date().getFullYear();
       noindex={noindex}
       published={published}
       modified={modified}
-      citation={citation && { ...seoCitation, authors: [] }}
+      citation={citation}
       image={shareImage}
       imageAlt={shareAlt}
+      imageType={shareType}
+      icons={{ svg: "/favicon.svg", png: "/favicon-192.png", apple: "/apple-touch-icon.png" }}
       schema={records}
       breadcrumbs={crumbs}
       sitemap="/sitemap-index.xml"
     />
-    {scholarAuthors.map((a) => (
-      <>
-        <meta name="citation_author" content={a.name} />
-        {a.institutions.map((i) => <meta name="citation_author_institution" content={i} />)}
-      </>
-    ))}
-    {citation && <meta name="citation_abstract_html_url" content={pageUrl} />}
-    {citation && <meta name="citation_fulltext_html_url" content={pageUrl} />}
-    {citation?.arxiv && <meta name="citation_arxiv_id" content={citation.arxiv} />}
-    {citationKeywords.length > 0 && <meta name="citation_keywords" content={citationKeywords.join("; ")} />}
-    <meta name="twitter:title" content={previewTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={previewSrc} />
-    <meta name="twitter:image:alt" content={shareAlt} />
-    <meta property="og:image:type" content={shareType} />
-    {citation && <meta name="citation_language" content="en" />}
-    {/* Search may show this page's pictures at full width, as in Discover. */}
-    {!noindex && <meta name="robots" content="max-image-preview:large" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <!-- Rasters of favicon.svg, for search results and home screens that take no SVG, and
-         favicon.ico at the address crawlers ask for first. -->
-    <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    {math && <style set:html={katexCss} />}
+    {math && <KatexAssets />}
     {markdown && <link rel="alternate" type="text/markdown" href={new URL(markdown, pageUrl).href} />}
     {feeds.map((f) => <link rel="alternate" type="application/rss+xml" title={`${person.name}: ${f.title}`} href={f.href} />)}
     <link rel="preload" href={ultra} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={franklin} as="font" type="font/woff2" crossorigin />
-    {math && katexFonts.map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)" />
     <script is:inline>try{var t=localStorage.getItem("ply-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+    <slot name="head" />
     <Analytics />
   </head>
   <body>
     <a class="ply-skip" href="#main">Skip to content</a>
-    <SiteBar tabs={tabs} />
-    <main id="main">
+    <SiteBar tabs={tabs} topics={searchTopics} />
+    <main id="main" data-pagefind-body={indexed ? "" : undefined} data-pagefind-meta={indexed ? `kind:${kind}` : undefined}>
       <slot />
     </main>
-    <button class="back-top" type="button" aria-label="Back to top" tabindex="-1" inert>
-      <svg class="ply-icon" width="1.25em" height="1.25em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M12 20V5M6 11l6-6 6 6" /></svg>
-    </button>
-    <footer class="site-foot">
-      <div class="ply-container site-foot__inner">
-        <div class="site-foot__who">
-          <p><span class="ply-display site-foot__name">{person.name}<span class="ply-wordmark__stop" aria-hidden="true">.</span></span></p>
-          <p class="ply-small ply-muted">{person.role}, {person.affiliation}, {person.city}.</p>
-        </div>
-        <nav class="site-foot__nav" aria-label="Elsewhere and feeds">
-        <ul class="site-foot__links ply-small" role="list">
+    <BackToTop />
+    <SiteFooter name={person.name} lede={`${person.role}, ${person.affiliation}, ${person.city}.`} top="Back to top" linksLabel="Elsewhere and feeds">
+      <Fragment slot="links">
+        <ul class="ply-site-footer__links ply-small" role="list">
           <li id="contact">
             <EmailLink placement="footer" plain icon={false}>Email</EmailLink>
             <noscript><span class="ply-muted">Email links need JavaScript; <a href={person.profiles.linkedin}>LinkedIn</a> works without it.</span></noscript>
@@ -180,211 +140,26 @@ const year = new Date().getFullYear();
           <li><a class="ply-target" href={person.profiles.linkedin} data-track="profile-link" data-track-placement="footer" data-track-label="linkedin">LinkedIn</a></li>
           <li><a class="ply-target" href={person.profiles.orcid} data-track="profile-link" data-track-placement="footer" data-track-label="orcid">ORCID</a></li>
         </ul>
-        <ul class="site-foot__links ply-small" role="list">
+        <ul class="ply-site-footer__links ply-small" role="list">
           {feeds.map((f) => <li><a class="ply-target" href={f.href}>{f.name} RSS</a></li>)}
           <li><a class="ply-target" href="/privacy/">Privacy</a></li>
         </ul>
-        </nav>
-      </div>
-      <div class="ply-container">
-        <p class="site-foot__colophon ply-small ply-muted">&copy; {year} {person.name}. Built with <a href="/projects/polytope/">Polytope</a>. <a href={siteMeta.repo}>Source</a>. <a class="site-foot__top" href="#top">Back to top</a></p>
-      </div>
-    </footer>
+      </Fragment>
+      <Fragment slot="colophon">&copy; {`${year} ${person.name}`}. Built with <a href="/projects/polytope/">Polytope</a>. <a href={siteMeta.repo}>Source</a>.</Fragment>
+    </SiteFooter>
 <script>
   import "@dario-loi/polytope/js/copy.js";
   import "@dario-loi/polytope/js/scroll.js";
   import "../scripts/track.ts";
-  // Back to top, on phones: a floating button shows only on scrolling up from two screens down, so
-  // it never sits under a reader's thumb during a downward read. A footer link does the same without
-  // script. Passive listener, one scrollY read per frame.
-  const btn = document.querySelector<HTMLButtonElement>(".back-top");
-  const main = document.getElementById("main");
-  // Phones in portrait, and phones turned sideways (touch, under 32rem tall); the same query as the CSS.
-  const phone = matchMedia("(max-width: 47.99rem), (pointer: coarse) and (max-height: 32rem)");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-  // Where the page's last content ends: the bottom of the deepest last element in main, so the
-  // padding after it does not count.
-  const end = () => {
-    let el: Element | null = main;
-    while (el && el.lastElementChild) el = el.lastElementChild;
-    return el ? el.getBoundingClientRect().bottom : 0;
-  };
-  const toTop = (e?: Event) => {
-    e?.preventDefault();
-    scrollTo({ top: 0, behavior: reduce.matches ? "auto" : "smooth" });
-    if (main) { main.tabIndex = -1; main.focus({ preventScroll: true }); }
-    show(false);
-  };
-  let shown = false, timer = 0;
-  const show = (on: boolean) => {
-    if (!btn || on === shown) return;
-    shown = on;
-    btn.classList.toggle("back-top--on", on);
-    btn.inert = !on;
-    btn.tabIndex = on ? 0 : -1;
-  };
-  for (const a of document.querySelectorAll<HTMLAnchorElement>(".site-foot__top")) a.addEventListener("click", toTop);
-  if (btn) {
-    btn.addEventListener("click", toTop);
-    let last = scrollY, queued = false;
-    const tick = () => {
-      queued = false;
-      const y = scrollY, dy = y - last;
-      // Off on large screens, in the first two screens, and once the end of the page's content is on
-      // screen: the button would sit on the last line and on the footer links, and the footer has its
-      // own Back to top link.
-      if (!phone.matches || y < innerHeight || (end() < innerHeight + 24)) show(false);
-      else if (dy < -8) show(true);
-      else if (dy > 2) show(false);
-      if (Math.abs(dy) > 2) last = y;
-      clearTimeout(timer);
-      if (shown) timer = window.setTimeout(() => show(false), 2500);
-    };
-    addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(tick); } }, { passive: true });
-  }
   // Links prefetch on hover, and a PDF on this site would be fetched whole; paper PDFs run to
-  // several megabytes.
+  // several megabytes. Polytope's paper and card links already opt out; this covers the rest.
   for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href$=".pdf"]')) a.dataset.astroPrefetch = "false";
-  // The browser's bar takes the page's ground: the system theme's by default (the theme-color
-  // metas), and the theme switch's once a theme is chosen.
-  const ground = { light: "#FFFFFF", dark: "#161615" };
-  const paintBar = () => {
-    const theme = document.documentElement.dataset.theme;
-    if (theme !== "light" && theme !== "dark") return;
-    for (const m of document.querySelectorAll('meta[name="theme-color"]')) m.setAttribute("content", ground[theme]);
-  };
-  paintBar();
-  new MutationObserver(paintBar).observe(document.documentElement, { attributeFilter: ["data-theme"] });
 </script>
   </body>
 </html>
 <style is:global>
-  /* Glyphs outside the self-hosted Latin subset (accented author names, the multiplication sign,
-     math operators) used to send the browser searching every installed font for a stand-in, which
-     put hundreds of milliseconds into the first layout on a slow CPU. Naming the stand-in (the
-     metric-compatible Arial family the stack already ends on) turns that search into one lookup.
-     No size-adjust, so the glyphs keep the size they had. */
-  @font-face { font-family: "Libre Franklin Variable"; font-style: normal; font-weight: 100 549; src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans"), local("DejaVu Sans"); unicode-range: U+0100-024F, U+2200-22FF, U+2061; }
-  @font-face { font-family: "Libre Franklin Variable"; font-style: normal; font-weight: 550 900; src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold"), local("DejaVu Sans Bold"); unicode-range: U+0100-024F, U+2200-22FF, U+2061; }
-  /* Sizes that a Polytope utility may override sit in Polytope's components layer, under its
-     utilities layer: a footer link is 24px tall, and .ply-target raises it to 44px under a
-     finger. The layer order is restated so this sheet never sets it first. */
-  @layer ply.reset, ply.base, ply.layout, ply.components, ply.utilities;
-  @layer ply.components {
-    .site-foot__links a { display: inline-flex; align-items: center; min-height: 1.5rem; }
-  }
-  /* A cover with a dark twin (Cover.astro) shows the one for the theme in use, the switch's
-     or else the system's, and prints the light one. Nothing else may set their display. */
-  @media screen { :root[data-theme="light"] .theme-dark-only, :root[data-theme="dark"] .theme-light-only { display: none; } }
-  @media screen and (prefers-color-scheme: light) { :root:not([data-theme]) .theme-dark-only { display: none; } }
-  @media screen and (prefers-color-scheme: dark) { :root:not([data-theme]) .theme-light-only { display: none; } }
-  @media print { .theme-dark-only { display: none; } }
-  /* A row of tags. Inside .ply-prose, list items would otherwise take the prose list spacing. */
-  /* Running text and captions never end on a lone word. */
-  :is(.ply-prose p, .ply-prose li, .ply-figure figcaption, .ply-exhibit > figcaption, .ply-mast__lede, .ply-card p) { text-wrap: pretty; }
-  /* Every wall (years on the publication lists, topics, the home page's About) sets its label in one
-     column the width of the article rail, so the content of all of them starts on one edge. */
-  @media (min-width: 64rem) { .ply-wall__year { grid-template-columns: var(--ply-layout-toc) minmax(0, 1fr); } }
-  .tag-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
-  .ply-prose .tag-list { padding-inline-start: 0; }
-  .tag-list > li, .ply-prose .tag-list > li + li { margin: 0; }
-  /* Emphasis in running text is type alone: *em* the true italic, **strong** bold, ***both*** bold
-     italic. Italic sits a step heavier than the body, so it reads as a change of voice. */
-  .ply-prose em { font-style: italic; font-weight: var(--ply-weight-medium); }
-  .ply-prose :is(strong em, em strong) { font-weight: var(--ply-weight-bold); }
-  /* A small chart drawn for the margin (src/components/charts) shows at its own size, so its text
-     matches the sidenotes, and shrinks only in a narrower column. Back in the text on a narrow
-     screen it keeps that size instead of scrolling sideways. */
-  .site-chart { max-width: 21rem; }
-  .site-chart .ply-chart__plot > svg { display: block; max-width: 100%; height: auto; min-width: 0; font-size: var(--ply-size-sm); }
-  .site-chart > .ply-details > summary { font-size: var(--ply-size-sm); }
-  .site-chart .ply-details { overflow-x: auto; }
-  /* The one retro move: the rule's end climbs in three 3px pixel steps, as a bar on an Atari
-     screen does. It is on the home page's section rules (SectionHead.astro), inside the content
-     width, and nowhere else; the full-width rule under a mast stays plain. The rule keeps its 3px in layout: the stair
-     rises into the space above it. */
-  :root { --site-stair: linear-gradient(var(--ply-color-rule-strong), var(--ply-color-rule-strong)) right 0 bottom 0 / 3px 0.75rem no-repeat, linear-gradient(var(--ply-color-rule-strong), var(--ply-color-rule-strong)) right 3px bottom 0 / 3px 0.5625rem no-repeat, linear-gradient(var(--ply-color-rule-strong), var(--ply-color-rule-strong)) right 6px bottom 0 / 3px 0.375rem no-repeat; }
-  /* Back to top, phones only: 44px square, the page's own ground and the ink border of a secondary
-     button, bottom right inside the safe area. Hidden, it takes no touch and no tab stop. */
-  .back-top { display: none; }
-  .site-foot__top { margin-inline-start: var(--ply-space-2); white-space: nowrap; }
-  @media (max-width: 47.99rem), (pointer: coarse) and (max-height: 32rem) {
-    .back-top { display: grid; place-items: center; position: fixed; z-index: 30; width: 2.75rem; height: 2.75rem; padding: 0; inset-inline-end: max(var(--ply-space-4), env(safe-area-inset-right)); bottom: max(var(--ply-space-4), env(safe-area-inset-bottom)); background: var(--ply-color-bg); color: var(--ply-color-text); border: var(--ply-border-rule) solid var(--ply-color-rule-strong); border-radius: 0; opacity: 0; pointer-events: none; transition: opacity 150ms ease-out; cursor: pointer; }
-    .back-top--on { opacity: 1; pointer-events: auto; }
-  }
-  /* Enlarged text in a narrow window: titles may break inside a word, and the Atlas's list and its
-     filter stay inside the column (the filter scrolls) instead of pushing the page wider. */
-  @media (max-width: 30rem) {
-    .ply-card__title, .ply-card__title .ply-nowrap, .ply-title, .latest__what a, .latest__what { white-space: normal; overflow-wrap: anywhere; min-width: 0; }
-    /* Inline math too wide for the column scrolls inside itself. */
-    p .ply-math:not(.ply-math--display) { display: inline-block; max-width: 100%; overflow-x: auto; overflow-y: hidden; vertical-align: bottom; }
-    .ply-atlas__frame > *, .ply-atlas__stops, .ply-atlas__stop, .ply-atlas__list, .ply-atlas__filter { min-width: 0; max-width: 100%; }
-    .ply-atlas__stop :is(.ply-atlas__title, .ply-atlas__org, .ply-atlas__meta, .ply-atlas__when) { overflow-wrap: anywhere; }
-  }
-  @media (min-width: 48rem) and (pointer: fine) { .site-foot__top { display: none; } }
-  /* Touch targets, 44px: the small link rows of cards and the footer, and each title link, get the
-     hit area of a button without moving the layout (padding with the opposite margin). Inline
-     links inside running text stay as they are. */
-  @media (pointer: coarse) {
-    .ply-pub__links a, .site-foot__links li > :is(a, button), .ply-atlas__filter button { min-width: 2.75rem; justify-content: center; }
-    .ply-card__title a, .ply-pub__title a, .topic-wall__name a, .topic-wall__papers a, .latest__what a { display: inline-block; padding-block: 0.7rem; margin-block: -0.7rem; }
-    .ply-skip { min-height: 2.75rem; display: flex; align-items: center; }
-    .site-foot__colophon a { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; min-width: 2.75rem; }
-  }
-  @media (prefers-reduced-motion: reduce) { .back-top { transition: none; } }
-  @media print { .back-top { display: none; } }
-  .site-foot { border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); margin-top: var(--ply-space-7); }
-  .site-foot__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: var(--ply-space-5) var(--ply-space-7); padding-block: var(--ply-space-6) var(--ply-space-4); }
-  .site-foot__who { display: grid; gap: var(--ply-space-2); }
-  .site-foot__name { font-size: var(--ply-size-xl); line-height: 1; }
-  /* The links are two groups, by meaning: contact and profiles, then feeds and the policy. They
-     share one row when it fits and otherwise stack, right-aligned on one edge, so no row holds a
-     lone link. */
-  .site-foot__nav { display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
-  @media (min-width: 64rem) {
-    .site-foot__nav { flex: 1 1 28rem; justify-content: flex-end; }
-    .site-foot__links { flex-wrap: nowrap; }
-    /* The left block is as wide as its lede, which stays on one line; the links take the rest. */
-    .site-foot__who { flex: none; }
-    .site-foot__who p { white-space: nowrap; }
-  }
-  .site-foot__links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2) var(--ply-space-5); }
-  /* Every link in the footer's row is 24px tall at rest and 44px under a finger, Email included. */
-  @media (pointer: coarse) { .site-foot__links a { min-height: 2.75rem; } }
-  .site-foot__colophon { padding-block: var(--ply-space-4) var(--ply-space-5); border-top: var(--ply-border-hair) solid var(--ply-color-rule); }
-  /* Density: space that separates nothing comes down a step or two; the rules, panels and display
-     type do the grouping. Masts pad 2rem above and 1.5rem below (2rem, 3rem on the home mast), and a
-     grid of cards sets its rows 2rem apart, as it sets its columns. */
-  .ply-mast { padding-block-end: var(--ply-space-7); }
-  .ply-mast--compact { padding-block: var(--ply-space-6) var(--ply-space-5); }
-  .ply-cards { row-gap: var(--ply-space-6); }
-  /* The atlas list's scroll runway under its last stop: 10svh is enough to bring that stop to the current line. */
-  .ply-atlas__list { padding-block-end: 10svh; }
-  /* A grid of cards (class card-rows) lines its parts up across a row: each card takes six rows of
-     the grid by subgrid (panel, title, venue, summary, authors, links), so the titles, summaries,
-     authors and link rows of one row of cards start on shared lines, and the row is as tall as its
-     tallest part. The card's body dissolves into the grid (display: contents). The gap between rows
-     is each card's bottom margin, since a grid gap would also open between the six rows. The lead,
-     or a card alone, is its own row and keeps Polytope's layout. */
-  @media (min-width: 48rem) {
-    .card-rows { row-gap: 0; margin-bottom: calc(-1 * var(--ply-space-6)); }
-    .card-rows > :is(.ply-card--lead, .ply-card:only-child, .ply-card--lead + .ply-card:last-child) { margin-bottom: var(--ply-space-6); }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) { grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; margin-bottom: var(--ply-space-6); }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) > .ply-card__body { display: contents; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) :is(.ply-card__title, .ply-card__meta, .ply-card__summary, .ply-card__tags, .pub-card__authors, .ply-pub__links) { margin-block: var(--ply-space-2) 0; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) > .ply-card__panel { grid-row: 1; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) .ply-card__title { grid-row: 2; margin-top: var(--ply-space-4); }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) .ply-card__meta { grid-row: 3; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) .ply-card__summary { grid-row: 4; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) :is(.ply-card__tags, .pub-card__authors) { grid-row: 5; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) .ply-pub__links { grid-row: 6; }
-    .card-rows > .ply-card:not(.ply-card--lead, :only-child, .ply-card--lead + :last-child) .ply-card__tags { margin-top: var(--ply-space-3); }
-  }
-  /* Without subgrid, the last block of a card sits at the card's bottom. */
-  @supports not (grid-template-rows: subgrid) {
-    .card-rows .ply-card__body { display: flex; flex-direction: column; }
-    .card-rows .ply-card__body > :last-child { margin-top: auto; }
-  }
-  /* A printed page ends with its own content. */
-  @media print { .site-foot { display: none; } }
+  /* Site-only rules. Everything else here lives in Polytope: the footer and back-to-top
+     button, light and dark twins, walls, tags, aligned card rows, touch targets, density. */
+  /* The footer is not printed. */
+  @media print { .ply-site-footer { display: none; } }
 </style>

@@ -3,7 +3,7 @@ import type { RSSFeedItem } from "@astrojs/rss";
 import { statSync } from "node:fs";
 import { join } from "node:path";
 import { entries, pubVenue } from "./content";
-import { emphasis, plain } from "./tex";
+import { emphasis, plain } from "@dario-loi/polytope/astro/tex.ts";
 
 const html = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const local = (pdf?: string) => (pdf?.startsWith("/") ? join("public", pdf) : undefined);
