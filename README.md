@@ -156,6 +156,7 @@ Custom events, each with `page`, `source` (the referrer: `direct`, a host name, 
 | `profile-link` | Google Scholar, GitHub, LinkedIn, ORCID links (`label` names which) |
 | `paper-link` | OpenReview, PDF, arXiv, Code on a paper page (`label`) |
 | `bibtex-copy` | The Copy button on a paper's BibTeX (`label` is the paper) |
+| `citation-download` | The Download .bib and Download .ris buttons under a paper's BibTeX (`label` is `bib` or `ris`) |
 | `project-link` | Links on a project page (`label`) |
 | `open-post`, `open-publication`, `open-project` | Following a card to its page (`label` is the entry) |
 | `open-topic` | A topic tag or a topic in the topics index (`label` is the topic) |
