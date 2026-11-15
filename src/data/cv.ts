@@ -13,8 +13,10 @@ export interface CvEntry {
   to?: string;
   /** One or two plain sentences about what you did. */
   text?: string;
-  /** The program or event page, linked under the entry. */
+  /** The program, event, or conference site, linked under the entry. */
   href?: string;
+  /** Ids of my papers presented there, linked under the entry to their pages on this site. */
+  papers?: string[];
   draft?: boolean;
 }
 
@@ -38,6 +40,8 @@ const ROCCELLA = { place: "Roccella Ionica, Italy", lat: 38.32, lon: 16.4 };
 const all: CvEntry[] = [
   {
     title: "METACOG-26",
+    href: "https://metacognition.syracuse.edu/metacog-26-symposium-on-artificial-metacognition/",
+    papers: ["metacognitive-tta", "metacognitive-ad"],
     org: "AAAI Fall Symposium on Artificial Metacognition",
     kind: "Conference",
     ...ARLINGTON,
@@ -55,6 +59,8 @@ const all: CvEntry[] = [
   },
   {
     title: "TDL Challenge 2026",
+    href: "https://www.khoury.northeastern.edu/event/the-boston-tag-party-faculty-conference/2026-08-19/",
+    papers: ["tdl-challenge-2026"],
     org: "Topological Deep Learning Challenge at TAG-DS 2026",
     kind: "Conference",
     ...BOSTON,
@@ -63,6 +69,7 @@ const all: CvEntry[] = [
   },
   {
     title: "FUSION 2026",
+    href: "https://www.ntnu.edu/fusion2026/",
     org: "International Conference on Information Fusion",
     kind: "Conference",
     ...TRONDHEIM,
@@ -71,6 +78,8 @@ const all: CvEntry[] = [
   },
   {
     title: "ICLR 2026",
+    href: "https://iclr.cc/Conferences/2026",
+    papers: ["implicit-inversion-clip"],
     org: "International Conference on Learning Representations",
     kind: "Conference",
     ...RIO,
@@ -88,6 +97,7 @@ const all: CvEntry[] = [
   },
   {
     title: "ROCKIN' AI 2.0",
+    href: "https://sites.google.com/view/rockinai2025",
     org: "Roccella Conference on Inference and AI",
     kind: "Conference",
     ...ROCCELLA,

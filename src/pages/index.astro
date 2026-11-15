@@ -36,11 +36,11 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const latest = [...cvEntries].sort((a, b) => b.from.localeCompare(a.from)).slice(0, 3).map((e) => {
   const [y, m] = e.from.split("-");
   const phrase = e.text?.includes(": ") ? e.text.slice(e.text.indexOf(": ") + 2).replace(/\.$/, "").toLowerCase() : undefined;
-  const paper = phrase ? pubs.find((p) => p.data.title.toLowerCase().includes(phrase)) : undefined;
+  const paper = e.papers?.length ? pubs.find((p) => p.id === e.papers![0]) : phrase ? pubs.find((p) => p.data.title.toLowerCase().includes(phrase)) : undefined;
   return { when: `${MONTHS[Number(m) - 1]} ${y}`, title: e.title, rest: e.text ?? e.org, kind: e.kind, href: paper ? `/publications/${paper.id}/` : `/cv/#${cvAnchor(e)}`, paper: Boolean(paper) };
 });
 // Polytope's DatedList, with each known co-author's name linked and the click counted.
-const latestItems = (placement: string) => latest.map((e) => ({ ...e, rest: linkPeople(e.rest), attrs: { "data-track": "open-latest", "data-track-placement": placement, "data-track-label": e.title } }));
+const latestItems = (placement: string) => latest.map((e) => ({ ...e, rest: linkPeople(e.rest, placement), attrs: { "data-track": "open-latest", "data-track-placement": placement, "data-track-label": e.title } }));
 ---
 <Base kind="Pages" description={`${person.name}, ${person.lede}`} current="About" profile>
   <Mast title={person.name} lede={person.lede} dense side class="home-mast">

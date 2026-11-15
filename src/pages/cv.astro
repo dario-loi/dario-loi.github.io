@@ -1,5 +1,5 @@
 ---
-import { linkPeople } from "../data/people";
+import { hostOf, linkPeople } from "../data/people";
 import Base from "../layouts/Base.astro";
 import Atlas from "@dario-loi/polytope/astro/Atlas.astro";
 import AtlasStop from "@dario-loi/polytope/astro/AtlasStop.astro";
@@ -12,7 +12,15 @@ import EmailLink from "../components/EmailLink.astro";
 import { awards, cvAnchor, cvEntries, service, skills } from "../data/cv";
 import { cv, person } from "../site";
 
-const pubs = (await entries("publications")).map(pubRow);
+const pubEntries = await entries("publications");
+const pubs = pubEntries.map(pubRow);
+// A paper linked under a CV entry: its page here, named by its title up to the subtitle.
+const paperLink = (id: string) => {
+  const p = pubEntries.find((x) => x.id === id);
+  return p && { href: `/publications/${p.id}/`, label: p.data.title.split(": ")[0], id: p.id };
+};
+const siteLabel = (e: (typeof cvEntries)[number]) =>
+  e.kind === "Conference" ? "Conference site" : e.kind === "Education" && /^(Ph\.D\.|M\.S\.|B\.S\.)/.test(e.title) ? "Program page" : "Event page";
 ---
 <Base kind="CV" title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}, with education, research, and a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
   <div class="ply-container cv-atlas">
@@ -27,8 +35,13 @@ const pubs = (await entries("publications")).map(pubRow);
       </Fragment>
       {cvEntries.map((e) => (
         <AtlasStop id={cvAnchor(e)} level={2} title={e.title} org={e.org} kind={e.draft ? `${e.kind} (draft)` : e.kind} place={e.place} lat={e.lat} lon={e.lon} from={e.from} to={e.to}>
-          {e.text && <p set:html={linkPeople(e.text)} />}
-          {e.href && <p><a href={e.href} data-track="open-program" data-track-placement="cv" data-track-label={e.title}>{e.kind === "Education" && /^(Ph\.D\.|M\.S\.|B\.S\.)/.test(e.title) ? "Program page" : "Event page"}</a></p>}
+          {e.text && <p set:html={linkPeople(e.text, "cv-person")} />}
+          {(e.papers?.length || e.href) && (
+            <ul class="ply-pub__links cv-links" role="list">
+              {(e.papers ?? []).map(paperLink).filter((l) => l !== undefined).map((l) => <li><a href={l.href} data-track="open-publication" data-track-placement="cv" data-track-label={l.id}>{l.label}</a></li>)}
+              {e.href && <li><a href={e.href} data-track="outbound" data-track-placement={e.kind === "Conference" ? "cv-conference" : "cv-program"} data-track-label={hostOf(e.href)}>{siteLabel(e)}</a></li>}
+            </ul>
+          )}
         </AtlasStop>
       ))}
     </Atlas>
@@ -64,6 +77,9 @@ const pubs = (await entries("publications")).map(pubRow);
 <style>
   /* On paper the download and email buttons do nothing. */
   @media print { .cv-actions { display: none; } }
+  /* The paper and site links under an entry start on the text's edge. */
+  .cv-links { list-style: none; padding: 0; margin: var(--ply-space-2) 0 0; }
+  .cv-links li { margin: 0; }
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
   /* A section's rule sits as far under the one before as on the home page, so space above a heading
