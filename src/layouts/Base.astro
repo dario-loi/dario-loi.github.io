@@ -49,8 +49,10 @@ interface Props {
   kind?: "Papers" | "Projects" | "Posts" | "CV" | "Topics" | "Pages";
   /** A Markdown version of the page, such as a paper's index.md, offered to tools that read it. */
   markdown?: string;
+  /** Leave the search field out of the top bar, for the results page, which has its own. */
+  barSearch?: boolean;
 }
-const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [], math = false, markdown, kind } = Astro.props;
+const { title, unnamed = false, description = siteMeta.description, current, noindex = false, type, published, modified, citation, image, imageAlt, crumbs, profile = false, schema = [], math = false, markdown, kind, barSearch = true } = Astro.props;
 // Drafts and noindex pages stay out of the search index, as they stay out of Google.
 const indexed = kind !== undefined && !noindex;
 // Search results cut titles past about 70 characters, so a long one drops the name.
@@ -123,7 +125,7 @@ const year = new Date().getFullYear();
   </head>
   <body>
     <a class="ply-skip" href="#main">Skip to content</a>
-    <SiteBar tabs={tabs} topics={searchTopics} />
+    <SiteBar tabs={tabs} topics={searchTopics} search={barSearch} />
     <main id="main" data-pagefind-body={indexed ? "" : undefined} data-pagefind-meta={indexed ? `kind:${kind}` : undefined}>
       <slot />
     </main>

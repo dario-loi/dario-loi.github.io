@@ -45,7 +45,7 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
     <div slot="header" class="project-head">
       <PostHeader title={d.title} lede={d.description} meta={[String(d.date.getUTCFullYear()), ...(d.context ? [d.context] : []), ...(d.stars ? [`${d.stars} GitHub stars`] : [])]}>
         {d.links.length > 0 && (
-          <div class="ply-cluster">
+          <div class="ply-cluster" data-pagefind-ignore>
             {d.links.map((l, i) => (
               <a class:list={["ply-button ply-button--sm", i > 0 && "ply-button--secondary"]} href={l.href} data-track="project-link" data-track-placement="project-header" data-track-label={`${project.id}:${l.label}`}>{l.icon && <Icon name={l.icon} />}{l.label}</a>
             ))}
@@ -54,7 +54,7 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
       </PostHeader>
       <figure class="ply-exhibit project-head__exhibit">
         {d.cover ? (
-          <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
+          <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverAlt ? "" : d.title} fallback={seed} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
         ) : (
           <Complex seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
         )}
@@ -77,11 +77,11 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
 </Base>
 <style>
   /* The exhibit stacks under the header, then hangs in the margin column beside it once
-     the article has one. Without a cover it is the project card's complex, drawn as
-     Polytope's Card draws it, from the same seed. */
-  .project-head { display: grid; gap: 0 var(--ply-space-6); }
+     the article has one. Without a cover, or under one that fails to load, it is the project
+     card's complex, drawn as Polytope's Card draws it, from the same seed. */
+  .project-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 var(--ply-space-6); }
   .project-head__exhibit { margin-bottom: var(--ply-space-6); max-width: 30rem; }
-  .project-head__exhibit img { width: 100%; height: auto; }
+  .project-head__exhibit :global(img) { width: 100%; height: auto; }
   @media (min-width: 60rem) {
     .project-head { grid-template-columns: minmax(0, var(--ply-layout-measure)) minmax(0, 1fr); align-items: center; }
     .project-head__exhibit { margin-block: var(--ply-space-7); }

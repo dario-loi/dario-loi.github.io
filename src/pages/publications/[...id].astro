@@ -105,7 +105,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
       ) : (
         <figure slot="exhibit" class="ply-exhibit">
           {d.cover ? (
-            <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverCaption ? (d.coverAlt ?? "") : ""} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
+            <div class="ply-panel ply-panel--flush" data-surface="panel"><ThemedImage src={d.cover} dark={d.coverDark} alt={d.coverCaption ? (d.coverAlt ?? "") : ""} fallback={seed} widths={widthsFor(d.cover, 480)} sizes={`(min-width: 60rem) 22rem, (min-width: 32rem) 30rem, ${column()}`} loading="eager" fetchpriority="high" /></div>
           ) : (
             <ComplexStatic seed={seed} points={28} radius={0.17} label={`${d.title}: a Vietoris-Rips complex`} />
           )}

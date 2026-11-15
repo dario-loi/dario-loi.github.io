@@ -3,7 +3,8 @@
 // below searches again in place. It reads the same Pagefind index as the field (Pagefind runs
 // after the build) and draws results with Polytope's search classes. The query is read and shown
 // in the browser only: it is not written to the address, and nothing here sends it anywhere.
-// The page is kept out of search results and out of its own index.
+// The page is kept out of search results and out of its own index. Its bar leaves the field out,
+// so the page has one search field.
 import Base from "../layouts/Base.astro";
 import Mast from "@dario-loi/polytope/astro/Mast.astro";
 import Icon from "@dario-loi/polytope/astro/Icon.astro";
@@ -12,7 +13,7 @@ import { person } from "../site";
 
 const topics = await topicLinks();
 ---
-<Base title="Search" description={`Search the papers, projects, and CV of ${person.name}.`} noindex crumbs={[{ name: person.name, href: "/" }, { name: "Search", href: "/search/" }]}>
+<Base title="Search" barSearch={false} description={`Search the papers, projects, and CV of ${person.name}.`} noindex crumbs={[{ name: person.name, href: "/" }, { name: "Search", href: "/search/" }]}>
   <meta slot="head" name="referrer" content="origin" />
   <Mast title="Search" lede="Papers, projects, and the CV on this site." compact wideLede rule dense />
   <div class="ply-container search-page">

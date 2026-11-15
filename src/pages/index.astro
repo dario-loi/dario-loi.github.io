@@ -45,7 +45,7 @@ const latestItems = (placement: string) => latest.map((e) => ({ ...e, rest: link
 <Base kind="Pages" description={`${person.name}, ${person.lede}`} current="About" profile>
   <Mast title={person.name} lede={person.lede} dense side class="home-mast">
     <div slot="after" class="home-after">
-      <div class="ply-cluster home-actions">
+      <div class="ply-cluster home-actions" data-pagefind-ignore>
         <Button href="/publications/">Publications</Button>
         <CvLink placement="home-mast" mode="view" />
         <EmailLink placement="home-mast" />
@@ -57,7 +57,7 @@ const latestItems = (placement: string) => latest.map((e) => ({ ...e, rest: link
       <figcaption><b>A <a href="https://en.wikipedia.org/wiki/Vietoris%E2%80%93Rips_complex">Vietoris-Rips complex</a>.</b> Sheaf neural networks, part of my research, learn on structures like this one.</figcaption>
     </figure>
   </Mast>
-  {latest.length > 0 && <div class="ply-container home-latest-phone"><DatedList html items={latestItems("home-mast-phone")} /></div>}
+  {latest.length > 0 && <div class="ply-container home-latest-phone" data-pagefind-ignore><DatedList html items={latestItems("home-mast-phone")} /></div>}
 
   <div class="ply-container">
     <section class="home-section" aria-labelledby="about">
