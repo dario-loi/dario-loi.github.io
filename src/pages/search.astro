@@ -16,6 +16,7 @@ const topics = await topicLinks();
 <Base title="Search" barSearch={false} description={`Search the papers, projects, and CV of ${person.name}.`} noindex crumbs={[{ name: person.name, href: "/" }, { name: "Search", href: "/search/" }]}>
   <meta slot="head" name="referrer" content="origin" />
   <noscript slot="head"><style is:inline>.search-page__app { display: none; }</style></noscript>
+  <script slot="head" is:inline>if (/[?&]q=[^&]/.test(location.search)) document.documentElement.dataset.searchPending = "";</script>
   <Mast title="Search" lede="Papers, projects, and the CV on this site." compact wideLede rule dense />
   <div class="ply-container search-page">
     <noscript>
@@ -171,6 +172,9 @@ const topics = await topicLinks();
      the script starts, and the footer holds still. A page without JavaScript hides them for the
      notice above. The minimum height keeps the footer under the fold while results arrive. */
   .search-page { padding-block: var(--ply-space-5) var(--ply-space-8); min-height: 28rem; }
+  /* A visit that comes with ?q= reserves a screen for the results, so the footer waits below the fold
+     while they load, whether they fill the screen, fill part of it, or none arrive. */
+  :global(html[data-search-pending]) .search-page { min-height: 100svh; }
   .search-page__app { display: grid; gap: var(--ply-space-4); max-width: 52rem; }
   .search-page__form { max-width: none; }
   .search-page__row { display: flex; flex-wrap: wrap; gap: var(--ply-space-3); }
