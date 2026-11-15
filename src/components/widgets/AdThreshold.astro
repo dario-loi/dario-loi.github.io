@@ -40,7 +40,7 @@ const lab = (xb: number) => (xb > 72 ? { x: xb - 1.2, anchor: "end" } : { x: xb 
 const lb = lab(m.xb);
 const pct = (v: number) => v.toFixed(2) + "%";
 ---
-<Model name="ad-threshold" title="Where the threshold lands" draft={draft} firstRun>
+<Model name="ad-threshold" title="Where the threshold sits" draft={draft} firstRun>
   <svg viewBox="0 0 100 56" role="img" aria-label={`The density of anomaly scores of normal pixels, a lognormal curve with a heavy right tail. A tomato line marks mean plus three standard deviations and a dashed chalk line marks the score exceeded by 0.135 percent of normal pixels. At the default tail weight, ${pct(m.flagged)} of normal pixels lie right of the tomato line.`}>
     <path class="m-note" data-fill d={m.fill} />
     <path class="m-chalk" data-curve d={m.curve} stroke-width="0.5" stroke-linejoin="round" />

@@ -33,7 +33,7 @@ const xTicks = [200, 1000, 2000];
   source="Table 5 of the paper, mean of 10 seeds."
   class:list={["site-chart", className]}
 >
-  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Over 2,000 steps, the entropy gate falls from 0.73 to 0.41. The concept residual holds between 0.74 and 0.77, class prototypes near 0.79, and the perfect filter near 0.86. The unadapted model scores 0.39.">
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Over 2,000 steps, the entropy gate falls from 0.73 to 0.41. The concept residual stays between 0.74 and 0.77, class prototypes near 0.79, and the perfect filter near 0.86. The unadapted model stays at 0.39.">
     <g class="grid">{yTicks.map((t) => <line x1={left} x2={right} y1={y(t)} y2={y(t)} />)}</g>
     <g class="axis">{yTicks.map((t) => <text class="ply-axis-text" x={left - 4} y={y(t) + 4} text-anchor="end">{t.toFixed(1)}</text>)}</g>
     <line x1={left} x2={right} y1={y(unadapted)} y2={y(unadapted)} stroke="var(--ply-color-text-muted)" stroke-width="1" stroke-dasharray="1 3" />

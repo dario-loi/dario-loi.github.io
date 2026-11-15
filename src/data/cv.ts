@@ -42,7 +42,7 @@ const all: CvEntry[] = [
     kind: "Conference",
     ...ARLINGTON,
     from: "2026-11",
-    text: "Presented and won Top 3 of 27 papers: A Metacognitive Framework for Test-Time Adaptation.",
+    text: "Presented A Metacognitive Framework for Test-Time Adaptation, named a Top 3 paper of 27.",
   },
   {
     title: "Ph.D. in Computer Engineering",
@@ -59,7 +59,7 @@ const all: CvEntry[] = [
     kind: "Conference",
     ...BOSTON,
     from: "2026-08",
-    text: "1st of 37 in Track 1 (GNNs), and the Excellent portfolio honorable mention, with Gabriele Onorato.",
+    text: "Placed 1st of 37 in Track 1 (GNNs) and received the Excellent portfolio honorable mention, with Gabriele Onorato.",
   },
   {
     title: "FUSION 2026",
@@ -126,7 +126,7 @@ const all: CvEntry[] = [
     ...ROME,
     from: "2024-05",
     to: "2024-09",
-    text: "Taught both courses in the B.S. in Computer Science: logic gates and circuits, multiplexers and registers, counters, RISC-V programming, pipeline and cache behavior, and the design of custom instructions. Ran exams, homework, practice sessions, and one-on-one sessions with students.",
+    text: "Taught both courses in the B.S. in Computer Science, covering logic gates and circuits, multiplexers and registers, counters, RISC-V programming, pipeline and cache behavior, and the design of custom instructions. Ran exams, homework, practice sessions, and one-on-one sessions with students.",
   },
   {
     title: "Computer vision software engineer",

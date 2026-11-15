@@ -23,12 +23,12 @@ const fmt = (v: number) => v.toFixed(2);
 const axisY = top + rows.length * rowH + 2;
 ---
 <Chart
-  title="What each monitor can tell"
+  title="What each monitor measures"
   subtitle="AUROC from 0.5 (chance) to 1. Ring: correctness. Ball: competence."
   source="Table 3 of the paper, mean of 15 seeds."
   class:list={["site-chart", className]}
 >
-  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Entropy scores 0.85 on correctness and 0.61 on competence. Class prototypes score 0.86 and 0.94. The concept residual scores 0.82 and 0.91.">
+  <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-label="Entropy reaches 0.85 on correctness and 0.61 on competence. Class prototypes reach 0.86 and 0.94. The concept residual reaches 0.82 and 0.91.">
     {rows.map((r, i) => {
       const y0 = top + i * rowH;
       const cy = y0 + 28;

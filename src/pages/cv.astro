@@ -14,7 +14,7 @@ import { cv, person } from "../site";
 
 const pubs = (await entries("publications")).map(pubRow);
 ---
-<Base title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}: education and research, with a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
+<Base title="CV" description={`Curriculum vitae of ${person.name}, ${person.role} at ${person.affiliation}, with education, research, and a map of where each happened.`} current="CV" profile crumbs={[{ name: person.name, href: "/" }, { name: "CV", href: "/cv/" }]}>
   <div class="ply-container cv-atlas">
     <Atlas label="Where the work has taken me" quiet>
       <Fragment slot="head">

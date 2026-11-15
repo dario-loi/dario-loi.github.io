@@ -8,7 +8,7 @@ import { person } from "../../../site";
 
 const pubs = await entries("publications");
 const rows = topics.map((topic) => ({ topic, pubs: pubs.filter((p) => p.data.topics.includes(topic.name)) })).filter((r) => r.pubs.length > 0);
-const description = `Publications by ${person.name} grouped by research topic: ${rows.slice(0, 6).map((r) => r.topic.name.toLowerCase().replace("llm", "LLM")).join(", ")}, and more.`;
+const description = `Publications by ${person.name} grouped by research topic, including ${rows.slice(0, 6).map((r) => r.topic.name.toLowerCase().replace("llm", "LLM")).join(", ")}.`;
 ---
 <Base
   title="Research topics"

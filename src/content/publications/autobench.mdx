@@ -17,7 +17,7 @@ affiliations:
 venue: "Preprint"
 kind: preprint
 date: 2025-10-26
-tldr: "Language models take turns writing tasks, answering them, and judging each other's answers; weighting each judge by how reliable it proves yields rankings that agree with established benchmarks."
+tldr: "Language models take turns writing tasks, answering them, and judging each other's answers. Weighting each judge by how reliable it proves yields rankings that agree with established benchmarks."
 abstract: "We present AutoBench, a fully automated and self-sustaining framework for evaluating Large Language Models (LLMs) through reciprocal peer assessment. This paper provides a rigorous scientific validation of the AutoBench methodology, originally developed as an open-source project by eZecute S.R.L. Unlike static benchmarks that suffer from test-set contamination and limited adaptability, AutoBench dynamically generates novel evaluation tasks while models alternately serve as question generators, contestants, and judges across diverse domains. An iterative weighting mechanism amplifies the influence of consistently reliable evaluators, aggregating peer judgments into consensus-based rankings that reflect collective model agreement. Our experiments demonstrate strong correlations with established benchmarks including MMLU-Pro and GPQA (respectively 78% and 63%), validating this peer-driven evaluation paradigm. The multi-judge design significantly outperforms single-judge baselines, confirming that distributed evaluation produces more robust and human-consistent assessments. AutoBench offers a scalable, contamination-resistant alternative to static benchmarks for the continuous evaluation of evolving language models."
 keywords: ["LLM evaluation", "Large language models", "LLM-as-a-judge", "Peer assessment", "Automated LLM benchmark", "Benchmark contamination", "Benchmark saturation", "LLM leaderboard", "Multi-judge evaluation", "MMLU-Pro", "GPQA"]
 topics: ["Benchmarks"]
@@ -28,7 +28,7 @@ links:
 arxiv: "2510.22593"
 pdf: "/publications/autobench/autobench.pdf"
 cover: ./autobench-card.webp
-coverAlt: "Six rows of Figure 3 of the paper: the mean score each of six judge models gives twelve answering models, with a harsh judge in red between lenient judges in teal."
+coverAlt: "Six rows of Figure 3 of the paper: the mean score each of six judge models gives twelve answering models, with a judge that gives low marks in red between judges that give high marks in teal."
 figure: ./autobench-figure1.webp
 figureNum: 1
 figureAlt: "The AutoBench loop in three stages. One: a model generates a task and the other models validate it. Two: every model answers. Three: the models rank one another's answers into a judgment matrix, which, weighted by each judge's reliability, updates the model scores and the judge weights for the next round. An inset shows a contestant and a judge joined by one judgment."
@@ -49,19 +49,19 @@ bibtex: |
 import LabPlot from "../../components/LabPlot.astro";
 import plot from "./autobench-plot.svg?raw";
 
-Every few months a new language model tops a leaderboard, and every few months someone asks whether the number still means anything. Part of the doubt is practical. A benchmark that is public for long enough can leak into training data, and a test that every strong model passes no longer separates the strong from the stronger. Part of it is structural, because each fix we know has moved the dependency somewhere else: toward human annotators who write the tasks, toward a fixed panel of judge models, or toward one judge, e.g., GPT-4, that is trusted by default.
+Every few months a new language model tops a leaderboard. Every few months someone asks whether the number still means anything. Part of the doubt is practical. A benchmark that is public for long enough can leak into training data, and a test that every strong model passes no longer separates the strong from the stronger. Part of it is structural, because each fix we know has moved the dependency somewhere else: toward human annotators who write the tasks, toward a fixed panel of judge models, or toward one judge, e.g., GPT-4, that serves as the default reference.
 
-AutoBench asks what happens if no outside party is needed. The models being ranked write the tasks, answer them, and grade each other, and the grades of models that prove reliable count for more. This is a form of peer review between language models, and the question we cared about is whether a ranking obtained that way tells us anything that established benchmarks do not contradict.
+AutoBench asks what happens if no outside party is needed. The models being ranked write the tasks, answer them, and grade each other. The grades of models that prove reliable count for more. This is a form of peer review between language models. We wanted to know whether a ranking obtained that way agrees with established benchmarks.
 
 ## Why LLM-as-a-judge needs more than one judge
 
-Using a language model to grade another is now routine, and it is cheap, but a single judge brings its own habits into every score. A model that grades answers may also favor its own. The judgment matrix in the paper makes this inspectable, since its diagonal records how each model scores itself, so self-preference is a visible quantity and not an assumption. Spreading the grading over every participant dilutes the bias of any one judge.
+Grading one language model with another is now routine and cheap. A single judge adds its own bias to every score. A model that grades answers may also rate its own higher. The judgment matrix in the paper makes this inspectable, since its diagonal records how each model rates its own answers, so self-preference is a visible quantity. Spreading the grading over every participant dilutes the bias of any one judge.
 
-In practice, this is multi-judge LLM evaluation with a feedback loop, i.e., a model earns authority as a grader through its standing as a contestant. The structure is close to peer review, where authors also act as reviewers of one another. Whether that intuition transfers to language models is what the experiment below tests.
+In practice, this is multi-judge LLM evaluation with a feedback loop, i.e., a model's weight as a grader depends on how reliable it proves. The structure is close to peer review, where authors also act as reviewers of one another. Whether that analogy holds for language models is what the experiment below tests.
 
 ## Evaluating LLMs without human labels
 
-The design removes human labels from the loop entirely. There is no answer key, and there is no annotator. Tasks come from the models themselves, filtered by a quality check that the same weighted panel applies, and answers are graded on a 1 to 5 scale with a strict rule against rewarding factual errors. This matters for anyone who needs to compare models in a domain where no public benchmark exists, since the task categories form a list that can be extended by naming a new category and letting the models write the tasks.
+The design removes human labels from the loop. Tasks come from the models themselves, filtered by a quality check that the same weighted panel applies. Answers are graded on a 1 to 5 scale with a strict rule against rewarding factual errors. This matters for anyone who needs to compare models in a domain where no public benchmark exists, since the task categories form a list that can be extended by naming a new category and letting the models write the tasks.
 
 Because fresh tasks are drawn every iteration, the benchmark is dynamic in the sense that a dataset cannot be memorized ahead of time. As such, we argue that it resists benchmark contamination better than a fixed test set, a claim that follows from how the tasks are made.
 
@@ -80,13 +80,13 @@ A Spearman's rho of 0.78 with MMLU-Pro comes from a procedure with no fixed answ
   <Fragment slot="caption">Rank correlation between the AutoBench ranking and each benchmark, for the multi-judge pipeline and the single-judge ablation.</Fragment>
 </LabPlot>
 
-These are rank correlations over twelve models, and they show that the peer ranking is consistent with other benchmarks, not that it equals a human verdict. Direct human evaluation remains the reference for qualities such as creativity and subtle reasoning, and we describe AutoBench as a complement to it.
+These are rank correlations over twelve models. They show that the peer ranking is consistent with other benchmarks. Whether it matches a human verdict is a separate question. Direct human evaluation remains the reference for qualities such as creativity and subtle reasoning. We describe AutoBench as a complement to it.
 
 ## Who can use a dynamic, self-sustaining LLM benchmark
 
 A team that fine-tunes models for a narrow domain could add that domain as a category and track models on it without commissioning a test set. A group that tracks a field of fast-moving open models could rerun the loop whenever a new checkpoint appears. The public AutoBench project already operates at a larger scale than this study, with a third run over 33 models and about 300,000 individual ranks (Kruger, 2025a), and the paper provides the methodology and validation behind it.
 
-The leaderboards reflect a consensus among models, not a definitive judgment of quality, safety or alignment, so they can inform a decision about which model to deploy but should not be its only basis.
+The leaderboards reflect a consensus among models. They can inform a decision about which model to deploy. Quality, safety, and alignment need other evidence too, so a leaderboard should not be the only basis.
 
 ## Where it goes next
 

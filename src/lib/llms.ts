@@ -143,7 +143,7 @@ export async function llms(full: boolean) {
 
   push("## How to cite", "");
   push(
-    line(`Cite a paper by its final venue, using the BibTeX on its page (also in ${link("llms-full.txt", "/llms-full.txt")} and each paper's Markdown file). Preprints list the arXiv identifier. Papers are co-authored; the author list on each entry is the full one. Cite the paper, not this site.`),
+    line(`Cite a paper by its final venue, using the BibTeX on its page (also in ${link("llms-full.txt", "/llms-full.txt")} and each paper's Markdown file). Preprints list the arXiv identifier. Papers are co-authored. The author list on each entry is the full one. Cite the paper itself.`),
     "",
   );
 

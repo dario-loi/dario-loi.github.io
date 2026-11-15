@@ -15,7 +15,7 @@ const topic = (name: string, description: string): Topic => ({
 
 export const topics: Topic[] = [
   topic("Sheaf neural networks", "Graph networks that attach a vector space to every node and edge and learn the maps between them, to handle heterophily and oversmoothing."),
-  topic("Topological deep learning", "Learning on higher-order domains: simplicial and cell complexes, hypergraphs, and sheaves."),
+  topic("Topological deep learning", "Learning on higher-order domains such as simplicial and cell complexes, hypergraphs, and sheaves."),
   topic("Computer vision", "Recognizing, generating, and inspecting images."),
   topic("Metacognition", "Models that monitor and regulate their own processing, as studied in cognitive psychology."),
   topic("Test-time adaptation", "Adapting a deployed model to the data it meets after training, without labels."),

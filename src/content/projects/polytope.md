@@ -1,6 +1,6 @@
 ---
 title: "Polytope"
-description: "A design system for academic sites, paper pages, and research demos: tokens, CSS components, Astro components, and plotting themes compiled from one token file."
+description: "A design system for academic sites, paper pages, and research demos, with tokens, CSS and Astro components, and plotting themes compiled from one token file."
 date: 2026-10-11
 context: "Open source, Apache 2.0"
 tags: ["Design systems", "Astro", "CSS", "Python"]
