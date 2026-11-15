@@ -140,7 +140,7 @@ advertise them in the head and the footer.
 ## Analytics
 
 [Umami Cloud](https://umami.is), cookieless: no cookies, nothing stored on the visitor's device,
-Do Not Track honored, so no consent banner. The website id lives in `src/site.ts` (it is public;
+so no consent banner. Do Not Track is not honored (`data-do-not-track="false"`): nothing is stored, so there is nothing to switch off. `data-performance="true"` records page-load timings (Core Web Vitals), shown under the Performance tab. The website id lives in `src/site.ts` (it is public;
 every page carries it). The repository variable `UMAMI_WEBSITE_ID` (Settings > Secrets and
 variables > Actions > Variables) overrides it at build time. The script runs only on
 `dario-loi.github.io`, never on localhost or previews.
@@ -160,6 +160,11 @@ Custom events, each with `page`, `source` (the referrer: `direct`, a host name, 
 | `open-post`, `open-publication`, `open-project` | Following a card to its page (`label` is the entry) |
 | `open-topic` | A topic tag or a topic in the topics index (`label` is the topic) |
 | `open-latest` | An item in the home page's Latest column (`label` is the entry) |
+| `widget-interact` | First pointer, key, or input use of an interactive figure, once per figure per page view (`label` is its `data-model` name, e.g. `tta-gate`) |
+| `read-end` | The end of a post, paper, or project body scrolls into view, once per page view, not when the page fits without scrolling (`label` is the entry slug) |
+| `not-found` | The 404 page loads (`path` is the address asked for) |
+| `outbound` | A link to another host that carries no `data-track` (`label` is the host without `www.`) |
+| `theme-toggle` | The theme switch (`label` is the new theme, `light` or `dark`) |
 
 In Umami, open Events, pick an event, and break it down by any of these properties.
 

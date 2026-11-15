@@ -59,6 +59,7 @@ const shareCard = (ogCards as Record<string, { src: string }>)[`/projects/${proj
       </figure>
     </div>
     <Content />
+    <div data-read-end={project.id} aria-hidden="true"></div>
     {d.tags.length > 0 && <ul class="tag-list project-body__tags" role="list" aria-label="Topics">{d.tags.map((t) => <li class="ply-tag">{t}</li>)}</ul>}
   </Article>
   <div class="ply-container ply-article ply-article--head project-foot">

@@ -6,7 +6,7 @@
 //
 // Every event also carries the page it fired on and where the visitor came from: "direct",
 // another site's host name, or "internal:/path" for a page on this site. Nothing is stored in
-// the browser; when Umami is absent (no id, blocked, Do Not Track) the call is a no-op. The
+// the browser; when Umami is absent (no id, blocked) the call is a no-op. The
 // returned promise settles once Umami has sent the event, for a page that leaves right after.
 type Umami = { track: (name: string, data?: Record<string, string>) => Promise<unknown> | void };
 declare global { interface Window { umami?: Umami } }
@@ -32,10 +32,11 @@ function campaign() {
   return out;
 }
 
-export function track(name: string, el?: HTMLElement) {
+export function track(name: string, el?: HTMLElement, extra?: Record<string, string>) {
   const data: Record<string, string> = { page: location.pathname, source: source(), ...campaign() };
   if (el?.dataset.trackPlacement) data.placement = el.dataset.trackPlacement;
   if (el?.dataset.trackLabel) data.label = el.dataset.trackLabel;
+  for (const [k, v] of Object.entries(extra ?? {})) data[k] = v.slice(0, 100);
   try { return window.umami?.track(name, data); } catch {}
 }
 
@@ -57,5 +58,50 @@ document.addEventListener("click", (e) => {
   const mail = target?.closest?.<HTMLAnchorElement>("a[data-email-user]");
   if (mail) arm(mail);
   const el = target?.closest?.<HTMLElement>("[data-track]");
-  if (el?.dataset.track) track(el.dataset.track, el);
+  if (el?.dataset.track) { track(el.dataset.track, el); return; }
+  // An external link nobody tagged: report where it goes (host name only).
+  const a = target?.closest?.<HTMLAnchorElement>("a[href]");
+  if (a && /^https?:$/.test(a.protocol) && a.hostname !== location.hostname) {
+    const place = a.closest<HTMLElement>("[data-track-placement]")?.dataset.trackPlacement;
+    track("outbound", undefined, { label: a.hostname.replace(/^www\./, ""), ...(place ? { placement: place } : {}) });
+  }
 });
+
+// The first real use of each interactive figure (a [data-model] root), once per figure per page view.
+const touched = new WeakSet<Element>();
+function touch(e: Event) {
+  if (e.type === "keydown" && ["Tab", "Shift"].includes((e as KeyboardEvent).key)) return;
+  const fig = (e.target as Element | null)?.closest?.<HTMLElement>("[data-model]");
+  if (!fig || touched.has(fig)) return;
+  touched.add(fig);
+  track("widget-interact", undefined, { label: fig.dataset.model ?? "" });
+}
+for (const type of ["pointerdown", "keydown", "change"]) document.addEventListener(type, touch, true);
+
+// The theme switch: report the theme it left the page in (read after the switch's own handler runs).
+document.addEventListener("click", (e) => {
+  if (!(e.target as Element | null)?.closest?.("[data-ply-theme-toggle]")) return;
+  setTimeout(() => track("theme-toggle", undefined, { label: document.documentElement.dataset.theme ?? "" }), 0);
+});
+
+// End of an article: once per page view, when the sentinel after the prose scrolls into view. A page
+// short enough that the sentinel is on screen at load, with no scroll, does not count.
+const end = document.querySelector<HTMLElement>("[data-read-end]");
+if (end && "IntersectionObserver" in window) {
+  let first = true;
+  const io = new IntersectionObserver((entries) => {
+    const hit = entries.some((x) => x.isIntersecting);
+    if (first) { first = false; if (hit) { io.disconnect(); return; } return; }
+    if (hit) { io.disconnect(); track("read-end", undefined, { label: end.dataset.readEnd ?? "" }); }
+  });
+  io.observe(end);
+}
+
+/** The 404 page: send `not-found` once Umami exists (its script is deferred), for up to 5 seconds. */
+export function notFound() {
+  let tries = 0;
+  const t = setInterval(() => {
+    if (window.umami) { clearInterval(t); track("not-found", undefined, { path: location.pathname }); }
+    else if (++tries > 20) clearInterval(t);
+  }, 250);
+}

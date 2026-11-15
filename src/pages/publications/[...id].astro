@@ -109,6 +109,7 @@ const Widget = d.widget && (d.widgetLive || import.meta.env.DEV) ? widgets[d.wid
     {/* A 3px rule closes the paper's front matter (summary, abstract, topics) before the text. */}
     {pub.body?.trim() && <hr class="ply-rule paper__divide" />}
     <Content />
+    <div data-read-end={pub.id} aria-hidden="true"></div>
     <References refs={referencesOf(pub.id)} />
     <h2 id="cite" class="paper__cite">Cite</h2>
     <div id="bibtex"><BibTeX entry={d.bibtex.trim()} /></div>

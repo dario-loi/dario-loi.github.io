@@ -22,10 +22,14 @@ const ways = [
       ))}
     </ul>
     <div class="ply-panel ply-panel--flush lost__exhibit" data-surface="panel">
-      <Complex seed={seedOf("404")} points={28} radius={0.12} controls={false} label="A complex with no path to this address" id="cx-404" />
+      <Complex seed={seedOf("404")} points={28} radius={0.12} controls={false} label="A complex of unconnected points" id="cx-404" />
     </div>
   </div>
 </Base>
+<script>
+  import { notFound } from "../scripts/track.ts";
+  notFound();
+</script>
 <style>
   .lost { padding-block: var(--ply-space-5) var(--ply-space-8); display: grid; gap: var(--ply-space-6); align-items: start; }
   .lost__ways { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: var(--ply-border-rule) solid var(--ply-color-rule-strong); }

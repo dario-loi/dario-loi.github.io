@@ -43,6 +43,7 @@ const og = await preview(d.cover, d.coverAlt);
       </figure>
     )}
     <Content />
+    <div data-read-end={post.id} aria-hidden="true"></div>
     {d.updated && <p class="post__byline ply-small ply-muted">Updated <time datetime={isoDay(d.updated)}>{longDate(d.updated)}</time>.</p>}
   </Article>
   <div class="ply-container ply-article ply-article--head post__foot">
