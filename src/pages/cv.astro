@@ -62,6 +62,8 @@ const pubs = (await entries("publications")).map(pubRow);
   </div>
 </Base>
 <style>
+  /* On paper the download and email buttons do nothing. */
+  @media print { .cv-actions { display: none; } }
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
   /* A section's rule sits as far under the one before as on the home page, so space above a heading

@@ -177,6 +177,12 @@ const latestItems = (placement: string) => latest.map((e) => ({ ...e, rest: link
   .home-about__portrait { width: 12rem; height: auto; aspect-ratio: 1; outline: var(--ply-border-hair) solid var(--ply-color-rule); outline-offset: -1px; }
   .home-about__links { display: grid; gap: var(--ply-space-3); align-content: start; justify-items: start; }
   .home-profiles { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--ply-space-2); }
+  /* From 40rem (a tablet, a phone on its side) the portrait stands beside the text, so it does not
+     sit alone above an empty half of the row. */
+  @media (min-width: 40rem) {
+    .home-about { grid-template-columns: 12rem minmax(0, 1fr); align-items: start; }
+    .home-about__links { grid-column: 2; }
+  }
   @media (min-width: 64rem) {
     .home-about { grid-template-columns: var(--ply-layout-toc) minmax(0, 1fr); align-items: start; }
     .home-about__links { grid-column: 2; }
