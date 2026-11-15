@@ -15,12 +15,13 @@ const topics = await topicLinks();
 ---
 <Base title="Search" barSearch={false} description={`Search the papers, projects, and CV of ${person.name}.`} noindex crumbs={[{ name: person.name, href: "/" }, { name: "Search", href: "/search/" }]}>
   <meta slot="head" name="referrer" content="origin" />
+  <noscript slot="head"><style is:inline>.search-page__app { display: none; }</style></noscript>
   <Mast title="Search" lede="Papers, projects, and the CV on this site." compact wideLede rule dense />
   <div class="ply-container search-page">
     <noscript>
       <p class="search-page__nojs">Search needs JavaScript. <a href="/publications/">The publications list</a> shows every paper, and <a href="/publications/topics/">the topics page</a> groups them by subject.</p>
     </noscript>
-    <ply-search-page class="search-page__app" bundle="/pagefind/" hidden>
+    <ply-search-page class="search-page__app" bundle="/pagefind/">
       <form class="ply-field search-page__form" role="search" action="/search/" method="get">
         <label class="ply-field__label" for="search-page-q">Search the site</label>
         <div class="search-page__row">
@@ -29,7 +30,7 @@ const topics = await topicLinks();
         </div>
       </form>
       <p class="search-page__status" role="status"></p>
-      <div class="ply-search__idle search-page__idle" hidden>
+      <div class="ply-search__idle search-page__idle">
         <p>Try one of these topics.</p>
         <ul>{topics.map((t) => <li><a href={t.href}>{t.label}</a></li>)}</ul>
       </div>
@@ -74,7 +75,6 @@ const topics = await topicLinks();
     private settle = 0;
     connectedCallback() {
       const input = this.querySelector<HTMLInputElement>("#search-page-q")!;
-      this.hidden = false;
       this.status = this.querySelector(".search-page__status")!;
       this.idle = this.querySelector(".search-page__idle")!;
       this.list = this.querySelector(".search-page__results")!;
@@ -90,7 +90,7 @@ const topics = await topicLinks();
       this.querySelector("form")!.addEventListener("submit", (e) => { e.preventDefault(); this.search(); });
       input.addEventListener("input", () => this.search(150));
       const q = new URLSearchParams(location.search).get("q")?.trim() ?? "";
-      if (q) { input.value = q; this.search(); } else { this.empty(); input.focus(); }
+      if (q) { input.value = q; this.idle.hidden = true; this.search(); } else { this.empty(); input.focus(); }
     }
     status!: HTMLElement; idle!: HTMLElement; list!: HTMLElement; more!: HTMLButtonElement; input!: HTMLInputElement;
 
@@ -167,9 +167,11 @@ const topics = await topicLinks();
   if (!customElements.get("ply-search-page")) customElements.define("ply-search-page", PlySearchPage);
 </script>
 <style>
-  .search-page { padding-block: var(--ply-space-5) var(--ply-space-8); }
+  /* The form and the topic links are in the page's HTML, so nothing is inserted above the footer when
+     the script starts, and the footer holds still. A page without JavaScript hides them for the
+     notice above. The minimum height keeps the footer under the fold while results arrive. */
+  .search-page { padding-block: var(--ply-space-5) var(--ply-space-8); min-height: 28rem; }
   .search-page__app { display: grid; gap: var(--ply-space-4); max-width: 52rem; }
-  .search-page__app[hidden] { display: none; }
   .search-page__form { max-width: none; }
   .search-page__row { display: flex; flex-wrap: wrap; gap: var(--ply-space-3); }
   .search-page__row .ply-input { flex: 1 1 16rem; min-width: 0; }

@@ -64,7 +64,9 @@ const pubs = (await entries("publications")).map(pubRow);
 <style>
   .cv-atlas { padding-block-start: var(--ply-space-6); }
   .cv-actions { margin-top: var(--ply-space-5); }
-  .cv-pubs, .cv-block { margin-top: var(--ply-space-6); }
+  /* A section's rule sits as far under the one before as on the home page, so space above a heading
+     stays larger than the space below it. */
+  .cv-pubs, .cv-block { margin-top: var(--ply-space-7); }
   /* The atlas list's scroll runway under its last stop: 10svh is enough to bring that stop to the current line. */
   .cv-atlas :global(.ply-atlas__list) { padding-block-end: 10svh; }
   /* Stacked, the pinned globe closes on its own 3px rule, so the first section after it drops
