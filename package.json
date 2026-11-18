@@ -19,16 +19,16 @@
     "og": "node scripts/og.mjs"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.4.3",
-    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/markdown-satteri": "^0.4.10",
+    "@astrojs/mdx": "^8.1.6",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/sitemap": "^3.7.5",
     "@dario-loi/polytope": "^0.8.0",
-    "astro": "^7.3.8",
+    "astro": "^7.4.12",
     "katex": "^0.19.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.12",
     "pagefind": "^1.6.0",
     "sharp": "^0.35.5",
     "typescript": "^6.0.0",
